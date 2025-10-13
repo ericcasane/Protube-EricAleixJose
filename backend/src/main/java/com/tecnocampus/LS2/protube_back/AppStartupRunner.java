@@ -1,5 +1,7 @@
 package com.tecnocampus.LS2.protube_back;
 
+import com.tecnocampus.LS2.protube_back.application.service.VideoLoaderService;
+import com.tecnocampus.LS2.protube_back.domain.model.Video;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Component
 public class AppStartupRunner implements ApplicationRunner {
@@ -20,7 +23,10 @@ public class AppStartupRunner implements ApplicationRunner {
     @Autowired
     VideoService videoService;
 
-    // Example variables from our implementation. 
+    @Autowired
+    VideoLoaderService videoLoaderService;
+
+    // Example variables from our implementation.
     // Feel free to adapt them to your needs
     private final Environment env;
     private final Path rootPath;
@@ -31,12 +37,25 @@ public class AppStartupRunner implements ApplicationRunner {
         final var rootDir = env.getProperty("pro_tube.store.dir");
         this.rootPath = Paths.get(rootDir);
         loadInitialData = env.getProperty("pro_tube.load_initial_data", Boolean.class);
-
-
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // Should your backend perform any task during the bootstrap, do it here
+        if (loadInitialData) {
+            loadInitialData();
+        }
+    }
+
+    private void loadInitialData() {
+        LOG.info("Starting initial data load...");
+
+        // Load videos from the root path (videos directory)
+        List<Video> videos = videoLoaderService.loadVideos(rootPath);
+
+        // Display videos information in console
+        videoLoaderService.displayVideos(videos);
+
+        LOG.info("Initial data load completed");
     }
 }
