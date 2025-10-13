@@ -14,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class VideosControllerTest {
+class VideosRestControllerTest {
 
     @InjectMocks
-    VideosController videosController;
+    VideosRestController videosRestController;
 
     @Autowired
     @Mock
@@ -27,6 +27,6 @@ class VideosControllerTest {
     @Test
     void getVideos() {
         when(videoService.getVideos()).thenReturn(List.of("video 1", "video 2"));
-        assertEquals(List.of("video 1", "video 2"), videosController.getVideos().getBody());
+        assertEquals(List.of("video 1", "video 2"), videosRestController.getVideos().getBody());
     }
 }
