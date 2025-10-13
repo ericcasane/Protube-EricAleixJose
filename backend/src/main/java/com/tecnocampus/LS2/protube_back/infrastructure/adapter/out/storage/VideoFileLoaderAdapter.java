@@ -73,7 +73,6 @@ public class VideoFileLoaderAdapter implements VideoLoaderPort {
         String thumbnailFileName = videoId + ".webp";
 
         return new Video(
-                metadata.getId(),
                 metadata.getTitle(),
                 metadata.getUser(),
                 videoFileName,

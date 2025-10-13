@@ -1,5 +1,7 @@
 package com.tecnocampus.LS2.protube_back.services;
 
+import com.tecnocampus.LS2.protube_back.application.port.out.VideoRepository;
+import com.tecnocampus.LS2.protube_back.domain.model.Video;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -7,8 +9,17 @@ import java.util.List;
 @Service
 public class VideoService {
 
-    public List<String> getVideos() {
+    private final VideoRepository videoRepository;
 
-        return List.of("video1", "video2");
+    public VideoService(VideoRepository videoRepository) {
+        this.videoRepository = videoRepository;
+    }
+
+    public List<Video> getVideos() {
+        return videoRepository.findAll();
+    }
+
+    public Video saveVideo(Video video) {
+        return videoRepository.save(video);
     }
 }

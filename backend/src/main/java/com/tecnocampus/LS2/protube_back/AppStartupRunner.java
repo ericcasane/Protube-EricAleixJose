@@ -50,11 +50,13 @@ public class AppStartupRunner implements ApplicationRunner {
     private void loadInitialData() {
         LOG.info("Starting initial data load...");
 
-        // Load videos from the root path (videos directory)
         List<Video> videos = videoLoaderService.loadVideos(rootPath);
 
-        // Display videos information in console
         videoLoaderService.displayVideos(videos);
+
+        LOG.info("Saving videos to database...");
+        videos.forEach(video -> videoService.saveVideo(video));
+        LOG.info("Saved {} videos to database", videos.size());
 
         LOG.info("Initial data load completed");
     }

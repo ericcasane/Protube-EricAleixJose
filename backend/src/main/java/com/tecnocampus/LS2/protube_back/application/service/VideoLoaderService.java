@@ -49,7 +49,6 @@ public class VideoLoaderService {
 
         for (Video video : videos) {
             LOG.info("");
-            LOG.info("ID: {}", video.getId());
             LOG.info("Title: {}", video.getTitle());
             LOG.info("User: {}", video.getUser());
             LOG.info("Video File: {}", video.getVideoFileName());

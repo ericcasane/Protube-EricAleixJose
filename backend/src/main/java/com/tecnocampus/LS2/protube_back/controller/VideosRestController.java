@@ -1,5 +1,6 @@
 package com.tecnocampus.LS2.protube_back.controller;
 
+import com.tecnocampus.LS2.protube_back.domain.model.Video;
 import com.tecnocampus.LS2.protube_back.services.VideoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +22,7 @@ public class VideosRestController {
 
     @GetMapping("")
     @Operation(summary = "Get all videos")
-    public ResponseEntity<List<String>> getVideos() {
+    public ResponseEntity<List<Video>> getVideos() {
         return ResponseEntity.ok().body(videoService.getVideos());
 
     }
