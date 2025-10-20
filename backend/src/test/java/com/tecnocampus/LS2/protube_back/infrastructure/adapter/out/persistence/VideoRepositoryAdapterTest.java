@@ -1,0 +1,91 @@
+package com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.persistence;
+
+import com.tecnocampus.LS2.protube_back.domain.model.Video;
+import com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.persistence.jpa.VideoEntity;
+import com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.persistence.jpa.VideoEntityMapper;
+import com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.persistence.jpa.VideoJpaRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class VideoRepositoryAdapterTest {
+
+    @Mock
+    private VideoJpaRepository jpaRepository;
+
+    @Mock
+    private VideoEntityMapper mapper;
+
+    private VideoRepositoryAdapter adapter;
+
+    @BeforeEach
+    void setUp() {
+        adapter = new VideoRepositoryAdapter(jpaRepository, mapper);
+    }
+
+    @Test
+    void testSave() {
+        Video video = new Video("Test Video", "testuser", "video.mp4", "thumbnail.webp");
+        VideoEntity entity = new VideoEntity(UUID.randomUUID(), "Test Video", "testuser", "video.mp4", "thumbnail.webp");
+        VideoEntity savedEntity = new VideoEntity(UUID.randomUUID(), "Test Video", "testuser", "video.mp4", "thumbnail.webp");
+        Video savedVideo = new Video("Test Video", "testuser", "video.mp4", "thumbnail.webp");
+
+        when(mapper.toEntity(video)).thenReturn(entity);
+        when(jpaRepository.save(entity)).thenReturn(savedEntity);
+        when(mapper.toDomain(savedEntity)).thenReturn(savedVideo);
+
+        Video result = adapter.save(video);
+
+        assertNotNull(result);
+        assertEquals(savedVideo, result);
+        verify(mapper).toEntity(video);
+        verify(jpaRepository).save(entity);
+        verify(mapper).toDomain(savedEntity);
+    }
+
+    @Test
+    void testFindAll() {
+        VideoEntity entity1 = new VideoEntity(UUID.randomUUID(), "Video 1", "user1", "video1.mp4", "thumb1.webp");
+        VideoEntity entity2 = new VideoEntity(UUID.randomUUID(), "Video 2", "user2", "video2.mp4", "thumb2.webp");
+        List<VideoEntity> entities = Arrays.asList(entity1, entity2);
+
+        Video video1 = new Video("Video 1", "user1", "video1.mp4", "thumb1.webp");
+        Video video2 = new Video("Video 2", "user2", "video2.mp4", "thumb2.webp");
+
+        when(jpaRepository.findAll()).thenReturn(entities);
+        when(mapper.toDomain(entity1)).thenReturn(video1);
+        when(mapper.toDomain(entity2)).thenReturn(video2);
+
+        List<Video> result = adapter.findAll();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(video1, result.get(0));
+        assertEquals(video2, result.get(1));
+        verify(jpaRepository).findAll();
+        verify(mapper, times(2)).toDomain(any(VideoEntity.class));
+    }
+
+    @Test
+    void testFindAllEmpty() {
+        when(jpaRepository.findAll()).thenReturn(List.of());
+
+        List<Video> result = adapter.findAll();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(jpaRepository).findAll();
+        verify(mapper, never()).toDomain(any(VideoEntity.class));
+    }
+}
