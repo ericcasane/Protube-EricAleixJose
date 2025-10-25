@@ -1,11 +1,14 @@
-import './App.css';
 import { useAllVideos } from './useAllVideos';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src="/protube-logo-removebg-preview.png" className="App-logo" alt="logo" />
+    <div className="flex items-center justify-center min-h-screen">
+      <header className="w-full min-h-screen bg-gray-900 flex flex-col items-center justify-center text-white text-center px-4">
+        <img
+          src="/protube-logo-removebg-preview.png"
+          className="h-[40vmin] pointer-events-none"
+          alt="logo"
+        />
         <ContentApp />
       </header>
     </div>
@@ -16,26 +19,29 @@ function ContentApp() {
   const { loading, message, value } = useAllVideos();
   switch (loading) {
     case 'loading':
-      return <div>Loading...</div>;
+      return <div className="text-lg mt-8">Loading...</div>;
     case 'error':
       return (
-        <div>
-          <h3>Error</h3> <p>{message}</p>
+        <div className="mt-8 text-center">
+          <h3 className="text-2xl font-bold mb-2">Error</h3>
+          <p className="text-lg">{message}</p>
         </div>
       );
     case 'success':
       return (
-        <>
-          <strong>Videos available:</strong>
-          <ul>
+        <div className="mt-8">
+          <strong className="text-xl block mb-4">Videos available:</strong>
+          <ul className="space-y-2 list-disc list-inside">
             {value.map((item) => (
-              <li key={item.videoFileName}>{item.title}</li>
+              <li key={item.videoFileName} className="text-lg">
+                {item.title}
+              </li>
             ))}
           </ul>
-        </>
+        </div>
       );
   }
-  return <div>Idle...</div>;
+  return <div className="text-lg mt-8">Idle...</div>;
 }
 
 export default App;
