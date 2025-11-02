@@ -1,9 +1,10 @@
 package com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.persistence;
 
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.adapter.VideoRepositoryAdapter;
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.mapper.VideoEntityMapper;
 import com.tecnocampus.LS2.protube_back.domain.model.Video;
-import com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.persistence.jpa.VideoEntity;
-import com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.persistence.jpa.VideoEntityMapper;
-import com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.persistence.jpa.VideoJpaRepository;
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.VideoEntity;
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.repository.VideoJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

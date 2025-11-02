@@ -1,6 +1,6 @@
 package com.tecnocampus.LS2.protube_back.domain.model;
 
-import com.tecnocampus.LS2.protube_back.application.port.in.RegisterUserCommand;
+import com.tecnocampus.LS2.protube_back.application.port.in.command.RegisterUserCommand;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public record User(
