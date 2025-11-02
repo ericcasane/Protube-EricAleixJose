@@ -1,8 +1,9 @@
 package com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.storage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tecnocampus.LS2.protube_back.adapter.out.storage.VideoFileLoaderAdapter;
 import com.tecnocampus.LS2.protube_back.domain.model.Video;
-import com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.storage.dto.VideoMetadataDTO;
+import com.tecnocampus.LS2.protube_back.adapter.out.storage.dto.VideoMetadataDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

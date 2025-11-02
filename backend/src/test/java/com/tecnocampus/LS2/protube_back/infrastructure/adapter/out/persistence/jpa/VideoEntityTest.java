@@ -1,5 +1,6 @@
 package com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.persistence.jpa;
 
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.VideoEntity;
 import org.junit.jupiter.api.Test;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;

@@ -2,7 +2,7 @@ package com.tecnocampus.LS2.protube_back;
 
 import com.tecnocampus.LS2.protube_back.application.service.VideoLoaderService;
 import com.tecnocampus.LS2.protube_back.domain.model.Video;
-import com.tecnocampus.LS2.protube_back.services.VideoService;
+import com.tecnocampus.LS2.protube_back.domain.service.VideoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package com.tecnocampus.LS2.protube_back.infrastructure.adapter.out.storage.dto;
 
+import com.tecnocampus.LS2.protube_back.adapter.out.storage.dto.VideoMetadataDTO;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
