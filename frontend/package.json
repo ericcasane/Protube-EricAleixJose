@@ -34,6 +34,7 @@
     "@heroui/popover": "2.3.27",
     "@heroui/progress": "2.2.22",
     "@heroui/radio": "2.3.27",
+    "@heroui/react": "^3.0.0-alpha.35",
     "@heroui/react-utils": "2.1.14",
     "@heroui/scroll-shadow": "2.3.18",
     "@heroui/select": "2.4.28",
@@ -41,6 +42,7 @@
     "@heroui/snippet": "2.2.28",
     "@heroui/spacer": "2.2.21",
     "@heroui/spinner": "2.2.24",
+    "@heroui/styles": "^3.0.0-alpha.35",
     "@heroui/switch": "2.2.24",
     "@heroui/system": "2.4.23",
     "@heroui/table": "2.2.27",
@@ -60,6 +62,7 @@
     "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@iconify/react": "^6.0.2",
     "@next/eslint-plugin-next": "16.0.1",
     "@react-types/shared": "3.32.1",
     "@tailwindcss/postcss": "4.1.11",
