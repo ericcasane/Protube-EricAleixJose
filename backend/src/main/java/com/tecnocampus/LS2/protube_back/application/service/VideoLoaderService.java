@@ -1,6 +1,6 @@
 package com.tecnocampus.LS2.protube_back.application.service;
 
-import com.tecnocampus.LS2.protube_back.application.port.out.VideoLoaderPort;
+import com.tecnocampus.LS2.protube_back.adapter.out.in_memory.VideoLoaderPort;
 import com.tecnocampus.LS2.protube_back.domain.model.Video;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
