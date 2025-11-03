@@ -38,10 +38,7 @@ const VideoGrid = () => {
     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
       {videos.map((video) => (
         <li key={video.videoUrl}>
-          <VideoCard
-            title={video.title}
-            imageUrl={`${getEnv().MEDIA_BASE_URL}${video.thumbnailUrl}`}
-          />
+          <VideoCard title={video.title} imageUrl={`${getEnv().MEDIA_BASE_URL}${video.thumbnailUrl}`} />
         </li>
       ))}
     </ul>
