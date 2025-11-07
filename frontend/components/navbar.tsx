@@ -13,6 +13,7 @@ import { Input } from "@heroui/input";
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
+import { Icon } from "@iconify/react";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -40,7 +41,7 @@ export const Navbar = () => {
 
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
-      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+      <NavbarContent className="basis-1/5 sm:basis-1/4" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Logo />
@@ -66,19 +67,26 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
+        className="hidden sm:flex basis-1/2"
+        justify="center"
+      >
+        <NavbarItem className="hidden lg:flex w-full max-w-xs">{searchInput}</NavbarItem>
+      </NavbarContent>
+
+      <NavbarContent
+        className="hidden sm:flex basis-1/4 sm:basis-full"
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
         <NavbarItem className="hidden md:flex">
           <Button
             isExternal
             as={Link}
             className="text-sm font-normal text-default-600 bg-default-100"
             variant="flat"
+            startContent={<Icon icon="heroicons:user-16-solid" className="text-base" />}
           >
             Login
           </Button>

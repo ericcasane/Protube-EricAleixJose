@@ -2,6 +2,8 @@ import "@/styles/globals.css";
 
 import { Providers } from "./providers";
 import { Navbar } from "@/components/navbar";
+import clsx from "clsx";
+import { fontSans } from "@/styles/fonts";
 
 export default function RootLayout({
   children,
@@ -10,7 +12,12 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-        <body>
+        <body
+          className={clsx(
+            "min-h-screen text-foreground bg-background font-sans antialiased",
+            fontSans.variable,
+          )}
+        >
             <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
               <div className="relative flex flex-col h-screen">
                 <Navbar />
