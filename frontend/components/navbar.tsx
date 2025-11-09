@@ -35,6 +35,7 @@ export const Navbar = () => {
   const searchInput = (
     <Input
       aria-label="Search"
+      className="light:bg-default-100 dark:bg-default-100"
       classNames={{
         inputWrapper: "bg-default-100",
         input: "text-sm",
@@ -49,7 +50,7 @@ export const Navbar = () => {
   );
 
   return (
-    <HeroUINavbar maxWidth="xl">
+    <HeroUINavbar maxWidth="2xl">
       <NavbarContent className="basis-1/5 sm:basis-1/4" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
@@ -86,11 +87,12 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/4 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden sm:flex gap-2">
-          <LanguageSwitcher />
-        </NavbarItem>
+
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
+        </NavbarItem>
+        <NavbarItem className="hidden sm:flex gap-2">
+          <LanguageSwitcher />
         </NavbarItem>
 
         {isAuthenticated && user ? (
