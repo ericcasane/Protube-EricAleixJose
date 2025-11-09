@@ -1,52 +1,126 @@
 'use client';
 
-import { Card, Avatar } from '@heroui/react';
+import { Card, Avatar, Chip } from '@heroui/react';
 import Image from 'next/image';
 
 export interface VideoCardProps {
   id?: string;
   title: string;
-  user: string;
+  channelName: string;
   videoUrl: string;
   thumbnailUrl: string;
+  duration?: number; // en segundos
+  viewCount?: number;
+  timestamp?: number; // unix timestamp
+}
+
+// Función para formatear números grandes
+function formatViewCount(count: number): string {
+  if (count >= 1000000000) {
+    return (count / 1000000000).toFixed(1) + 'B';
+  }
+  if (count >= 1000000) {
+    return (count / 1000000).toFixed(1) + 'M';
+  }
+  if (count >= 1000) {
+    return (count / 1000).toFixed(1) + 'K';
+  }
+  return count.toString();
+}
+
+// Función para formatear duración a minutos:segundos
+function formatDuration(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+// Función para formatear fecha
+function formatDate(timestamp: number): string {
+  const date = new Date(timestamp * 1000);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) {
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    if (diffHours === 0) {
+      const diffMins = Math.floor(diffMs / (1000 * 60));
+      return diffMins <= 0 ? 'Just now' : `${diffMins} minutes ago`;
+    }
+    return `${diffHours} hours ago`;
+  }
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7);
+    return `${weeks} weeks ago`;
+  }
+  if (diffDays < 365) {
+    const months = Math.floor(diffDays / 30);
+    return `${months} months ago`;
+  }
+  const years = Math.floor(diffDays / 365);
+  return `${years} years ago`;
 }
 
 export function VideoCard({
   id,
   title,
-  user,
+  channelName,
   videoUrl,
   thumbnailUrl,
+  duration = 0,
+  viewCount = 0,
+  timestamp = Math.floor(Date.now() / 1000),
 }: VideoCardProps) {
   const mediaUrl = `/media${thumbnailUrl}`;
+  const formattedDuration = formatDuration(duration);
+  const formattedViews = formatViewCount(viewCount);
+  const formattedDate = formatDate(timestamp);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
       <Card.Header className="flex flex-col items-start px-0 py-0">
-        <div className="relative w-full aspect-video overflow-hidden rounded-t-lg">
+        <div className="relative w-full aspect-video overflow-hidden bg-neutral-800">
           <Image
             src={mediaUrl}
             alt={title}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            priority
           />
-          <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/0 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+
+          {duration > 0 && (
+            <Chip
+              className="absolute bottom-2 right-2 bg-black/80 text-white text-xs font-semibold"
+              size="sm"
+              variant="soft"
+            >
+              {formattedDuration}
+            </Chip>
+          )}
         </div>
       </Card.Header>
 
-      <Card.Content className="flex flex-col gap-3 py-4">
-        <h3 className="font-semibold text-lg line-clamp-2 hover:text-accent transition-colors">
+      <Card.Content className="flex flex-col gap-3 py-3 px-3">
+        <h3 className="font-semibold text-sm line-clamp-2 hover:text-accent transition-colors cursor-pointer leading-tight">
           {title}
         </h3>
 
-        <div className="flex items-center gap-3">
-          <Avatar size="sm">
-            <Avatar.Fallback className="bg-accent text-white">
-              {user.charAt(0).toUpperCase()}
+        <div className="flex items-center gap-2.5">
+          <Avatar size="sm" className="flex-shrink-0">
+            <Avatar.Fallback className="bg-accent text-white text-xs font-bold">
+              {channelName.charAt(0).toUpperCase()}
             </Avatar.Fallback>
           </Avatar>
-          <div className="flex flex-col gap-1">
-            <p className="text-sm font-medium text-foreground">{user}</p>
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <p className="text-xs font-medium text-foreground truncate hover:text-accent transition-colors cursor-pointer">
+              {channelName}
+            </p>
+            <p className="text-xs text-neutral-500">
+              {formattedViews} views • {formattedDate}
+            </p>
           </div>
         </div>
       </Card.Content>
