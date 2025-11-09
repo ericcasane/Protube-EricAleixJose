@@ -7,11 +7,13 @@ import { Input } from '@heroui/input';
 import { Card, CardBody, CardHeader } from '@heroui/card';
 import { Link } from '@heroui/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslations } from '@/hooks/useTranslations';
 import { title } from '@/components/primitives';
 
 export default function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
+  const t = useTranslations();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -30,33 +32,31 @@ export default function RegisterPage() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'El nom és obligatori';
+      newErrors.name = t('auth.register.firstNameRequired');
     }
 
     if (!formData.surname.trim()) {
-      newErrors.surname = 'Els cognoms són obligatoris';
+      newErrors.surname = t('auth.register.lastNameRequired');
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'El correu electrònic és obligatori';
+      newErrors.email = t('auth.register.emailRequired');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'El correu electrònic no és vàlid';
+      newErrors.email = t('auth.register.emailInvalid');
     }
 
     if (!formData.username.trim()) {
-      newErrors.username = 'El nom d\'usuari és obligatori';
-    } else if (formData.username.length < 3 || formData.username.length > 50) {
-      newErrors.username = 'El nom d\'usuari ha de tenir entre 3 i 50 caràcters';
+      newErrors.username = t('auth.register.usernameRequired');
     }
 
     if (!formData.password) {
-      newErrors.password = 'La contrasenya és obligatòria';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'La contrasenya ha de tenir almenys 6 caràcters';
+      newErrors.password = t('auth.register.passwordRequired');
+    } else if (formData.password.length < 8) {
+      newErrors.password = t('auth.register.passwordTooShort');
     }
 
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Les contrasenyes no coincideixen';
+      newErrors.confirmPassword = t('auth.register.passwordsDoNotMatch');
     }
 
     setErrors(newErrors);
@@ -85,7 +85,7 @@ export default function RegisterPage() {
       router.push('/');
     } catch (error) {
       setServerError(
-        error instanceof Error ? error.message : 'Error en el registre. Si us plau, torna-ho a intentar.'
+        error instanceof Error ? error.message : t('auth.register.error')
       );
     } finally {
       setIsLoading(false);
@@ -104,15 +104,15 @@ export default function RegisterPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col gap-1 items-center pb-6 pt-8">
           <h1 className={title({ size: 'sm' })}>
-            Registra't a <span className={title({ color: 'blue', size: 'sm' })}>ProTube</span>
+            {t('auth.register.title')} <span className={title({ color: 'blue', size: 'sm' })}>ProTube</span>
           </h1>
-          <p className="text-small text-default-500">Crea el teu compte per començar</p>
+          <p className="text-small text-default-500">{t('auth.register.subtitle')}</p>
         </CardHeader>
         <CardBody>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <Input
-              label="Nom"
-              placeholder="Introdueix el teu nom"
+              label={t('auth.register.firstName')}
+              placeholder={t('auth.register.firstName')}
               value={formData.name}
               onChange={handleChange('name')}
               isInvalid={!!errors.name}
@@ -122,8 +122,8 @@ export default function RegisterPage() {
             />
 
             <Input
-              label="Cognoms"
-              placeholder="Introdueix els teus cognoms"
+              label={t('auth.register.lastName')}
+              placeholder={t('auth.register.lastName')}
               value={formData.surname}
               onChange={handleChange('surname')}
               isInvalid={!!errors.surname}
@@ -133,8 +133,8 @@ export default function RegisterPage() {
             />
 
             <Input
-              label="Correu electrònic"
-              placeholder="correu@example.com"
+              label={t('auth.register.email')}
+              placeholder="example@email.com"
               type="email"
               value={formData.email}
               onChange={handleChange('email')}
@@ -145,8 +145,8 @@ export default function RegisterPage() {
             />
 
             <Input
-              label="Nom d'usuari"
-              placeholder="Tria un nom d'usuari"
+              label={t('auth.register.username')}
+              placeholder={t('auth.register.username')}
               value={formData.username}
               onChange={handleChange('username')}
               isInvalid={!!errors.username}
@@ -156,8 +156,8 @@ export default function RegisterPage() {
             />
 
             <Input
-              label="Contrasenya"
-              placeholder="Mínim 6 caràcters"
+              label={t('auth.register.password')}
+              placeholder={t('auth.register.password')}
               type="password"
               value={formData.password}
               onChange={handleChange('password')}
@@ -168,8 +168,8 @@ export default function RegisterPage() {
             />
 
             <Input
-              label="Confirma la contrasenya"
-              placeholder="Repeteix la contrasenya"
+              label={t('auth.register.confirmPassword')}
+              placeholder={t('auth.register.confirmPassword')}
               type="password"
               value={formData.confirmPassword}
               onChange={handleChange('confirmPassword')}
@@ -192,13 +192,13 @@ export default function RegisterPage() {
               isLoading={isLoading}
               className="w-full"
             >
-              Registrar-se
+              {t('auth.register.registerButton')}
             </Button>
 
             <p className="text-center text-small">
-              Ja tens compte?{' '}
+              {t('auth.register.haveAccount')}{' '}
               <Link href="/login" size="sm" className="font-semibold">
-                Inicia sessió
+                {t('auth.register.signIn')}
               </Link>
             </p>
           </form>

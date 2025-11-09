@@ -20,14 +20,17 @@ import { Icon } from "@iconify/react";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import {
   SearchIcon,
   Logo,
 } from "@/components/icons";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslations } from "@/hooks/useTranslations";
 
 export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const t = useTranslations();
 
   const searchInput = (
     <Input
@@ -37,7 +40,7 @@ export const Navbar = () => {
         input: "text-sm",
       }}
       labelPlacement="outside"
-      placeholder="Search..."
+      placeholder={t('nav.search')}
       startContent={
         <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
       }
@@ -46,7 +49,7 @@ export const Navbar = () => {
   );
 
   return (
-    <HeroUINavbar maxWidth="xl">
+    <HeroUINavbar maxWidth="2xl">
       <NavbarContent className="basis-1/5 sm:basis-1/4" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
@@ -65,7 +68,7 @@ export const Navbar = () => {
                 color="foreground"
                 href={item.href}
               >
-                {item.label}
+                {t((item as any).labelKey)}
               </NextLink>
             </NavbarItem>
           ))}
@@ -83,8 +86,12 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/4 sm:basis-full"
         justify="end"
       >
+
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
+        </NavbarItem>
+        <NavbarItem className="hidden sm:flex gap-2">
+          <LanguageSwitcher />
         </NavbarItem>
 
         {isAuthenticated && user ? (
@@ -100,18 +107,18 @@ export const Navbar = () => {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="User menu actions">
-                <DropdownItem key="profile" className="h-14 gap-2" textValue="Perfil">
-                  <p className="font-semibold">Identificat com</p>
+                <DropdownItem key="profile" className="h-14 gap-2" textValue="Profile">
+                  <p className="font-semibold">{t('auth.signIn.welcome')}</p>
                   <p className="font-semibold">{user.email}</p>
                 </DropdownItem>
                 <DropdownItem
                   key="logout"
                   color="danger"
-                  textValue="Tancar sessió"
+                  textValue={t('nav.logout')}
                   startContent={<Icon icon="heroicons:arrow-right-on-rectangle" />}
                   onPress={logout}
                 >
-                  Tancar sessió
+                  {t('nav.logout')}
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -126,7 +133,7 @@ export const Navbar = () => {
                 variant="flat"
                 startContent={<Icon icon="heroicons:arrow-right-on-rectangle" className="text-base" />}
               >
-                Iniciar sessió
+                {t('nav.signIn')}
               </Button>
             </NavbarItem>
             <NavbarItem className="hidden md:flex">
@@ -137,7 +144,7 @@ export const Navbar = () => {
                 variant="flat"
                 startContent={<Icon icon="heroicons:user-plus" className="text-base" />}
               >
-                Registrar-se
+                {t('nav.register')}
               </Button>
             </NavbarItem>
           </>
@@ -145,6 +152,7 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+        <LanguageSwitcher />
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
@@ -165,7 +173,7 @@ export const Navbar = () => {
                 href={item.href}
                 size="lg"
               >
-                {item.label}
+                {t((item as any).labelKey)}
               </Link>
             </NavbarMenuItem>
           ))}
@@ -187,7 +195,7 @@ export const Navbar = () => {
                   startContent={<Icon icon="heroicons:arrow-right-on-rectangle" />}
                   onPress={logout}
                 >
-                  Tancar sessió
+                  {t('nav.logout')}
                 </Button>
               </NavbarMenuItem>
             </>
@@ -201,7 +209,7 @@ export const Navbar = () => {
                   className="w-full"
                   startContent={<Icon icon="heroicons:arrow-right-on-rectangle" />}
                 >
-                  Iniciar sessió
+                  {t('nav.signIn')}
                 </Button>
               </NavbarMenuItem>
               <NavbarMenuItem>
@@ -213,7 +221,7 @@ export const Navbar = () => {
                   className="w-full"
                   startContent={<Icon icon="heroicons:user-plus" />}
                 >
-                  Registrar-se
+                  {t('nav.register')}
                 </Button>
               </NavbarMenuItem>
             </>

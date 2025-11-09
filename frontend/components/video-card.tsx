@@ -3,6 +3,7 @@
 import { Card, Avatar, Chip } from '@heroui/react';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
+import { useTranslations } from '@/hooks/useTranslations';
 
 export interface VideoCardProps {
   id?: string;
@@ -36,8 +37,8 @@ function formatDuration(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
-// Función para formatear fecha
-function formatDate(timestamp: number): string {
+// Función para formatear fecha con soporte para traducción
+function formatDate(timestamp: number, t: (key: string, options?: Record<string, string | number>) => string): string {
   const date = new Date(timestamp * 1000);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -47,21 +48,21 @@ function formatDate(timestamp: number): string {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     if (diffHours === 0) {
       const diffMins = Math.floor(diffMs / (1000 * 60));
-      return diffMins <= 0 ? 'Just now' : `${diffMins} minutes ago`;
+      return diffMins <= 0 ? t('video.timeAgo.justNow') : t('video.timeAgo.minutesAgo', { count: diffMins });
     }
-    return `${diffHours} hours ago`;
+    return t('video.timeAgo.hoursAgo', { count: diffHours });
   }
-  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 7) return t('video.timeAgo.daysAgo', { count: diffDays });
   if (diffDays < 30) {
     const weeks = Math.floor(diffDays / 7);
-    return `${weeks} weeks ago`;
+    return t('video.timeAgo.weeksAgo', { count: weeks });
   }
   if (diffDays < 365) {
     const months = Math.floor(diffDays / 30);
-    return `${months} months ago`;
+    return t('video.timeAgo.monthsAgo', { count: months });
   }
   const years = Math.floor(diffDays / 365);
-  return `${years} years ago`;
+  return t('video.timeAgo.yearsAgo', { count: years });
 }
 
 export function VideoCard({
@@ -78,12 +79,13 @@ export function VideoCard({
   const [shouldPlayVideo, setShouldPlayVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const t = useTranslations();
 
   const mediaUrl = `/media${thumbnailUrl}`;
   const videoMediaUrl = `/media${videoUrl}`;
   const formattedDuration = formatDuration(duration);
   const formattedViews = formatViewCount(viewCount);
-  const formattedDate = formatDate(timestamp);
+  const formattedDate = formatDate(timestamp, t);
 
   useEffect(() => {
     if (isHovered) {
@@ -166,7 +168,7 @@ export function VideoCard({
               {channelName}
             </p>
             <p className="text-xs text-neutral-500">
-              {formattedViews} views • {formattedDate}
+              {formattedViews} {t('video.viewsLabel')} • {formattedDate}
             </p>
           </div>
         </div>

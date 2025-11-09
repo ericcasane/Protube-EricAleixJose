@@ -5,11 +5,11 @@ export const siteConfig = {
   description: "The ultimate platform for video enthusiasts.",
   navItems: [
     {
-      label: "Home",
+      labelKey: "nav.home",
       href: "/",
     },
     {
-      label: "Explore",
+      labelKey: "nav.explore",
       href: "/explore",
     },
   ],
