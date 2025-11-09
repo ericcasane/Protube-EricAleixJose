@@ -79,14 +79,14 @@ export function VideoCard({
   const formattedDate = formatDate(timestamp);
 
   return (
-    <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
-      <Card.Header className="flex flex-col items-start p-0">
-        <div className="relative w-full aspect-video overflow-hidden rounded-t-lg">
+    <Card className="w-full overflow-hidden transition-all duration-200 rounded-2xl hover:shadow-lg hover:-translate-y-1 p-0">
+      <Card.Header className="flex flex-col items-start p-2 pb-0 m-0">
+        <div className="relative w-full aspect-video overflow-hidden m-0">
           <Image
             src={mediaUrl}
             alt={title}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/0 opacity-0 hover:opacity-100 transition-opacity duration-300" />
@@ -103,7 +103,7 @@ export function VideoCard({
         </div>
       </Card.Header>
 
-      <Card.Content className="flex flex-col gap-3 px-3">
+      <Card.Content className="flex flex-col gap-3 px-3 py-3 pt-0">
         <h3 className="font-semibold text-sm line-clamp-2 hover:text-accent transition-colors cursor-pointer leading-tight">
           {title}
         </h3>
