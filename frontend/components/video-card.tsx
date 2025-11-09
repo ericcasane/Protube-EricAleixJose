@@ -2,6 +2,7 @@
 
 import { Card, Avatar, Chip } from '@heroui/react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 
 export interface VideoCardProps {
@@ -109,13 +110,14 @@ export function VideoCard({
   }, [isHovered]);
 
   return (
-    <Card className="w-full overflow-hidden transition-all duration-200 rounded-2xl hover:shadow-lg hover:-translate-y-1 p-0">
-      <Card.Header className="flex flex-col items-start p-2 pb-0 m-0">
-        <div
-          className="relative w-full aspect-video overflow-hidden m-0 rounded-xl cursor-pointer"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+    <Link href={`/video/${id}`} className="block">
+      <Card className="w-full overflow-hidden transition-all duration-200 rounded-2xl hover:shadow-lg hover:-translate-y-1 p-0">
+        <Card.Header className="flex flex-col items-start p-2 pb-0 m-0">
+          <div
+            className="relative w-full aspect-video overflow-hidden m-0 rounded-xl cursor-pointer"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
           {shouldPlayVideo ? (
             <video
               ref={videoRef}
@@ -172,5 +174,6 @@ export function VideoCard({
         </div>
       </Card.Content>
     </Card>
+    </Link>
   );
 }
