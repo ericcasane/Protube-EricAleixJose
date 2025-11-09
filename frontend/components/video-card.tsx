@@ -80,8 +80,8 @@ export function VideoCard({
 
   return (
     <Card className="w-full overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
-      <Card.Header className="flex flex-col items-start px-0 py-0">
-        <div className="relative w-full aspect-video overflow-hidden bg-neutral-800">
+      <Card.Header className="flex flex-col items-start p-0">
+        <div className="relative w-full aspect-video overflow-hidden rounded-t-lg">
           <Image
             src={mediaUrl}
             alt={title}
@@ -103,14 +103,14 @@ export function VideoCard({
         </div>
       </Card.Header>
 
-      <Card.Content className="flex flex-col gap-3 py-3 px-3">
+      <Card.Content className="flex flex-col gap-3 px-3">
         <h3 className="font-semibold text-sm line-clamp-2 hover:text-accent transition-colors cursor-pointer leading-tight">
           {title}
         </h3>
 
         <div className="flex items-center gap-2.5">
-          <Avatar size="sm" className="flex-shrink-0">
-            <Avatar.Fallback className="bg-accent text-white text-xs font-bold">
+          <Avatar size="sm" className="rounded-lg">
+            <Avatar.Fallback >
               {channelName.charAt(0).toUpperCase()}
             </Avatar.Fallback>
           </Avatar>

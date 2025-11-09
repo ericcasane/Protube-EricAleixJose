@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Spinner } from '@heroui/react';
+import { motion } from 'framer-motion';
 import { VideoCard, type VideoCardProps } from '@/components/video-card';
 import { title } from '@/components/primitives';
 
@@ -37,18 +38,111 @@ export default function Home() {
     fetchVideos();
   }, []);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: 'easeOut',
+      },
+    },
+  };
+
+  const wordVariants = {
+    hidden: { opacity: 0, scale: 0.8, rotateZ: -10 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      rotateZ: 0,
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut',
+      },
+    },
+  };
+
+  const underlineVariants = {
+    hidden: { scaleX: 0 },
+    visible: {
+      scaleX: 1,
+      transition: {
+        duration: 0.8,
+        delay: 0.8,
+        ease: 'easeOut',
+      },
+    },
+  };
+
   return (
-    <section className="flex flex-col gap-8 py-8">
-      <div className="flex flex-col items-center justify-center gap-4">
+    <section className="flex flex-col gap-8 py-4">
+      <motion.div
+        className="flex flex-col items-center justify-center gap-4"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <div className="inline-block max-w-lg text-center justify-center">
-          <span className={title()}>The&nbsp;</span>
-          <span className={title({ color: 'blue' })}>ultimate&nbsp;</span>
-          <br />
-          <span className={title()}>
-            platform for video enthusiasts.
-          </span>
+          <div className="flex items-center justify-center flex-wrap gap-2">
+            <motion.span
+              className={`${title()} inline-block`}
+              variants={wordVariants}
+            >
+              The
+            </motion.span>
+            <motion.span
+              className={`${title({ color: 'blue' })} inline-block bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent`}
+              variants={wordVariants}
+            >
+              ultimate
+            </motion.span>
+          </div>
+
+          <motion.div
+            className="relative mt-2"
+            variants={itemVariants}
+          >
+            <span className={title()}>
+              platform for video enthusiasts.
+            </span>
+            <motion.div
+              variants={underlineVariants}
+              className="h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 rounded-full mt-2 origin-left"
+              style={{ transformOrigin: 'left' }}
+            />
+          </motion.div>
         </div>
-      </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.2 }}
+          className="mt-4"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 backdrop-blur-md">
+            <motion.span
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+              className="inline-block w-2 h-2 rounded-full bg-cyan-400"
+            />
+            <span className="text-xs font-medium text-slate-300">
+              Discover amazing content
+            </span>
+          </div>
+        </motion.div>
+      </motion.div>
 
       <div className="w-full">
         {isLoading ? (
