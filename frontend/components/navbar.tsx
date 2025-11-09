@@ -35,7 +35,6 @@ export const Navbar = () => {
   const searchInput = (
     <Input
       aria-label="Search"
-      className="light:bg-default-100 dark:bg-default-100"
       classNames={{
         inputWrapper: "bg-default-100",
         input: "text-sm",
