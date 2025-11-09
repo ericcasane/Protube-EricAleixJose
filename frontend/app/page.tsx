@@ -137,7 +137,7 @@ export default function Home() {
               transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
               className="inline-block w-2 h-2 rounded-full bg-cyan-400"
             />
-            <span className="text-xs font-medium text-slate-300">
+            <span className="text-xs font-medium">
               Discover amazing content
             </span>
           </div>
@@ -161,7 +161,7 @@ export default function Home() {
             <p className="text-lg">No videos available</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
             {videos.map((video, index) => (
               <VideoCard key={`${video.title}-${index}`} {...video} />
             ))}

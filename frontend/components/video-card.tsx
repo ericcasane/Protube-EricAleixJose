@@ -2,6 +2,7 @@
 
 import { Card, Avatar, Chip } from '@heroui/react';
 import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
 
 export interface VideoCardProps {
   id?: string;
@@ -73,23 +74,69 @@ export function VideoCard({
   viewCount = 0,
   timestamp = Math.floor(Date.now() / 1000),
 }: VideoCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [shouldPlayVideo, setShouldPlayVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const mediaUrl = `/media${thumbnailUrl}`;
+  const videoMediaUrl = `/media${videoUrl}`;
   const formattedDuration = formatDuration(duration);
   const formattedViews = formatViewCount(viewCount);
   const formattedDate = formatDate(timestamp);
 
+  useEffect(() => {
+    if (isHovered) {
+      hoverTimeoutRef.current = setTimeout(() => {
+        setShouldPlayVideo(true);
+      }, 1000);
+    } else {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      setShouldPlayVideo(false);
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
+    }
+
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, [isHovered]);
+
   return (
     <Card className="w-full overflow-hidden transition-all duration-200 rounded-2xl hover:shadow-lg hover:-translate-y-1 p-0">
       <Card.Header className="flex flex-col items-start p-2 pb-0 m-0">
-        <div className="relative w-full aspect-video overflow-hidden m-0">
-          <Image
-            src={mediaUrl}
-            alt={title}
-            fill
-            className="object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/0 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+        <div
+          className="relative w-full aspect-video overflow-hidden m-0 rounded-xl cursor-pointer"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {shouldPlayVideo ? (
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              muted
+              autoPlay
+              loop
+              playsInline
+              preload="auto"
+            >
+              <source src={videoMediaUrl} type="video/mp4" />
+            </video>
+          ) : (
+            <Image
+              src={mediaUrl}
+              alt={title}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              priority
+            />
+          )}
 
           {duration > 0 && (
             <Chip
