@@ -1,0 +1,76 @@
+{
+  "nav": {
+    "search": "Search...",
+    "signIn": "Sign in",
+    "register": "Register",
+    "logout": "Log out",
+    "home": "Home",
+    "explore": "Explore",
+    "platformDescription": "The ultimate platform for video enthusiasts."
+  },
+  "home": {
+    "title": {
+      "the": "The",
+      "ultimate": "ultimate",
+      "platform": "platform for video enthusiasts."
+    },
+    "badge": "Discover amazing content",
+    "errorLoading": "Error loading videos",
+    "noVideos": "No videos available"
+  },
+  "auth": {
+    "signIn": {
+      "welcome": "Welcome to ProTube",
+      "subtitle": "Sign in to continue",
+      "username": "Username",
+      "password": "Password",
+      "usernameRequired": "Username is required",
+      "passwordRequired": "Password is required",
+      "signInButton": "Sign in",
+      "noAccount": "Don't have an account?",
+      "registerNow": "Register now",
+      "error": "Sign in error. Check your credentials."
+    },
+    "register": {
+      "title": "Register on ProTube",
+      "subtitle": "Create your account to get started",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "username": "Username",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email is invalid",
+      "usernameRequired": "Username is required",
+      "usernameTaken": "Username is already taken",
+      "passwordRequired": "Password is required",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "registerButton": "Register",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "error": "Registration error. Please try again."
+    }
+  },
+  "video": {
+    "viewsLabel": "views",
+    "timeAgo": {
+      "justNow": "Just now",
+      "minutesAgo": "{count} minutes ago",
+      "hoursAgo": "{count} hours ago",
+      "daysAgo": "{count} days ago",
+      "weeksAgo": "{count} weeks ago",
+      "monthsAgo": "{count} months ago",
+      "yearsAgo": "{count} years ago"
+    }
+  },
+  "common": {
+    "error": "Error",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "save": "Save"
+  }
+}

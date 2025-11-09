@@ -7,11 +7,13 @@ import { Input } from '@heroui/input';
 import { Card, CardBody, CardHeader } from '@heroui/card';
 import { Link } from '@heroui/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTranslations } from '@/hooks/useTranslations';
 import { title } from '@/components/primitives';
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
+  const t = useTranslations();
 
   const [formData, setFormData] = useState({
     username: '',
@@ -26,11 +28,11 @@ export default function LoginPage() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.username.trim()) {
-      newErrors.username = 'El nom d\'usuari és obligatori';
+      newErrors.username = t('auth.signIn.usernameRequired');
     }
 
     if (!formData.password) {
-      newErrors.password = 'La contrasenya és obligatòria';
+      newErrors.password = t('auth.signIn.passwordRequired');
     }
 
     setErrors(newErrors);
@@ -58,7 +60,7 @@ export default function LoginPage() {
       setServerError(
         error instanceof Error
           ? error.message
-          : 'Error en l\'inici de sessió. Comprova les teves credencials.'
+          : t('auth.signIn.error')
       );
     } finally {
       setIsLoading(false);
@@ -80,15 +82,15 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col gap-1 items-center pb-6 pt-8">
           <h1 className={title({ size: 'sm' })}>
-            Benvingut a <span className={title({ color: 'blue', size: 'sm' })}>ProTube</span>
+            {t('auth.signIn.welcome')} <span className={title({ color: 'blue', size: 'sm' })}>ProTube</span>
           </h1>
-          <p className="text-small text-default-500">Inicia sessió per continuar</p>
+          <p className="text-small text-default-500">{t('auth.signIn.subtitle')}</p>
         </CardHeader>
         <CardBody>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <Input
-              label="Nom d'usuari"
-              placeholder="Introdueix el teu nom d'usuari"
+              label={t('auth.signIn.username')}
+              placeholder={t('auth.signIn.username')}
               value={formData.username}
               onChange={handleChange('username')}
               isInvalid={!!errors.username}
@@ -99,8 +101,8 @@ export default function LoginPage() {
             />
 
             <Input
-              label="Contrasenya"
-              placeholder="Introdueix la teva contrasenya"
+              label={t('auth.signIn.password')}
+              placeholder={t('auth.signIn.password')}
               type="password"
               value={formData.password}
               onChange={handleChange('password')}
@@ -124,13 +126,13 @@ export default function LoginPage() {
               isLoading={isLoading}
               className="w-full"
             >
-              Iniciar sessió
+              {t('auth.signIn.signInButton')}
             </Button>
 
             <p className="text-center text-small">
-              No tens compte?{' '}
+              {t('auth.signIn.noAccount')}{' '}
               <Link href="/register" size="sm" className="font-semibold">
-                Registra't ara
+                {t('auth.signIn.registerNow')}
               </Link>
             </p>
           </form>

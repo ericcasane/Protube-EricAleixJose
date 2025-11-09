@@ -1,0 +1,76 @@
+{
+  "nav": {
+    "search": "Buscar...",
+    "signIn": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
+    "home": "Inicio",
+    "explore": "Explorar",
+    "platformDescription": "La plataforma definitiva para entusiastas de vídeos."
+  },
+  "home": {
+    "title": {
+      "the": "La",
+      "ultimate": "plataforma definitiva",
+      "platform": "para entusiastas de vídeos."
+    },
+    "badge": "Descubre contenido asombroso",
+    "errorLoading": "Error al cargar vídeos",
+    "noVideos": "No hay vídeos disponibles"
+  },
+  "auth": {
+    "signIn": {
+      "welcome": "Bienvenido a ProTube",
+      "subtitle": "Inicia sesión para continuar",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "usernameRequired": "El nombre de usuario es obligatorio",
+      "passwordRequired": "La contraseña es obligatoria",
+      "signInButton": "Iniciar sesión",
+      "noAccount": "¿No tienes cuenta?",
+      "registerNow": "Regístrate ahora",
+      "error": "Error al iniciar sesión. Verifica tus credenciales."
+    },
+    "register": {
+      "title": "Regístrate en ProTube",
+      "subtitle": "Crea tu cuenta para comenzar",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo electrónico",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "confirmPassword": "Confirma la contraseña",
+      "firstNameRequired": "El nombre es obligatorio",
+      "lastNameRequired": "El apellido es obligatorio",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "emailInvalid": "El correo electrónico no es válido",
+      "usernameRequired": "El nombre de usuario es obligatorio",
+      "usernameTaken": "El nombre de usuario ya está en uso",
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden",
+      "registerButton": "Registrarse",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "signIn": "Inicia sesión",
+      "error": "Error al registrarse. Por favor, intenta de nuevo."
+    }
+  },
+  "video": {
+    "viewsLabel": "visualizaciones",
+    "timeAgo": {
+      "justNow": "Hace poco",
+      "minutesAgo": "Hace {count} minutos",
+      "hoursAgo": "Hace {count} horas",
+      "daysAgo": "Hace {count} días",
+      "weeksAgo": "Hace {count} semanas",
+      "monthsAgo": "Hace {count} meses",
+      "yearsAgo": "Hace {count} años"
+    }
+  },
+  "common": {
+    "error": "Error",
+    "loading": "Cargando...",
+    "cancel": "Cancelar",
+    "save": "Guardar"
+  }
+}

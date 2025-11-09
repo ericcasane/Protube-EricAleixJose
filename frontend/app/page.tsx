@@ -5,11 +5,13 @@ import { Spinner } from '@heroui/react';
 import { motion } from 'framer-motion';
 import { VideoCard, type VideoCardProps } from '@/components/video-card';
 import { title } from '@/components/primitives';
+import { useTranslations } from '@/hooks/useTranslations';
 
 export default function Home() {
   const [videos, setVideos] = useState<VideoCardProps[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations();
 
   useEffect(() => {
     const fetchVideos = async () => {
@@ -100,13 +102,13 @@ export default function Home() {
               className={`${title()} inline-block`}
               variants={wordVariants}
             >
-              The
+              {t('home.title.the')}
             </motion.span>
             <motion.span
               className={`${title({ color: 'blue' })} inline-block bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent`}
               variants={wordVariants}
             >
-              ultimate
+              {t('home.title.ultimate')}
             </motion.span>
           </div>
 
@@ -115,7 +117,7 @@ export default function Home() {
             variants={itemVariants}
           >
             <span className={title()}>
-              platform for video enthusiasts.
+              {t('home.title.platform')}
             </span>
             <motion.div
               variants={underlineVariants}
@@ -138,7 +140,7 @@ export default function Home() {
               className="inline-block w-2 h-2 rounded-full bg-cyan-400"
             />
             <span className="text-xs font-medium">
-              Discover amazing content
+              {t('home.badge')}
             </span>
           </div>
         </motion.div>
@@ -152,13 +154,13 @@ export default function Home() {
         ) : error ? (
           <div className="text-center text-danger min-h-[400px] flex items-center justify-center">
             <div>
-              <p className="text-lg font-semibold">Error loading videos</p>
+              <p className="text-lg font-semibold">{t('home.errorLoading')}</p>
               <p className="text-sm mt-2">{error}</p>
             </div>
           </div>
         ) : videos.length === 0 ? (
           <div className="text-center text-foreground-500 min-h-[400px] flex items-center justify-center">
-            <p className="text-lg">No videos available</p>
+            <p className="text-lg">{t('home.noVideos')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
