@@ -1,4 +1,4 @@
-package com.tecnocampus.LS2.protube_back.domain.model;
+package com.tecnocampus.LS2.protube_back.adapter.in.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,16 +11,16 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Video {
+public class VideoDetailResponseDTO {
+    private String id;
     private String title;
-    private String user;
-    private String videoFileName;
-    private String thumbnailFileName;
+    private String videoUrl;
+    private String thumbnailUrl;
     private Double duration;
     private String description;
-    private Long timestamp;
     private Long viewCount;
     private Long likeCount;
-    private Channel channel;
-    private List<Comment> comments;
+    private Long timestamp;
+    private ChannelDTO channel;
+    private List<CommentDTO> comments;
 }
