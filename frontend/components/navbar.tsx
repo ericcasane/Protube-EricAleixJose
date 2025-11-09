@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Navbar as HeroUINavbar,
   NavbarContent,
@@ -10,6 +12,7 @@ import {
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
 import { Input } from "@heroui/input";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
@@ -21,8 +24,11 @@ import {
   SearchIcon,
   Logo,
 } from "@/components/icons";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Navbar = () => {
+  const { user, isAuthenticated, logout } = useAuth();
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -80,17 +86,62 @@ export const Navbar = () => {
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            variant="flat"
-            startContent={<Icon icon="heroicons:user-16-solid" className="text-base" />}
-          >
-            Login
-          </Button>
-        </NavbarItem>
+
+        {isAuthenticated && user ? (
+          <NavbarItem className="hidden md:flex">
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Button
+                  variant="flat"
+                  className="text-sm font-normal text-default-600 bg-default-100"
+                  startContent={<Icon icon="heroicons:user-circle-solid" className="text-xl" />}
+                >
+                  {user.username}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="User menu actions">
+                <DropdownItem key="profile" className="h-14 gap-2" textValue="Perfil">
+                  <p className="font-semibold">Identificat com</p>
+                  <p className="font-semibold">{user.email}</p>
+                </DropdownItem>
+                <DropdownItem
+                  key="logout"
+                  color="danger"
+                  textValue="Tancar sessió"
+                  startContent={<Icon icon="heroicons:arrow-right-on-rectangle" />}
+                  onPress={logout}
+                >
+                  Tancar sessió
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+        ) : (
+          <>
+            <NavbarItem className="hidden md:flex">
+              <Button
+                as={NextLink}
+                href="/login"
+                className="text-sm font-normal text-default-600 bg-default-100"
+                variant="flat"
+                startContent={<Icon icon="heroicons:arrow-right-on-rectangle" className="text-base" />}
+              >
+                Iniciar sessió
+              </Button>
+            </NavbarItem>
+            <NavbarItem className="hidden md:flex">
+              <Button
+                as={NextLink}
+                href="/register"
+                color="primary"
+                variant="flat"
+                startContent={<Icon icon="heroicons:user-plus" className="text-base" />}
+              >
+                Registrar-se
+              </Button>
+            </NavbarItem>
+          </>
+        )}
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
@@ -111,15 +162,65 @@ export const Navbar = () => {
                       ? "danger"
                       : "foreground"
                 }
-                href="#"
+                href={item.href}
                 size="lg"
               >
                 {item.label}
               </Link>
             </NavbarMenuItem>
           ))}
+
+          {/* Auth buttons for mobile */}
+          {isAuthenticated && user ? (
+            <>
+              <NavbarMenuItem>
+                <div className="flex flex-col gap-1 py-2">
+                  <p className="text-sm font-semibold">{user.username}</p>
+                  <p className="text-xs text-default-500">{user.email}</p>
+                </div>
+              </NavbarMenuItem>
+              <NavbarMenuItem>
+                <Button
+                  color="danger"
+                  variant="flat"
+                  className="w-full"
+                  startContent={<Icon icon="heroicons:arrow-right-on-rectangle" />}
+                  onPress={logout}
+                >
+                  Tancar sessió
+                </Button>
+              </NavbarMenuItem>
+            </>
+          ) : (
+            <>
+              <NavbarMenuItem>
+                <Button
+                  as={NextLink}
+                  href="/login"
+                  variant="flat"
+                  className="w-full"
+                  startContent={<Icon icon="heroicons:arrow-right-on-rectangle" />}
+                >
+                  Iniciar sessió
+                </Button>
+              </NavbarMenuItem>
+              <NavbarMenuItem>
+                <Button
+                  as={NextLink}
+                  href="/register"
+                  color="primary"
+                  variant="flat"
+                  className="w-full"
+                  startContent={<Icon icon="heroicons:user-plus" />}
+                >
+                  Registrar-se
+                </Button>
+              </NavbarMenuItem>
+            </>
+          )}
         </div>
       </NavbarMenu>
     </HeroUINavbar>
   );
 };
+
