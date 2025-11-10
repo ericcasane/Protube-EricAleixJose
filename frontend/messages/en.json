@@ -20,7 +20,7 @@
   },
   "auth": {
     "signIn": {
-      "welcome": "Welcome to ProTube",
+      "logIn": "Log In",
       "subtitle": "Sign in to continue",
       "username": "Username",
       "password": "Password",
@@ -32,7 +32,7 @@
       "error": "Sign in error. Check your credentials."
     },
     "register": {
-      "title": "Register on ProTube",
+      "title": "Register",
       "subtitle": "Create your account to get started",
       "firstName": "First name",
       "lastName": "Last name",
