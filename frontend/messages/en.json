@@ -20,7 +20,7 @@
   },
   "auth": {
     "signIn": {
-      "welcome": "Welcome to ProTube",
+      "logIn": "Log In",
       "subtitle": "Sign in to continue",
       "username": "Username",
       "password": "Password",
@@ -32,7 +32,7 @@
       "error": "Sign in error. Check your credentials."
     },
     "register": {
-      "title": "Register on ProTube",
+      "title": "Register",
       "subtitle": "Create your account to get started",
       "firstName": "First name",
       "lastName": "Last name",
@@ -57,6 +57,19 @@
   },
   "video": {
     "viewsLabel": "views",
+    "subscribers": "subscribers",
+    "subscribe": "Subscribe",
+    "share": "Share",
+    "download": "Download",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "comments": "{count} Comments",
+    "addComment": "Add a comment...",
+    "reply": "Reply",
+    "recommended": "Recommended",
+    "errorLoading": "Error loading video",
+    "notFound": "Video not found",
+    "browserNotSupported": "Your browser does not support the video tag.",
     "timeAgo": {
       "justNow": "Just now",
       "minutesAgo": "{count} minutes ago",

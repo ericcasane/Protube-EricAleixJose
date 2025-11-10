@@ -82,12 +82,12 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col gap-1 items-center pb-6 pt-8">
           <h1 className={title({ size: 'sm' })}>
-            {t('auth.signIn.welcome')} <span className={title({ color: 'blue', size: 'sm' })}>ProTube</span>
+            {t('auth.signIn.logIn')}
           </h1>
           <p className="text-small text-default-500">{t('auth.signIn.subtitle')}</p>
         </CardHeader>
         <CardBody>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-6">
             <Input
               label={t('auth.signIn.username')}
               placeholder={t('auth.signIn.username')}

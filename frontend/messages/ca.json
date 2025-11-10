@@ -20,7 +20,7 @@
   },
   "auth": {
     "signIn": {
-      "welcome": "Benvingut a ProTube",
+      "logIn": "Iniciar sessió",
       "subtitle": "Inicia sessió per continuar",
       "username": "Nom d'usuari",
       "password": "Contrasenya",
@@ -32,7 +32,7 @@
       "error": "Error en l'inici de sessió. Comprova les teves credencials."
     },
     "register": {
-      "title": "Registra't a ProTube",
+      "title": "Registre",
       "subtitle": "Crea el teu compte per començar",
       "firstName": "Nom",
       "lastName": "Cognoms",
@@ -57,6 +57,19 @@
   },
   "video": {
     "viewsLabel": "visualitzacions",
+    "subscribers": "subscriptors",
+    "subscribe": "Subscriure's",
+    "share": "Compartir",
+    "download": "Descarregar",
+    "showMore": "Mostrar més",
+    "showLess": "Mostrar menys",
+    "comments": "{count} Comentaris",
+    "addComment": "Afegeix un comentari...",
+    "reply": "Respondre",
+    "recommended": "Recomanat",
+    "errorLoading": "Error carregant el vídeo",
+    "notFound": "Vídeo no trobat",
+    "browserNotSupported": "El teu navegador no suporta l'etiqueta de vídeo.",
     "timeAgo": {
       "justNow": "Fa poc",
       "minutesAgo": "Fa {count} minuts",

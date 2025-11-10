@@ -20,7 +20,7 @@ export function useTranslations(namespace?: string) {
   return useMemo(() => {
     const messages = translations[locale] || translations['en'];
 
-    const t = (key: string, defaultValue?: string, options?: Record<string, string | number>) => {
+    const t = (key: string, options?: Record<string, string | number>) => {
       let value = messages;
       const keyPath = namespace ? `${namespace}.${key}` : key;
 
@@ -30,14 +30,14 @@ export function useTranslations(namespace?: string) {
       }
 
       if (typeof value !== 'string') {
-        return defaultValue || key;
+        return key;
       }
 
       // Replace placeholders like {count}
       if (options) {
         let result = value;
         for (const [placeholder, replacement] of Object.entries(options)) {
-          result = result.replace(`{${placeholder}}`, String(replacement));
+          result = result.replaceAll(`{${placeholder}}`, String(replacement));
         }
         return result;
       }

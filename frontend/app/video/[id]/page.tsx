@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { Spinner, Avatar, Button, Card } from '@heroui/react';
 import { VideoDetail, VideoListItem } from '@/src/types/video';
 import { VideoCard } from '@/components/video-card';
+import { useTranslations } from '@/hooks/useTranslations';
 
 // SVG Icons
 const ThumbsUpIcon = ({ className }: { className?: string }) => (
@@ -120,7 +121,7 @@ function formatDate(timestamp: number): string {
 }
 
 // Función para formatear fecha de comentarios
-function formatCommentDate(timestamp: number): string {
+function formatCommentDate(timestamp: number, t: (key: string, options?: Record<string, string | number>) => string): string {
   const date = new Date(timestamp * 1000);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -130,26 +131,27 @@ function formatCommentDate(timestamp: number): string {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     if (diffHours === 0) {
       const diffMins = Math.floor(diffMs / (1000 * 60));
-      return diffMins <= 0 ? 'Just now' : `${diffMins} minutes ago`;
+      return diffMins <= 0 ? t('video.timeAgo.justNow') : t('video.timeAgo.minutesAgo', { count: diffMins });
     }
-    return `${diffHours} hours ago`;
+    return t('video.timeAgo.hoursAgo', { count: diffHours });
   }
-  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 7) return t('video.timeAgo.daysAgo', { count: diffDays });
   if (diffDays < 30) {
     const weeks = Math.floor(diffDays / 7);
-    return `${weeks} weeks ago`;
+    return t('video.timeAgo.weeksAgo', { count: weeks });
   }
   if (diffDays < 365) {
     const months = Math.floor(diffDays / 30);
-    return `${months} months ago`;
+    return t('video.timeAgo.monthsAgo', { count: months });
   }
   const years = Math.floor(diffDays / 365);
-  return `${years} years ago`;
+  return t('video.timeAgo.yearsAgo', { count: years });
 }
 
 export default function VideoPage() {
   const params = useParams();
   const videoId = params.id as string;
+  const t = useTranslations();
 
   const [video, setVideo] = useState<VideoDetail | null>(null);
   const [recommendedVideos, setRecommendedVideos] = useState<VideoListItem[]>(
@@ -209,8 +211,8 @@ export default function VideoPage() {
     return (
       <div className="text-center text-danger min-h-screen flex items-center justify-center">
         <div>
-          <p className="text-lg font-semibold">Error loading video</p>
-          <p className="text-sm mt-2">{error || 'Video not found'}</p>
+          <p className="text-lg font-semibold">{t('video.errorLoading')}</p>
+          <p className="text-sm mt-2">{error || t('video.notFound')}</p>
         </div>
       </div>
     );
@@ -226,7 +228,7 @@ export default function VideoPage() {
         <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden mb-4">
           <video className="w-full h-full" controls autoPlay>
             <source src={videoUrl} type="video/mp4" />
-            Your browser does not support the video tag.
+            {t('video.browserNotSupported')}
           </video>
         </div>
 
@@ -247,13 +249,13 @@ export default function VideoPage() {
                 <p className="font-semibold">{video.channel?.name}</p>
                 {video.channel?.followerCount && (
                   <p className="text-sm text-foreground-500">
-                    {formatNumber(video.channel.followerCount)} subscribers
+                    {formatNumber(video.channel.followerCount)} {t('video.subscribers')}
                   </p>
                 )}
               </div>
             </div>
             <Button variant="primary" className="px-6 rounded-full">
-              Subscribe
+              {t('video.subscribe')}
             </Button>
           </div>
 
@@ -273,11 +275,11 @@ export default function VideoPage() {
             </div>
             <Button variant="secondary" className="rounded-full">
               <ShareIcon />
-              <span className="ml-2">Share</span>
+              <span className="ml-2">{t('video.share')}</span>
             </Button>
             <Button variant="secondary" className="rounded-full">
               <DownloadIcon />
-              <span className="ml-2">Download</span>
+              <span className="ml-2">{t('video.download')}</span>
             </Button>
             <Button variant="secondary" className="rounded-full px-3">
               <MoreIcon />
@@ -288,7 +290,7 @@ export default function VideoPage() {
         {/* Video Description */}
         <Card className="p-4 bg-default-50">
           <div className="flex gap-3 text-sm font-semibold mb-2">
-            <span>{formatNumber(video.viewCount)} views</span>
+            <span>{formatNumber(video.viewCount)} {t('video.viewsLabel')}</span>
             <span>{formatDate(video.timestamp)}</span>
           </div>
           <div
@@ -301,7 +303,7 @@ export default function VideoPage() {
               onClick={() => setShowFullDescription(!showFullDescription)}
               className="text-sm font-semibold mt-2 hover:text-primary transition-colors"
             >
-              {showFullDescription ? 'Show less' : 'Show more'}
+              {showFullDescription ? t('video.showLess') : t('video.showMore')}
             </button>
           )}
         </Card>
@@ -309,7 +311,7 @@ export default function VideoPage() {
         {/* Comments Section */}
         <div className="mt-6">
           <h2 className="text-xl font-bold mb-4">
-            {video.comments?.length || 0} Comments
+            {t('video.comments', { count: video.comments?.length || 0 })}
           </h2>
 
           {/* Comment Input */}
@@ -319,7 +321,7 @@ export default function VideoPage() {
             </Avatar>
             <input
               type="text"
-              placeholder="Add a comment..."
+              placeholder={t('video.addComment')}
               className="flex-1 bg-transparent border-b-2 border-default-200 focus:border-primary outline-none pb-2 transition-colors"
             />
           </div>
@@ -339,7 +341,7 @@ export default function VideoPage() {
                       @{comment.author}
                     </span>
                     <span className="text-xs text-foreground-500">
-                      {formatCommentDate(comment.timestamp)}
+                      {formatCommentDate(comment.timestamp, t)}
                     </span>
                   </div>
                   <p className="text-sm mb-2">{comment.text}</p>
@@ -354,7 +356,7 @@ export default function VideoPage() {
                       <ThumbsDownIcon className="w-4 h-4" />
                     </button>
                     <button className="text-sm font-medium hover:bg-default-100 px-3 py-1 rounded-full transition-colors">
-                      Reply
+                      {t('video.reply')}
                     </button>
                   </div>
                 </div>
@@ -366,7 +368,7 @@ export default function VideoPage() {
 
       {/* Recommended Videos Sidebar */}
       <div className="lg:w-[400px]">
-        <h2 className="text-lg font-bold mb-4">Recommended</h2>
+        <h2 className="text-lg font-bold mb-4">{t('video.recommended')}</h2>
         <div className="space-y-2">
           {recommendedVideos.map((recVideo) => (
             <VideoCard

@@ -104,12 +104,15 @@ export default function RegisterPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col gap-1 items-center pb-6 pt-8">
           <h1 className={title({ size: 'sm' })}>
-            {t('auth.register.title')} <span className={title({ color: 'blue', size: 'sm' })}>ProTube</span>
+            {t('auth.register.title')}
+            <span aria-label="emoji" className="ml-2" role="img">
+            👋
+            </span>
           </h1>
           <p className="text-small text-default-500">{t('auth.register.subtitle')}</p>
         </CardHeader>
         <CardBody>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-6">
             <Input
               label={t('auth.register.firstName')}
               placeholder={t('auth.register.firstName')}
