@@ -20,6 +20,8 @@ public class VideoDetailResponseDTO {
     private String description;
     private Long viewCount;
     private Long likeCount;
+    private Long dislikeCount;
+    private String userReaction; // "LIKE", "DISLIKE", or null
     private Long timestamp;
     private ChannelDTO channel;
     private List<CommentDTO> comments;

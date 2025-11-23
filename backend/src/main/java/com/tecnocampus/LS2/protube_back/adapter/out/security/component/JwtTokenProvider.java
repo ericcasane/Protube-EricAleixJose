@@ -34,6 +34,17 @@ public class JwtTokenProvider {
         return getTokenBody(token).getSubject();
     }
 
+    public Long getUserIdFromToken(String token) {
+        Claims claims = getTokenBody(token);
+        Object userIdClaim = claims.get("userId");
+        if (userIdClaim instanceof Integer) {
+            return ((Integer) userIdClaim).longValue();
+        } else if (userIdClaim instanceof Long) {
+            return (Long) userIdClaim;
+        }
+        throw new IllegalArgumentException("Invalid userId in token");
+    }
+
     public boolean validateToken(String token) {
         try {
             getTokenBody(token);
