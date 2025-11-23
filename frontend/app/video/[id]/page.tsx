@@ -165,6 +165,8 @@ export default function VideoPage() {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
   const [isDislikeLoading, setIsDislikeLoading] = useState(false);
+  const [commentText, setCommentText] = useState('');
+  const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchVideoDetail = async () => {
@@ -317,6 +319,62 @@ export default function VideoPage() {
     }
   };
 
+  const handleAddComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const token = AuthService.getToken();
+    const userData = AuthService.getUserData();
+    
+    if (!isAuthenticated || !token) {
+      alert(t('video.loginRequired') || 'Please login to comment');
+      return;
+    }
+
+    if (!commentText.trim()) {
+      return;
+    }
+
+    try {
+      setIsCommentSubmitting(true);
+      
+      const response = await fetch(`/api/videos/${videoId}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ text: commentText }),
+      });
+
+      if (response.status === 401) {
+        alert(t('video.loginRequired') || 'Please login to comment');
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Comment error:', errorData);
+        throw new Error('Failed to add comment');
+      }
+
+      const newComment = await response.json();
+      
+      // Add new comment to the beginning of the comments list
+      setVideo(prev => prev ? {
+        ...prev,
+        comments: [newComment, ...(prev.comments || [])],
+      } : null);
+
+      // Clear the input
+      setCommentText('');
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      alert(t('video.errorComment') || 'Failed to add comment. Please try again.');
+    } finally {
+      setIsCommentSubmitting(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -448,16 +506,44 @@ export default function VideoPage() {
           </h2>
 
           {/* Comment Input */}
-          <div className="flex gap-3 mb-6">
+          <form onSubmit={handleAddComment} className="flex gap-3 mb-6">
             <Avatar size="md" className="rounded-full">
-              <Avatar.Fallback>U</Avatar.Fallback>
+              <Avatar.Fallback>
+                {AuthService.getUserData()?.username?.charAt(0).toUpperCase() || 'U'}
+              </Avatar.Fallback>
             </Avatar>
-            <input
-              type="text"
-              placeholder={t('video.addComment')}
-              className="flex-1 bg-transparent border-b-2 border-default-200 focus:border-primary outline-none pb-2 transition-colors"
-            />
-          </div>
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder={t('video.addComment')}
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                disabled={isCommentSubmitting || !isAuthenticated}
+                className="w-full bg-transparent border-b-2 border-default-200 focus:border-primary outline-none pb-2 transition-colors disabled:opacity-50"
+              />
+              {commentText.trim() && (
+                <div className="flex justify-end gap-2 mt-2">
+                  <Button
+                    type="button"
+                    variant="flat"
+                    size="sm"
+                    onClick={() => setCommentText('')}
+                    disabled={isCommentSubmitting}
+                  >
+                    {t('video.cancel')}
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="sm"
+                    disabled={isCommentSubmitting}
+                  >
+                    {isCommentSubmitting ? t('video.commenting') : t('video.comment')}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </form>
 
           {/* Comments List */}
           <div className="space-y-4">

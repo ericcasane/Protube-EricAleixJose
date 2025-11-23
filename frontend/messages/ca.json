@@ -71,14 +71,20 @@
     "notFound": "Vídeo no trobat",
     "browserNotSupported": "El teu navegador no suporta l'etiqueta de vídeo.",
     "timeAgo": {
-      "justNow": "Fa poc",
+      "justNow": "Ara mateix",
       "minutesAgo": "Fa {count} minuts",
       "hoursAgo": "Fa {count} hores",
       "daysAgo": "Fa {count} dies",
       "weeksAgo": "Fa {count} setmanes",
       "monthsAgo": "Fa {count} mesos",
       "yearsAgo": "Fa {count} anys"
-    }
+    },
+    "loginRequired": "Si us plau inicia sessió per continuar",
+    "comment": "Comentar",
+    "commenting": "Comentant...",
+    "errorComment": "Error en afegir comentari",
+    "errorLiking": "Error en donar m'agrada",
+    "errorDisliking": "Error en donar no m'agrada"
   },
   "common": {
     "error": "Error",

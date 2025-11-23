@@ -4,6 +4,7 @@ import com.tecnocampus.LS2.protube_back.adapter.in.web.dto.*;
 import com.tecnocampus.LS2.protube_back.domain.model.Video;
 import com.tecnocampus.LS2.protube_back.domain.service.VideoService;
 import com.tecnocampus.LS2.protube_back.domain.service.TemporaryVideoReactionService;
+import com.tecnocampus.LS2.protube_back.domain.service.TemporaryCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class VideosRestController {
 
     @Autowired
     TemporaryVideoReactionService temporaryReactionService;
+
+    @Autowired
+    TemporaryCommentService temporaryCommentService;
 
     @GetMapping("")
     @Operation(summary = "Get all videos with basic information for list view")
@@ -141,6 +145,51 @@ public class VideosRestController {
 
         VideoReactionResponseDTO response = temporaryReactionService.getReactionStats(userId, id);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{id}/comments")
+    @Operation(summary = "Add a comment to a video")
+    public ResponseEntity<CommentDTO> addComment(
+            @PathVariable String id,
+            @RequestBody CommentCreateDTO commentCreateDTO,
+            Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        // Get username from authentication (we need to extract it from JWT claims)
+        // For now, we'll use a workaround to get the username
+        String username = getUsernameFromAuthentication(authentication);
+        
+        if (username == null || commentCreateDTO.getText() == null || commentCreateDTO.getText().trim().isEmpty()) {
+            return ResponseEntity.status(400).build();
+        }
+
+        CommentDTO newComment = temporaryCommentService.addComment(id, username, commentCreateDTO.getText());
+        return ResponseEntity.ok(newComment);
+    }
+
+    @GetMapping("/{id}/comments")
+    @Operation(summary = "Get all comments for a video")
+    public ResponseEntity<List<CommentDTO>> getComments(@PathVariable String id) {
+        List<CommentDTO> comments = temporaryCommentService.getComments(id);
+        return ResponseEntity.ok(comments);
+    }
+
+    private String getUsernameFromAuthentication(Authentication authentication) {
+        // Since we're storing userId as the principal, we need to load the user to get username
+        // For now, we'll use a simple mapping based on userId
+        // In a real app, you'd query the database
+        try {
+            Long userId = Long.parseLong(authentication.getName());
+            // Temporary mapping - in production, query user service
+            if (userId == 1L) return "jmartorell";
+            if (userId == 2L) return "ealeix";
+            if (userId == 3L) return "jcasane";
+            return "user" + userId;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private VideoListResponseDTO mapVideoToListResponse(Video video) {
