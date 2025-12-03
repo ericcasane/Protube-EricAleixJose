@@ -29,7 +29,8 @@
       "signInButton": "Iniciar sessió",
       "noAccount": "No tens compte?",
       "registerNow": "Registra't ara",
-      "error": "Error en l'inici de sessió. Comprova les teves credencials."
+      "error": "Error en l'inici de sessió. Comprova les teves credencials.",
+      "welcome": "Benvingut"
     },
     "register": {
       "title": "Registre",

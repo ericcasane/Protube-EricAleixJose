@@ -107,9 +107,21 @@ export const Navbar = () => {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="User menu actions">
-                <DropdownItem key="profile" className="h-14 gap-2" textValue="Profile">
-                  <p className="font-semibold">{t('auth.signIn.welcome')}</p>
-                  <p className="font-semibold">{user.email}</p>
+                <DropdownItem 
+                  key="info" 
+                  className="gap-2 cursor-default pointer-events-none" 
+                  textValue="User Info"
+                  isReadOnly
+                >
+                  <p className="font-semibold">{t('auth.signIn.welcome')} @{user.username}</p>
+                </DropdownItem>
+                <DropdownItem
+                  key="profile"
+                  as={NextLink}
+                  href={`/profile/${user.username}`}
+                  startContent={<Icon icon="heroicons:user" />}
+                >
+                  My Channel
                 </DropdownItem>
                 <DropdownItem
                   key="logout"

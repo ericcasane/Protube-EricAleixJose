@@ -29,7 +29,8 @@
       "signInButton": "Sign in",
       "noAccount": "Don't have an account?",
       "registerNow": "Register now",
-      "error": "Sign in error. Check your credentials."
+      "error": "Sign in error. Check your credentials.",
+      "welcome": "Welcome"
     },
     "register": {
       "title": "Register",

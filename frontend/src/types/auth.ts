@@ -4,6 +4,7 @@ export interface RegisterData {
   email: string;
   username: string;
   password: string;
+  description?: string; // Optional for now
 }
 
 export interface LoginData {
@@ -23,8 +24,12 @@ export interface TokenResponse {
 }
 
 export interface User {
-  userId: number;
+  userId?: number; // Optional because profile response might not have ID
   username: string;
+  name: string;
+  surname: string;
   email: string;
+  description?: string;
+  profilePictureUrl?: string;
+  bannerUrl?: string;
 }
-
