@@ -20,7 +20,6 @@ export default function RegisterPage() {
     surname: '',
     email: '',
     username: '',
-    description: '',
     password: '',
     confirmPassword: '',
   });
@@ -81,7 +80,6 @@ export default function RegisterPage() {
         email: formData.email,
         username: formData.username,
         password: formData.password,
-        description: formData.description,
       });
 
       router.push('/');
@@ -157,14 +155,6 @@ export default function RegisterPage() {
               isInvalid={!!errors.username}
               errorMessage={errors.username}
               isRequired
-              variant="bordered"
-            />
-
-            <Input
-              label="Description"
-              placeholder="Tell us about yourself (optional)"
-              value={formData.description}
-              onChange={handleChange('description')}
               variant="bordered"
             />
 

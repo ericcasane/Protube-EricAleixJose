@@ -29,7 +29,7 @@ public record User(
                 command.email(),
                 command.username(),
                 encoder.encode(command.password()),
-                command.description() != null ? command.description() : "", // Default description
+                "Hello! I am using ProTube.", // Default description
                 "https://ui-avatars.com/api/?name=" + command.name() + "+" + command.surname(), // Default avatar
                 "https://picsum.photos/seed/" + command.username() + "/1200/300" // Default banner
         );

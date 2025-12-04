@@ -4,7 +4,6 @@ export interface RegisterData {
   email: string;
   username: string;
   password: string;
-  description?: string; // Optional for now
 }
 
 export interface LoginData {
