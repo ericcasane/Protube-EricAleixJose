@@ -6,6 +6,7 @@
     "logout": "Tancar sessió",
     "home": "Inici",
     "explore": "Explorar",
+    "myChannel": "El Meu Canal",
     "platformDescription": "La plataforma definitiva per a entusiastes de vídeo."
   },
   "home": {
@@ -17,6 +18,28 @@
     "badge": "Descobreix contingut sorprenent",
     "errorLoading": "Error carregant vídeos",
     "noVideos": "Cap vídeo disponible"
+  },
+  "explore": {
+    "title": "Explorar",
+    "subtitle": "Contingut seleccionat per a tu.",
+    "watchNow": "Veure ara",
+    "trending": "Tendències",
+    "freshUploads": "Noves pujades",
+    "trendingBadge": "#1 en Tendències"
+  },
+  "profile": {
+    "edit": "Editar Perfil",
+    "videos": "Vídeos",
+    "noVideos": "Encara no hi ha vídeos",
+    "description": "Descripció",
+    "descriptionPlaceholder": "Explica als espectadors sobre el teu canal",
+    "profilePictureUrl": "URL Foto de Perfil",
+    "bannerUrl": "URL Banner",
+    "save": "Guardar",
+    "cancel": "Cancel·lar",
+    "loadError": "Error carregant perfil",
+    "updateError": "Error actualitzant perfil",
+    "userNotFound": "Usuari no trobat"
   },
   "auth": {
     "signIn": {

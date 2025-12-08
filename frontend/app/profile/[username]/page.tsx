@@ -10,6 +10,7 @@ import { Input, Textarea } from '@heroui/input';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserService } from '@/src/services/userService';
 import type { User } from '@/types/auth';
+import { useTranslations } from '@/hooks/useTranslations';
 
 export default function ProfilePage() {
   const params = useParams();
@@ -18,7 +19,8 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  
+  const t = useTranslations();
+
   // Edit form state
   const [editForm, setEditForm] = useState({
     description: '',
@@ -46,7 +48,7 @@ export default function ProfilePage() {
         bannerUrl: data.bannerUrl || ''
       });
     } catch (err) {
-      setError('Failed to load profile');
+      setError('loadError'); // Store key instead of text
       console.error(err);
     } finally {
       setLoading(false);
@@ -69,23 +71,23 @@ export default function ProfilePage() {
 
   const isOwnProfile = currentUser?.username === username;
 
-  if (loading) return <div className="flex justify-center p-10">Loading...</div>;
-  if (error || !profile) return <div className="flex justify-center p-10 text-danger">{error || 'User not found'}</div>;
+  if (loading) return <div className="flex justify-center p-10">{t('common.loading')}</div>;
+  if (error || !profile) return <div className="flex justify-center p-10 text-danger">{t(`profile.${error || 'userNotFound'}`)}</div>;
 
   return (
     <div className="w-full flex flex-col items-center">
       {/* Banner */}
       <div className="w-full h-48 md:h-64 relative bg-gray-200 overflow-hidden">
         {profile.bannerUrl ? (
-            <Image
-                src={profile.bannerUrl}
-                alt="Banner"
-                className="w-full h-full object-cover"
-                width={1920}
-                height={300}
-            />
+          <Image
+            src={profile.bannerUrl}
+            alt="Banner"
+            className="w-full h-full object-cover"
+            width={1920}
+            height={300}
+          />
         ) : (
-            <div className="w-full h-full bg-gradient-to-r from-blue-400 to-purple-500" />
+          <div className="w-full h-full bg-gradient-to-r from-blue-400 to-purple-500" />
         )}
       </div>
 
@@ -93,12 +95,12 @@ export default function ProfilePage() {
         <div className="flex flex-col md:flex-row items-start gap-6 -mt-16 mb-8 relative z-10">
           {/* Avatar */}
           <div className="rounded-full p-1 bg-background">
-             <Image
-                src={profile.profilePictureUrl || `https://ui-avatars.com/api/?name=${profile.name}+${profile.surname}&background=random`}
-                alt={profile.username}
-                className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover"
-                width={160}
-                height={160}
+            <Image
+              src={profile.profilePictureUrl || `https://ui-avatars.com/api/?name=${profile.name}+${profile.surname}&background=random`}
+              alt={profile.username}
+              className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover"
+              width={160}
+              height={160}
             />
           </div>
 
@@ -111,11 +113,11 @@ export default function ProfilePage() {
               </div>
               {isOwnProfile && (
                 <Button color="primary" variant="flat" onPress={onOpen}>
-                  Edit Profile
+                  {t('profile.edit')}
                 </Button>
               )}
             </div>
-            
+
             {profile.description && (
               <div className="mt-4 text-default-700 max-w-2xl">
                 {profile.description}
@@ -126,12 +128,12 @@ export default function ProfilePage() {
 
         {/* Content Tabs/Section (Placeholder) */}
         <div className="mt-8 border-t border-divider pt-4">
-          <h2 className="text-xl font-semibold mb-4">Videos</h2>
+          <h2 className="text-xl font-semibold mb-4">{t('profile.videos')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <Card>
-                <CardBody className="p-4">
-                    <p className="text-center text-default-500">No videos yet</p>
-                </CardBody>
+              <CardBody className="p-4">
+                <p className="text-center text-default-500">{t('profile.noVideos')}</p>
+              </CardBody>
             </Card>
           </div>
         </div>
@@ -142,22 +144,22 @@ export default function ProfilePage() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Edit Profile</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">{t('profile.edit')}</ModalHeader>
               <ModalBody>
                 <Textarea
-                  label="Description"
-                  placeholder="Tell viewers about your channel"
+                  label={t('profile.description')}
+                  placeholder={t('profile.descriptionPlaceholder')}
                   value={editForm.description}
                   onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                 />
                 <Input
-                  label="Profile Picture URL"
+                  label={t('profile.profilePictureUrl')}
                   placeholder="https://..."
                   value={editForm.profilePictureUrl}
                   onChange={(e) => setEditForm({ ...editForm, profilePictureUrl: e.target.value })}
                 />
                 <Input
-                  label="Banner URL"
+                  label={t('profile.bannerUrl')}
                   placeholder="https://..."
                   value={editForm.bannerUrl}
                   onChange={(e) => setEditForm({ ...editForm, bannerUrl: e.target.value })}
@@ -165,10 +167,10 @@ export default function ProfilePage() {
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
-                  Cancel
+                  {t('profile.cancel')}
                 </Button>
                 <Button color="primary" onPress={() => handleUpdateProfile(onClose)} isLoading={isSaving}>
-                  Save
+                  {t('profile.save')}
                 </Button>
               </ModalFooter>
             </>

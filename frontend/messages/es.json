@@ -6,7 +6,8 @@
     "logout": "Cerrar sesión",
     "home": "Inicio",
     "explore": "Explorar",
-    "platformDescription": "La plataforma definitiva para entusiastas de vídeos."
+    "myChannel": "Mi Canal",
+    "platformDescription": "La plataforma definitiva para entusiastes de vídeos."
   },
   "home": {
     "title": {
@@ -17,6 +18,28 @@
     "badge": "Descubre contenido asombroso",
     "errorLoading": "Error al cargar vídeos",
     "noVideos": "No hay vídeos disponibles"
+  },
+  "explore": {
+    "title": "Explorar",
+    "subtitle": "Contenido seleccionado para ti.",
+    "watchNow": "Ver ahora",
+    "trending": "Tendencias",
+    "freshUploads": "Nuevas subidas",
+    "trendingBadge": "#1 en Tendencias"
+  },
+  "profile": {
+    "edit": "Editar Perfil",
+    "videos": "Vídeos",
+    "noVideos": "Aún no hay vídeos",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Cuéntale a los espectadores sobre tu canal",
+    "profilePictureUrl": "URL Foto de Perfil",
+    "bannerUrl": "URL Banner",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "loadError": "Error al cargar perfil",
+    "updateError": "Error al actualizar perfil",
+    "userNotFound": "Usuario no encontrado"
   },
   "auth": {
     "signIn": {

@@ -139,9 +139,9 @@ export const Navbar = () => {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="User menu actions">
-                <DropdownItem 
-                  key="info" 
-                  className="gap-2 cursor-default pointer-events-none" 
+                <DropdownItem
+                  key="info"
+                  className="gap-2 cursor-default pointer-events-none"
                   textValue="User Info"
                   isReadOnly
                 >
@@ -153,7 +153,7 @@ export const Navbar = () => {
                   href={`/profile/${user.username}`}
                   startContent={<Icon icon="heroicons:user" />}
                 >
-                  My Channel
+                  {t('nav.myChannel')}
                 </DropdownItem>
                 <DropdownItem
                   key="logout"
