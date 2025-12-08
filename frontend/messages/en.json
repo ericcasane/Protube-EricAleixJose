@@ -6,6 +6,7 @@
     "logout": "Log out",
     "home": "Home",
     "explore": "Explore",
+    "myChannel": "My Channel",
     "platformDescription": "The ultimate platform for video enthusiasts."
   },
   "home": {
@@ -17,6 +18,28 @@
     "badge": "Discover amazing content",
     "errorLoading": "Error loading videos",
     "noVideos": "No videos available"
+  },
+  "explore": {
+    "title": "Explore",
+    "subtitle": "Curated content just for you.",
+    "watchNow": "Watch Now",
+    "trending": "Trending Now",
+    "freshUploads": "Fresh Uploads",
+    "trendingBadge": "#1 Trending"
+  },
+  "profile": {
+    "edit": "Edit Profile",
+    "videos": "Videos",
+    "noVideos": "No videos yet",
+    "description": "Description",
+    "descriptionPlaceholder": "Tell viewers about your channel",
+    "profilePictureUrl": "Profile Picture URL",
+    "bannerUrl": "Banner URL",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loadError": "Failed to load profile",
+    "updateError": "Failed to update profile",
+    "userNotFound": "User not found"
   },
   "auth": {
     "signIn": {

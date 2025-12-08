@@ -24,11 +24,15 @@ public record User(
 
     public static User from(RegisterUserCommand command) {
         return new User(
+                null, // ID is null for new users
                 command.name(),
                 command.surname(),
                 command.email(),
                 command.username(),
-                encoder.encode(command.password())
+                encoder.encode(command.password()),
+                command.description(),
+                null, // profilePictureUrl default
+                null  // bannerUrl default
         );
     }
 
