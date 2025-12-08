@@ -13,7 +13,10 @@ public class UserEntityMapper {
                 entity.getSurname(),
                 entity.getEmail(),
                 entity.getUsername(),
-                entity.getPassword()
+                entity.getPassword(),
+                entity.getDescription(),
+                entity.getProfilePictureUrl(),
+                entity.getBannerUrl()
         );
     }
 
@@ -24,7 +27,10 @@ public class UserEntityMapper {
                 user.surname(),
                 user.email(),
                 user.username(),
-                user.hashedPassword()
+                user.hashedPassword(),
+                user.description(),
+                user.profilePictureUrl(),
+                user.bannerUrl()
         );
     }
 }

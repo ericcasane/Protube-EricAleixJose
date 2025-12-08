@@ -29,7 +29,8 @@
       "signInButton": "Iniciar sesión",
       "noAccount": "¿No tienes cuenta?",
       "registerNow": "Regístrate ahora",
-      "error": "Error al iniciar sesión. Verifica tus credenciales."
+      "error": "Error al iniciar sesión. Verifica tus credenciales.",
+      "welcome": "Bienvenido"
     },
     "register": {
       "title": "Regístro",
