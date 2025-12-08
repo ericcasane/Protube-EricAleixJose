@@ -79,7 +79,13 @@
       "weeksAgo": "{count} weeks ago",
       "monthsAgo": "{count} months ago",
       "yearsAgo": "{count} years ago"
-    }
+    },
+    "loginRequired": "Please login to continue",
+    "comment": "Comment",
+    "commenting": "Commenting...",
+    "errorComment": "Failed to add comment",
+    "errorLiking": "Failed to like video",
+    "errorDisliking": "Failed to dislike video"
   },
   "common": {
     "error": "Error",

@@ -32,8 +32,17 @@ class VideoLoaderServiceTest {
     @Test
     void testLoadVideos() {
         Path videosDirectory = Paths.get("/test/videos");
-        Video video1 = new Video("Video 1", "user1", "video1.mp4", "thumb1.webp");
-        Video video2 = new Video("Video 2", "user2", "video2.mp4", "thumb2.webp");
+        Video video1 = new Video();
+        video1.setTitle("Video 1");
+        video1.setUser("user1");
+        video1.setVideoFileName("video1.mp4");
+        video1.setThumbnailFileName("thumb1.webp");
+
+        Video video2 = new Video();
+        video2.setTitle("Video 2");
+        video2.setUser("user2");
+        video2.setVideoFileName("video2.mp4");
+        video2.setThumbnailFileName("thumb2.webp");
         List<Video> expectedVideos = Arrays.asList(video1, video2);
 
         when(videoLoaderPort.loadVideosFromDirectory(videosDirectory)).thenReturn(expectedVideos);
@@ -67,8 +76,17 @@ class VideoLoaderServiceTest {
 
     @Test
     void testDisplayVideosWithContent() {
-        Video video1 = new Video("Video 1", "user1", "video1.mp4", "thumb1.webp");
-        Video video2 = new Video("Video 2", "user2", "video2.mp4", "thumb2.webp");
+        Video video1 = new Video();
+        video1.setTitle("Video 1");
+        video1.setUser("user1");
+        video1.setVideoFileName("video1.mp4");
+        video1.setThumbnailFileName("thumb1.webp");
+
+        Video video2 = new Video();
+        video2.setTitle("Video 2");
+        video2.setUser("user2");
+        video2.setVideoFileName("video2.mp4");
+        video2.setThumbnailFileName("thumb2.webp");
         List<Video> videos = Arrays.asList(video1, video2);
 
         assertDoesNotThrow(() -> service.displayVideos(videos));
@@ -76,7 +94,11 @@ class VideoLoaderServiceTest {
 
     @Test
     void testDisplayVideosSingleVideo() {
-        Video video = new Video("Single Video", "user", "video.mp4", "thumb.webp");
+        Video video = new Video();
+        video.setTitle("Single Video");
+        video.setUser("user");
+        video.setVideoFileName("video.mp4");
+        video.setThumbnailFileName("thumb.webp");
         List<Video> videos = List.of(video);
 
         assertDoesNotThrow(() -> service.displayVideos(videos));

@@ -9,4 +9,6 @@ public interface VideoRepository {
     Video save(Video video);
 
     List<Video> findAll();
+
+    org.springframework.data.domain.Page<Video> searchVideos(String query, org.springframework.data.domain.Pageable pageable);
 }

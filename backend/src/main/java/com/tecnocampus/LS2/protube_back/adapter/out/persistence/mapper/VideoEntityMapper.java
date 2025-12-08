@@ -28,6 +28,7 @@ public class VideoEntityMapper {
         entity.setTimestamp(video.getTimestamp());
         entity.setViewCount(video.getViewCount());
         entity.setLikeCount(video.getLikeCount());
+        entity.setDislikeCount(video.getDislikeCount());
 
         if (video.getChannel() != null) {
             entity.setChannel(channelMapper.toEntity(video.getChannel()));
@@ -53,6 +54,7 @@ public class VideoEntityMapper {
         video.setTimestamp(entity.getTimestamp());
         video.setViewCount(entity.getViewCount());
         video.setLikeCount(entity.getLikeCount());
+        video.setDislikeCount(entity.getDislikeCount());
 
         if (entity.getChannel() != null) {
             video.setChannel(channelMapper.toDomain(entity.getChannel()));

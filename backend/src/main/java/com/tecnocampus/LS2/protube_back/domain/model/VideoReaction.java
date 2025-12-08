@@ -5,16 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Channel {
+public class VideoReaction {
     private UUID id;
-    private String name;
-    private Long followerCount;
-    private List<Video> videos;
+    private Long userId;
+    private UUID videoId;
+    private ReactionType reactionType;
+
+    public enum ReactionType {
+        LIKE,
+        DISLIKE
+    }
 }

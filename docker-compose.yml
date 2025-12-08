@@ -1,0 +1,47 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      # Force PostgreSQL profile by overriding the group configuration
+      - SPRING_PROFILES_GROUP_PROD=postgres
+      - ENV_PROTUBE_DB_USER=postgres
+      - ENV_PROTUBE_DB_PWD=postgres
+      - ENV_PROTUBE_DB=protube_db
+      - ENV_PROTUBE_STORE_DIR=/app/videos
+      # You need to provide these values in a .env file or export them
+      - ENV_PROTUBE_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - ENV_PROTUBE_GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/protube_db
+    volumes:
+      - ./videos:/app/videos
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      # URL for server-side rewrites (Next.js server -> Backend container)
+      - BACKEND_URL=http://backend:8080
+      # URL for client-side API calls (Browser -> Backend host)
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=protube_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

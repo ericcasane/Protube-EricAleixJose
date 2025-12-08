@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ProtubeBackApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-    <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+    <option name="ALTERNATIVE_JRE_PATH" value="21" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
       <env name="ENV_PROTUBE_DB" value="protubedb" />
@@ -8,7 +8,7 @@
       <env name="ENV_PROTUBE_DB_USE" value="Dbuser" />
       <env name="ENV_PROTUBE_GOOGLE_CLIENT_ID" value="" />
       <env name="ENV_PROTUBE_GOOGLE_CLIENT_SECRET" value="" />
-      <env name="ENV_PROTUBE_STORE_DIR" value="C:\Users\user\Documents\GitHub\Protube-EricAleixJose\videos" />
+      <env name="ENV_PROTUBE_STORE_DIR" value="C:\Users\Usuario\Pictures\ERIC\1. TCM\4t\Laboratori del software II\Protube-EricAleixJose\videos" />
     </envs>
     <module name="protube-back" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.tecnocampus.LS2.protube_back.ProtubeBackApplication" />
