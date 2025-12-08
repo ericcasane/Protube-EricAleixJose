@@ -102,6 +102,7 @@ class JwtAuthenticationFilterTest {
         when(request.getHeader("Authorization")).thenReturn("Bearer " + validToken);
         when(jwtTokenProvider.validateToken(validToken)).thenReturn(true);
         when(jwtTokenProvider.getUsernameFromToken(validToken)).thenReturn(username);
+        when(jwtTokenProvider.getUserIdFromToken(validToken)).thenReturn(java.util.UUID.randomUUID());
         when(userDetails.getAuthorities()).thenReturn(new ArrayList<>());
         when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
 

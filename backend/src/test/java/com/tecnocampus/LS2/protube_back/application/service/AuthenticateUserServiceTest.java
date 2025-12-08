@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
+
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -38,9 +41,10 @@ class AuthenticateUserServiceTest {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String rawPassword = "password123";
         String hashedPassword = encoder.encode(rawPassword);
+        UUID userId = UUID.randomUUID();
 
         AuthenticateUserCommand command = new AuthenticateUserCommand("johndoe", rawPassword);
-        User user = new User(1L, "John", "Doe", "john@example.com", "johndoe", hashedPassword);
+        User user = User.from(userId, "John", "Doe", "john@example.com", "johndoe", hashedPassword, null, null, null);
         String token = "jwt-token-123";
 
         when(userRepository.findByUsername(command.username())).thenReturn(Optional.of(user));
@@ -50,7 +54,7 @@ class AuthenticateUserServiceTest {
 
         assertNotNull(response);
         assertEquals(token, response.getToken());
-        assertEquals(1L, response.getUserId());
+        assertEquals(userId, response.getUserId());
         assertEquals("johndoe", response.getUsername());
         assertEquals("john@example.com", response.getEmail());
 
@@ -74,9 +78,10 @@ class AuthenticateUserServiceTest {
     void testAuthenticateUserInvalidPassword() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPassword = encoder.encode("correctPassword");
+        UUID userId = UUID.randomUUID();
 
         AuthenticateUserCommand command = new AuthenticateUserCommand("johndoe", "wrongPassword");
-        User user = new User(1L, "John", "Doe", "john@example.com", "johndoe", hashedPassword);
+        User user = User.from(userId, "John", "Doe", "john@example.com", "johndoe", hashedPassword, null, null, null);
 
         when(userRepository.findByUsername(command.username())).thenReturn(Optional.of(user));
 
@@ -90,9 +95,10 @@ class AuthenticateUserServiceTest {
     void testAuthenticateUserWithEmptyPassword() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPassword = encoder.encode("password123");
+        UUID userId = UUID.randomUUID();
 
         AuthenticateUserCommand command = new AuthenticateUserCommand("johndoe", "");
-        User user = new User(1L, "John", "Doe", "john@example.com", "johndoe", hashedPassword);
+        User user = User.from(userId, "John", "Doe", "john@example.com", "johndoe", hashedPassword, null, null, null);
 
         when(userRepository.findByUsername(command.username())).thenReturn(Optional.of(user));
 
@@ -107,9 +113,10 @@ class AuthenticateUserServiceTest {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String rawPassword = "mySecurePassword456";
         String hashedPassword = encoder.encode(rawPassword);
+        UUID userId = UUID.randomUUID();
 
         AuthenticateUserCommand command = new AuthenticateUserCommand("alice", rawPassword);
-        User user = new User(2L, "Alice", "Brown", "alice@example.com", "alice", hashedPassword);
+        User user = User.from(userId, "Alice", "Brown", "alice@example.com", "alice", hashedPassword, null, null, null);
         String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 
         when(userRepository.findByUsername(command.username())).thenReturn(Optional.of(user));
@@ -118,7 +125,7 @@ class AuthenticateUserServiceTest {
         UserAuthResponse response = service.authenticate(command);
 
         assertEquals(token, response.getToken());
-        assertEquals(2L, response.getUserId());
+        assertEquals(userId, response.getUserId());
         assertEquals("alice", response.getUsername());
         assertEquals("alice@example.com", response.getEmail());
 

@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+
+import java.util.UUID;
+
 @ExtendWith(MockitoExtension.class)
 class UserRepositoryAdapterTest {
 
@@ -34,10 +37,11 @@ class UserRepositoryAdapterTest {
 
     @Test
     void testSaveUser() {
-        User user = new User(null, "John", "Doe", "john@example.com", "johndoe", "hashedPwd");
-        UserEntity entity = new UserEntity(null, "John", "Doe", "john@example.com", "johndoe", "hashedPwd");
-        UserEntity savedEntity = new UserEntity(1L, "John", "Doe", "john@example.com", "johndoe", "hashedPwd");
-        User savedUser = new User(1L, "John", "Doe", "john@example.com", "johndoe", "hashedPwd");
+        UUID savedId = UUID.randomUUID();
+        User user = User.from(null, "John", "Doe", "john@example.com", "johndoe", "hashedPwd", null, null, null);
+        UserEntity entity = new UserEntity(null, "John", "Doe", "john@example.com", "johndoe", "hashedPwd", null, null, null);
+        UserEntity savedEntity = new UserEntity(savedId, "John", "Doe", "john@example.com", "johndoe", "hashedPwd", null, null, null);
+        User savedUser = User.from(savedId, "John", "Doe", "john@example.com", "johndoe", "hashedPwd", null, null, null);
 
         when(mapper.toEntity(user)).thenReturn(entity);
         when(jpaRepository.save(entity)).thenReturn(savedEntity);
@@ -46,7 +50,7 @@ class UserRepositoryAdapterTest {
         User result = adapter.save(user);
 
         assertNotNull(result);
-        assertEquals(1L, result.id());
+        assertEquals(savedId, result.id());
         assertEquals("John", result.name());
         assertEquals("johndoe", result.username());
 
@@ -57,9 +61,10 @@ class UserRepositoryAdapterTest {
 
     @Test
     void testFindByEmailFound() {
+        UUID id = UUID.randomUUID();
         String email = "john@example.com";
-        UserEntity entity = new UserEntity(1L, "John", "Doe", email, "johndoe", "hashedPwd");
-        User user = new User(1L, "John", "Doe", email, "johndoe", "hashedPwd");
+        UserEntity entity = new UserEntity(id, "John", "Doe", email, "johndoe", "hashedPwd", null, null, null);
+        User user = User.from(id, "John", "Doe", email, "johndoe", "hashedPwd", null, null, null);
 
         when(jpaRepository.findByEmail(email)).thenReturn(Optional.of(entity));
         when(mapper.toDomain(entity)).thenReturn(user);
@@ -90,9 +95,10 @@ class UserRepositoryAdapterTest {
 
     @Test
     void testFindByUsernameFound() {
+        UUID id = UUID.randomUUID();
         String username = "johndoe";
-        UserEntity entity = new UserEntity(1L, "John", "Doe", "john@example.com", username, "hashedPwd");
-        User user = new User(1L, "John", "Doe", "john@example.com", username, "hashedPwd");
+        UserEntity entity = new UserEntity(id, "John", "Doe", "john@example.com", username, "hashedPwd", null, null, null);
+        User user = User.from(id, "John", "Doe", "john@example.com", username, "hashedPwd", null, null, null);
 
         when(jpaRepository.findByUsername(username)).thenReturn(Optional.of(entity));
         when(mapper.toDomain(entity)).thenReturn(user);
@@ -123,10 +129,11 @@ class UserRepositoryAdapterTest {
 
     @Test
     void testSaveAndFindUser() {
-        User newUser = new User(null, "Jane", "Smith", "jane@example.com", "janesmith", "pwd");
-        UserEntity entityToSave = new UserEntity(null, "Jane", "Smith", "jane@example.com", "janesmith", "pwd");
-        UserEntity savedEntity = new UserEntity(2L, "Jane", "Smith", "jane@example.com", "janesmith", "pwd");
-        User savedUser = new User(2L, "Jane", "Smith", "jane@example.com", "janesmith", "pwd");
+        UUID savedId = UUID.randomUUID();
+        User newUser = User.from(null, "Jane", "Smith", "jane@example.com", "janesmith", "pwd", null, null, null);
+        UserEntity entityToSave = new UserEntity(null, "Jane", "Smith", "jane@example.com", "janesmith", "pwd", null, null, null);
+        UserEntity savedEntity = new UserEntity(savedId, "Jane", "Smith", "jane@example.com", "janesmith", "pwd", null, null, null);
+        User savedUser = User.from(savedId, "Jane", "Smith", "jane@example.com", "janesmith", "pwd", null, null, null);
 
         when(mapper.toEntity(newUser)).thenReturn(entityToSave);
         when(jpaRepository.save(entityToSave)).thenReturn(savedEntity);
@@ -134,19 +141,20 @@ class UserRepositoryAdapterTest {
         when(jpaRepository.findByEmail("jane@example.com")).thenReturn(Optional.of(savedEntity));
 
         User result = adapter.save(newUser);
-        assertEquals(2L, result.id());
+        assertEquals(savedId, result.id());
 
         when(mapper.toDomain(savedEntity)).thenReturn(savedUser);
         Optional<User> foundUser = adapter.findByEmail("jane@example.com");
 
         assertTrue(foundUser.isPresent());
-        assertEquals(2L, foundUser.get().id());
+        assertEquals(savedId, foundUser.get().id());
     }
 
     @Test
     void testFindByEmailAndUsername() {
-        UserEntity entity = new UserEntity(1L, "Bob", "Johnson", "bob@example.com", "bobjohnson", "pwd");
-        User user = new User(1L, "Bob", "Johnson", "bob@example.com", "bobjohnson", "pwd");
+        UUID id = UUID.randomUUID();
+        UserEntity entity = new UserEntity(id, "Bob", "Johnson", "bob@example.com", "bobjohnson", "pwd", null, null, null);
+        User user = User.from(id, "Bob", "Johnson", "bob@example.com", "bobjohnson", "pwd", null, null, null);
 
         when(jpaRepository.findByEmail("bob@example.com")).thenReturn(Optional.of(entity));
         when(jpaRepository.findByUsername("bobjohnson")).thenReturn(Optional.of(entity));

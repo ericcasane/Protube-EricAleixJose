@@ -16,6 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -40,12 +43,14 @@ class AuthControllerTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Description"
         );
 
+        UUID userId = UUID.randomUUID();
         UserAuthResponse authResponse = new UserAuthResponse(
                 "jwt-token-123",
-                1L,
+                userId,
                 "johndoe",
                 "john@example.com"
         );
@@ -60,7 +65,7 @@ class AuthControllerTest {
         AuthResponse body = response.getBody();
         assertNotNull(body);
         assertEquals("jwt-token-123", body.getToken());
-        assertEquals(1L, body.getUserId());
+        assertEquals(userId, body.getUserId());
         assertEquals("johndoe", body.getUsername());
         assertEquals("john@example.com", body.getEmail());
 
@@ -71,9 +76,10 @@ class AuthControllerTest {
     void testLoginSuccess() {
         AuthenticateUserCommand command = new AuthenticateUserCommand("johndoe", "password123");
 
+        UUID userId = UUID.randomUUID();
         UserAuthResponse authResponse = new UserAuthResponse(
                 "jwt-token-123",
-                1L,
+                userId,
                 "johndoe",
                 "john@example.com"
         );
@@ -97,7 +103,7 @@ class AuthControllerTest {
 
         UserAuthResponse authResponse = new UserAuthResponse(
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                2L,
+                UUID.randomUUID(),
                 "alice",
                 "alice@example.com"
         );
@@ -117,7 +123,8 @@ class AuthControllerTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Description 1"
         );
 
         RegisterUserCommand command2 = new RegisterUserCommand(
@@ -125,11 +132,12 @@ class AuthControllerTest {
                 "Smith",
                 "jane@example.com",
                 "janesmith",
-                "password456"
+                "password456",
+                "Description 2"
         );
 
-        UserAuthResponse response1 = new UserAuthResponse("token1", 1L, "johndoe", "john@example.com");
-        UserAuthResponse response2 = new UserAuthResponse("token2", 2L, "janesmith", "jane@example.com");
+        UserAuthResponse response1 = new UserAuthResponse("token1", UUID.randomUUID(), "johndoe", "john@example.com");
+        UserAuthResponse response2 = new UserAuthResponse("token2", UUID.randomUUID(), "janesmith", "jane@example.com");
 
         when(registerUserUseCase.registerUser(any(RegisterUserCommand.class)))
                 .thenReturn(response1)
@@ -151,12 +159,14 @@ class AuthControllerTest {
                 "Johnson",
                 "bob@example.com",
                 "bobjohnson",
-                "pass123"
+                "pass123",
+                "Description"
         );
 
+        UUID userId = UUID.randomUUID();
         UserAuthResponse authResponse = new UserAuthResponse(
                 "auth-token",
-                3L,
+                userId,
                 "bobjohnson",
                 "bob@example.com"
         );
@@ -168,7 +178,7 @@ class AuthControllerTest {
 
         assertNotNull(responseBody);
         assertEquals("auth-token", responseBody.getToken());
-        assertEquals(3L, responseBody.getUserId());
+        assertEquals(userId, responseBody.getUserId());
         assertEquals("bobjohnson", responseBody.getUsername());
         assertEquals("bob@example.com", responseBody.getEmail());
     }

@@ -1,5 +1,7 @@
 package com.tecnocampus.LS2.protube_back.domain.model;
 
+import java.util.UUID;
+
 import com.tecnocampus.LS2.protube_back.application.port.in.command.RegisterUserCommand;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,9 +15,10 @@ class UserTest {
     @Test
     void testUserConstructorWithId() {
         String hashedPassword = encoder.encode("password123");
-        User user = new User(1L, "John", "Doe", "john@example.com", "johndoe", hashedPassword);
+        UUID id = UUID.randomUUID();
+        User user = new User(id, "John", "Doe", "john@example.com", "johndoe", hashedPassword, null, null, null);
 
-        assertEquals(1L, user.id());
+        assertEquals(id, user.id());
         assertEquals("John", user.name());
         assertEquals("Doe", user.surname());
         assertEquals("john@example.com", user.email());
@@ -26,7 +29,7 @@ class UserTest {
     @Test
     void testUserConstructorWithoutId() {
         String hashedPassword = encoder.encode("password123");
-        User user = new User("Jane", "Smith", "jane@example.com", "janesmith", hashedPassword);
+        User user = new User(null, "Jane", "Smith", "jane@example.com", "janesmith", hashedPassword, null, null, null);
 
         assertNull(user.id());
         assertEquals("Jane", user.name());
@@ -43,7 +46,8 @@ class UserTest {
                 "Johnson",
                 "bob@example.com",
                 "bobjohnson",
-                "myPassword123"
+                "myPassword123",
+                "Description"
         );
 
         User user = User.from(command);
@@ -53,6 +57,7 @@ class UserTest {
         assertEquals("Johnson", user.surname());
         assertEquals("bob@example.com", user.email());
         assertEquals("bobjohnson", user.username());
+        assertEquals("Description", user.description());
         assertNotNull(user.hashedPassword());
         assertNotEquals("myPassword123", user.hashedPassword()); // Password should be encoded
     }
@@ -60,9 +65,10 @@ class UserTest {
     @Test
     void testUserFromStaticFactory() {
         String hashedPassword = encoder.encode("password123");
-        User user = User.from(2L, "Alice", "Brown", "alice@example.com", "alicebrown", hashedPassword);
+        UUID id = UUID.randomUUID();
+        User user = User.from(id, "Alice", "Brown", "alice@example.com", "alicebrown", hashedPassword, null, null, null);
 
-        assertEquals(2L, user.id());
+        assertEquals(id, user.id());
         assertEquals("Alice", user.name());
         assertEquals("Brown", user.surname());
         assertEquals("alice@example.com", user.email());
@@ -74,7 +80,7 @@ class UserTest {
     void testValidatePasswordSuccess() {
         String rawPassword = "correctPassword123";
         String hashedPassword = encoder.encode(rawPassword);
-        User user = new User(1L, "Test", "User", "test@example.com", "testuser", hashedPassword);
+        User user = User.from(UUID.randomUUID(), "Test", "User", "test@example.com", "testuser", hashedPassword, null, null, null);
 
         assertTrue(user.validatePassword(rawPassword));
     }
@@ -83,7 +89,7 @@ class UserTest {
     void testValidatePasswordFailure() {
         String rawPassword = "correctPassword123";
         String hashedPassword = encoder.encode(rawPassword);
-        User user = new User(1L, "Test", "User", "test@example.com", "testuser", hashedPassword);
+        User user = User.from(UUID.randomUUID(), "Test", "User", "test@example.com", "testuser", hashedPassword, null, null, null);
 
         assertFalse(user.validatePassword("wrongPassword123"));
     }
@@ -91,7 +97,7 @@ class UserTest {
     @Test
     void testValidatePasswordWithEmptyString() {
         String hashedPassword = encoder.encode("password123");
-        User user = new User(1L, "Test", "User", "test@example.com", "testuser", hashedPassword);
+        User user = User.from(UUID.randomUUID(), "Test", "User", "test@example.com", "testuser", hashedPassword, null, null, null);
 
         assertFalse(user.validatePassword(""));
     }
@@ -99,8 +105,9 @@ class UserTest {
     @Test
     void testUserEquality() {
         String hashedPassword = encoder.encode("password123");
-        User user1 = new User(1L, "Test", "User", "test@example.com", "testuser", hashedPassword);
-        User user2 = new User(1L, "Test", "User", "test@example.com", "testuser", hashedPassword);
+        UUID id = UUID.randomUUID();
+        User user1 = new User(id, "Test", "User", "test@example.com", "testuser", hashedPassword, null, null, null);
+        User user2 = new User(id, "Test", "User", "test@example.com", "testuser", hashedPassword, null, null, null);
 
         assertEquals(user1, user2);
     }
@@ -108,7 +115,7 @@ class UserTest {
     @Test
     void testUserRecord() {
         String hashedPassword = encoder.encode("password123");
-        User user1 = new User(1L, "Test", "User", "test@example.com", "testuser", hashedPassword);
+        User user1 = new User(UUID.randomUUID(), "Test", "User", "test@example.com", "testuser", hashedPassword, null, null, null);
         User user2 = user1;
 
         assertSame(user1, user2);

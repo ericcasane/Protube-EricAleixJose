@@ -27,7 +27,11 @@ class JwtTokenProviderTest {
 
     @Test
     void testGenerateToken() {
-        User user = new User(1L, "John", "Doe", "john@example.com", "johndoe", "hashed");
+        User user = User.from(
+            java.util.UUID.randomUUID(), 
+            "John", "Doe", "john@example.com", "johndoe", "hashed",
+            null, null, null
+        );
 
         String token = jwtTokenProvider.generateToken(user);
 
@@ -37,7 +41,11 @@ class JwtTokenProviderTest {
 
     @Test
     void testGetUsernameFromToken() {
-        User user = new User(1L, "John", "Doe", "john@example.com", "johndoe", "hashed");
+        User user = User.from(
+            java.util.UUID.randomUUID(), 
+            "John", "Doe", "john@example.com", "johndoe", "hashed",
+            null, null, null
+        );
         String token = jwtTokenProvider.generateToken(user);
 
         String username = jwtTokenProvider.getUsernameFromToken(token);
@@ -47,7 +55,11 @@ class JwtTokenProviderTest {
 
     @Test
     void testValidateTokenSuccess() {
-        User user = new User(1L, "John", "Doe", "john@example.com", "johndoe", "hashed");
+        User user = User.from(
+            java.util.UUID.randomUUID(), 
+            "John", "Doe", "john@example.com", "johndoe", "hashed",
+            null, null, null
+        );
         String token = jwtTokenProvider.generateToken(user);
 
         boolean isValid = jwtTokenProvider.validateToken(token);
@@ -73,8 +85,16 @@ class JwtTokenProviderTest {
 
     @Test
     void testGenerateTokenMultipleUsers() {
-        User user1 = new User(1L, "User", "One", "user1@example.com", "user1", "hashed");
-        User user2 = new User(2L, "User", "Two", "user2@example.com", "user2", "hashed");
+        User user1 = User.from(
+            java.util.UUID.randomUUID(), 
+            "User", "One", "user1@example.com", "user1", "hashed",
+            null, null, null
+        );
+        User user2 = User.from(
+            java.util.UUID.randomUUID(), 
+            "User", "Two", "user2@example.com", "user2", "hashed",
+            null, null, null
+        );
 
         String token1 = jwtTokenProvider.generateToken(user1);
         String token2 = jwtTokenProvider.generateToken(user2);
@@ -91,7 +111,11 @@ class JwtTokenProviderTest {
 
     @Test
     void testGenerateTokenIsNotEmpty() {
-        User user = new User(1L, "John", "Doe", "john@example.com", "johndoe", "hashed");
+        User user = User.from(
+            java.util.UUID.randomUUID(), 
+            "John", "Doe", "john@example.com", "johndoe", "hashed",
+            null, null, null
+        );
         String token = jwtTokenProvider.generateToken(user);
 
         assertTrue(token.length() > 0);
@@ -100,7 +124,11 @@ class JwtTokenProviderTest {
 
     @Test
     void testTokenExpirationClaim() {
-        User user = new User(1L, "John", "Doe", "john@example.com", "johndoe", "hashed");
+        User user = User.from(
+            java.util.UUID.randomUUID(), 
+            "John", "Doe", "john@example.com", "johndoe", "hashed",
+            null, null, null
+        );
         String token = jwtTokenProvider.generateToken(user);
 
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
