@@ -11,12 +11,15 @@ public record User(
         String surname,
         String email,
         String username,
-        String hashedPassword
+        String hashedPassword,
+        String description,
+        String profilePictureUrl,
+        String bannerUrl
 ) {
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public User(String name, String surname, String email, String username, String hashedPassword) {
-        this(null, name, surname, email, username, hashedPassword);
+        this(null, name, surname, email, username, hashedPassword, null, null, null);
     }
 
     public static User from(RegisterUserCommand command) {
@@ -29,10 +32,10 @@ public record User(
         );
     }
 
-    public static User from(UUID id, String name, String surname, String email, String username, String hashedPassword) {
-        return new User(id, name, surname, email, username, hashedPassword);
+    public static User from(UUID id, String name, String surname, String email, String username, String hashedPassword, String description, String profilePictureUrl, String bannerUrl) {
+        return new User(id, name, surname, email, username, hashedPassword, description, profilePictureUrl, bannerUrl);
     }
-
+    
     public boolean validatePassword(String rawPassword) {
         return encoder.matches(rawPassword, hashedPassword);
     }
