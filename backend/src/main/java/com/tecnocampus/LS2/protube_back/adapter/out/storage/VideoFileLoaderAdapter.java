@@ -37,7 +37,7 @@ public class VideoFileLoaderAdapter implements VideoLoaderPort {
         List<Video> videos = new ArrayList<>();
 
         if (!Files.exists(videosDirectory)) {
-            LOG.warn("Videos directory does not exist: {}", videosDirectory);
+            LOG.warn("Videos directory does not exist: {}", videosDirectory.toAbsolutePath());
             return videos;
         }
 

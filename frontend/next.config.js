@@ -1,11 +1,15 @@
 /** @type {import('next').NextConfig} */
+const backendUrl = process.env.BACKEND_URL || 'http://localhost:8080';
+const backendUrlParsed = new URL(backendUrl);
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '8080',
+        protocol: backendUrlParsed.protocol.replace(':', ''),
+        hostname: backendUrlParsed.hostname,
+        port: backendUrlParsed.port,
         pathname: '/media/**',
       },
     ],
@@ -14,7 +18,7 @@ const nextConfig = {
     return [
       {
         source: '/media/:path*',
-        destination: 'http://localhost:8080/media/:path*', // proxy al backend
+        destination: `${backendUrl}/media/:path*`, // proxy al backend
       },
     ];
   },

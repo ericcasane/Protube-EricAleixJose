@@ -56,4 +56,10 @@ public class VideoRepositoryAdapter implements VideoRepository {
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public org.springframework.data.domain.Page<Video> searchVideos(String query, org.springframework.data.domain.Pageable pageable) {
+        return videoJpaRepository.findBySearchQuery(query, pageable)
+                .map(mapper::toDomain);
+    }
 }

@@ -51,8 +51,8 @@ public class VideosRestController {
     }
 
     private VideoListResponseDTO mapVideoToListResponse(Video video) {
-        String videoUrl = "/videos/" + video.getVideoFileName();
-        String thumbnailUrl = "/videos/" + video.getThumbnailFileName();
+        String videoUrl = video.getVideoFileName();
+        String thumbnailUrl = video.getThumbnailFileName();
         String channelName = video.getChannel() != null ? video.getChannel().getName() : video.getUser();
 
         return new VideoListResponseDTO(
@@ -68,8 +68,8 @@ public class VideosRestController {
     }
 
     private VideoDetailResponseDTO mapVideoToDetailResponse(Video video) {
-        String videoUrl = "/videos/" + video.getVideoFileName();
-        String thumbnailUrl = "/videos/" + video.getThumbnailFileName();
+        String videoUrl = video.getVideoFileName();
+        String thumbnailUrl = video.getThumbnailFileName();
 
         ChannelDTO channelDTO = null;
         if (video.getChannel() != null) {
@@ -104,5 +104,17 @@ public class VideosRestController {
                 channelDTO,
                 commentDTOs
         );
+    }
+    @GetMapping("/search")
+    @Operation(summary = "Search videos by title, description or username")
+    public ResponseEntity<org.springframework.data.domain.Page<VideoListResponseDTO>> searchVideos(
+            @org.springframework.web.bind.annotation.RequestParam String query,
+            @org.springframework.web.bind.annotation.RequestParam(defaultValue = "0") int page,
+            @org.springframework.web.bind.annotation.RequestParam(defaultValue = "20") int size) {
+        
+        org.springframework.data.domain.Page<Video> videos = videoService.searchVideos(query, page, size);
+        org.springframework.data.domain.Page<VideoListResponseDTO> responses = videos.map(this::mapVideoToListResponse);
+        
+        return ResponseEntity.ok(responses);
     }
 }
