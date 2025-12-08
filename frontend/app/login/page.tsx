@@ -121,7 +121,6 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              color="primary"
               size="lg"
               isLoading={isLoading}
               className="w-full"

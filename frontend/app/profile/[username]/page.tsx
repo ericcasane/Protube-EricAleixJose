@@ -9,7 +9,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure
 import { Input, Textarea } from '@heroui/input';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserService } from '@/src/services/userService';
-import type { User } from '@/types/auth';
+import type { User } from '@/src/types/auth';
 import { useTranslations } from '@/hooks/useTranslations';
 
 export default function ProfilePage() {
@@ -29,7 +29,7 @@ export default function ProfilePage() {
   });
   const [isSaving, setIsSaving] = useState(false);
 
-  const username = Array.isArray(params.username) ? params.username[0] : params.username;
+  const username = (Array.isArray(params.username) ? params.username[0] : params.username) || '';
 
   useEffect(() => {
     if (username) {
@@ -112,7 +112,7 @@ export default function ProfilePage() {
                 <p className="text-default-500">@{profile.username}</p>
               </div>
               {isOwnProfile && (
-                <Button color="primary" variant="flat" onPress={onOpen}>
+                <Button variant="flat" onPress={onOpen}>
                   {t('profile.edit')}
                 </Button>
               )}
@@ -166,10 +166,10 @@ export default function ProfilePage() {
                 />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button variant="light" onPress={onClose}>
                   {t('profile.cancel')}
                 </Button>
-                <Button color="primary" onPress={() => handleUpdateProfile(onClose)} isLoading={isSaving}>
+                <Button onPress={() => handleUpdateProfile(onClose)} isLoading={isSaving}>
                   {t('profile.save')}
                 </Button>
               </ModalFooter>

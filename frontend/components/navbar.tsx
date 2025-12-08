@@ -132,9 +132,9 @@ export const Navbar = () => {
               <DropdownTrigger>
                 <Button
                   variant="flat"
-                  className="text-sm font-normal text-default-600 bg-default-100"
-                  startContent={<Icon icon="heroicons:user-circle-solid" className="text-xl" />}
+                  className="text-sm font-normal text-default-600 bg-default-100 flex items-center gap-2"
                 >
+                  <Icon icon="heroicons:user-circle-solid" className="text-xl" />
                   {user.username}
                 </Button>
               </DropdownTrigger>
@@ -173,10 +173,10 @@ export const Navbar = () => {
               <Button
                 as={NextLink}
                 href="/login"
-                className="text-sm font-normal text-default-600 bg-default-100"
+                className="text-sm font-normal text-default-600 bg-default-100 flex items-center gap-2"
                 variant="flat"
-                startContent={<Icon icon="heroicons:arrow-right-on-rectangle" className="text-base" />}
               >
+                <Icon icon="heroicons:arrow-right-on-rectangle" className="text-base" />
                 {t('nav.signIn')}
               </Button>
             </NavbarItem>
@@ -184,10 +184,10 @@ export const Navbar = () => {
               <Button
                 as={NextLink}
                 href="/register"
-                color="primary"
                 variant="flat"
-                startContent={<Icon icon="heroicons:user-plus" className="text-base" />}
+                className="flex items-center gap-2"
               >
+                <Icon icon="heroicons:user-plus" className="text-base" />
                 {t('nav.register')}
               </Button>
             </NavbarItem>
@@ -235,10 +235,10 @@ export const Navbar = () => {
                 <Button
                   color="danger"
                   variant="flat"
-                  className="w-full"
-                  startContent={<Icon icon="heroicons:arrow-right-on-rectangle" />}
+                  className="w-full flex items-center gap-2"
                   onPress={logout}
                 >
+                  <Icon icon="heroicons:arrow-right-on-rectangle" />
                   {t('nav.logout')}
                 </Button>
               </NavbarMenuItem>
@@ -250,9 +250,9 @@ export const Navbar = () => {
                   as={NextLink}
                   href="/login"
                   variant="flat"
-                  className="w-full"
-                  startContent={<Icon icon="heroicons:arrow-right-on-rectangle" />}
+                  className="w-full flex items-center gap-2"
                 >
+                  <Icon icon="heroicons:arrow-right-on-rectangle" />
                   {t('nav.signIn')}
                 </Button>
               </NavbarMenuItem>
@@ -260,11 +260,10 @@ export const Navbar = () => {
                 <Button
                   as={NextLink}
                   href="/register"
-                  color="primary"
                   variant="flat"
-                  className="w-full"
-                  startContent={<Icon icon="heroicons:user-plus" />}
+                  className="w-full flex items-center gap-2"
                 >
+                  <Icon icon="heroicons:user-plus" />
                   {t('nav.register')}
                 </Button>
               </NavbarMenuItem>

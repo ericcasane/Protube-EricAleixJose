@@ -35,9 +35,9 @@ export function useTranslations(namespace?: string) {
 
       // Replace placeholders like {count}
       if (options) {
-        let result = value;
+        let result = value as string;
         for (const [placeholder, replacement] of Object.entries(options)) {
-          result = result.replaceAll(`{${placeholder}}`, String(replacement));
+          result = result.split(`{${placeholder}}`).join(String(replacement));
         }
         return result;
       }

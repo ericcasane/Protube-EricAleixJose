@@ -118,7 +118,7 @@ export const SearchModal = ({ isOpen, onOpenChange }: SearchModalProps) => {
                             <ModalBody className="pb-4 px-2 max-h-[60vh] overflow-y-auto custom-scrollbar">
                                 {isLoading ? (
                                     <div className="flex justify-center items-center py-8">
-                                        <Spinner size="lg" color="primary" />
+                                        <Spinner size="lg" />
                                     </div>
                                 ) : (
                                     <div className="flex flex-col gap-2">

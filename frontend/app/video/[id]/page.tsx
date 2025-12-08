@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Spinner, Avatar, Button, Card } from '@heroui/react';
-import { VideoDetail, VideoListItem, VideoReactionResponse } from '@/types/video';
+import { VideoDetail, VideoListItem, VideoReactionResponse } from '@/src/types/video';
 import { VideoCard } from '@/components/video-card';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthService } from '@/utils/authService';
@@ -177,13 +177,13 @@ export default function VideoPage() {
         console.log('Fetching video with ID:', videoId);
         const videoResponse = await fetch(`/api/videos/${videoId}`);
         console.log('Video response status:', videoResponse.status);
-        
+
         if (!videoResponse.ok) {
           const errorText = await videoResponse.text();
           console.error('Video fetch error:', errorText);
           throw new Error(`Failed to fetch video: ${videoResponse.status} ${errorText}`);
         }
-        
+
         const videoData = await videoResponse.json();
         console.log('Video data received:', videoData);
         setVideo(videoData);
@@ -216,12 +216,12 @@ export default function VideoPage() {
   const handleLike = async () => {
     const token = AuthService.getToken();
     const userData = AuthService.getUserData();
-    
+
     console.log('Like button clicked:');
     console.log('- isAuthenticated:', isAuthenticated);
     console.log('- token exists:', !!token);
     console.log('- userData:', userData);
-    
+
     if (!isAuthenticated || !token) {
       alert(t('video.loginRequired') || 'Please login to like videos');
       return;
@@ -229,7 +229,7 @@ export default function VideoPage() {
 
     try {
       setIsLikeLoading(true);
-      
+
       const response = await fetch(`/api/videos/${videoId}/like`, {
         method: 'POST',
         headers: {
@@ -250,7 +250,7 @@ export default function VideoPage() {
       }
 
       const reactionData: VideoReactionResponse = await response.json();
-      
+
       // Update video state with new counts and user reaction
       setVideo(prev => prev ? {
         ...prev,
@@ -269,12 +269,12 @@ export default function VideoPage() {
   const handleDislike = async () => {
     const token = AuthService.getToken();
     const userData = AuthService.getUserData();
-    
+
     console.log('Dislike button clicked:');
     console.log('- isAuthenticated:', isAuthenticated);
     console.log('- token exists:', !!token);
     console.log('- userData:', userData);
-    
+
     if (!isAuthenticated || !token) {
       alert(t('video.loginRequired') || 'Please login to dislike videos');
       return;
@@ -282,7 +282,7 @@ export default function VideoPage() {
 
     try {
       setIsDislikeLoading(true);
-      
+
       const response = await fetch(`/api/videos/${videoId}/dislike`, {
         method: 'POST',
         headers: {
@@ -303,7 +303,7 @@ export default function VideoPage() {
       }
 
       const reactionData: VideoReactionResponse = await response.json();
-      
+
       // Update video state with new counts and user reaction
       setVideo(prev => prev ? {
         ...prev,
@@ -321,10 +321,10 @@ export default function VideoPage() {
 
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const token = AuthService.getToken();
     const userData = AuthService.getUserData();
-    
+
     if (!isAuthenticated || !token) {
       alert(t('video.loginRequired') || 'Please login to comment');
       return;
@@ -336,7 +336,7 @@ export default function VideoPage() {
 
     try {
       setIsCommentSubmitting(true);
-      
+
       const response = await fetch(`/api/videos/${videoId}/comments`, {
         method: 'POST',
         headers: {
@@ -358,7 +358,7 @@ export default function VideoPage() {
       }
 
       const newComment = await response.json();
-      
+
       // Add new comment to the beginning of the comments list
       setVideo(prev => prev ? {
         ...prev,
@@ -430,7 +430,7 @@ export default function VideoPage() {
                 )}
               </div>
             </div>
-            <Button variant="primary" className="px-6 rounded-full">
+            <Button className="px-6 rounded-full bg-primary text-white">
               {t('video.subscribe')}
             </Button>
           </div>
@@ -438,12 +438,11 @@ export default function VideoPage() {
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-default-100 rounded-full overflow-hidden">
-              <button 
+              <button
                 onClick={handleLike}
                 disabled={isLikeLoading}
-                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${
-                  video.userReaction === 'LIKE' ? 'bg-blue-500/20 text-blue-500' : ''
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${video.userReaction === 'LIKE' ? 'bg-blue-500/20 text-blue-500' : ''
+                  }`}
               >
                 <ThumbsUpIcon />
                 <span className="text-sm font-medium">
@@ -451,12 +450,11 @@ export default function VideoPage() {
                 </span>
               </button>
               <div className="w-px h-6 bg-default-300" />
-              <button 
+              <button
                 onClick={handleDislike}
                 disabled={isDislikeLoading}
-                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${
-                  video.userReaction === 'DISLIKE' ? 'bg-red-500/20 text-red-500' : ''
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${video.userReaction === 'DISLIKE' ? 'bg-red-500/20 text-red-500' : ''
+                  }`}
               >
                 <ThumbsDownIcon />
                 <span className="text-sm font-medium">
@@ -464,15 +462,15 @@ export default function VideoPage() {
                 </span>
               </button>
             </div>
-            <Button variant="secondary" className="rounded-full">
+            <Button className="rounded-full bg-secondary text-white">
               <ShareIcon />
               <span className="ml-2">{t('video.share')}</span>
             </Button>
-            <Button variant="secondary" className="rounded-full">
+            <Button className="rounded-full bg-secondary text-white">
               <DownloadIcon />
               <span className="ml-2">{t('video.download')}</span>
             </Button>
-            <Button variant="secondary" className="rounded-full px-3">
+            <Button className="rounded-full px-3 bg-secondary text-white">
               <MoreIcon />
             </Button>
           </div>
@@ -525,18 +523,16 @@ export default function VideoPage() {
                 <div className="flex justify-end gap-2 mt-2">
                   <Button
                     type="button"
-                    variant="flat"
-                    size="sm"
                     onClick={() => setCommentText('')}
-                    disabled={isCommentSubmitting}
+                    isDisabled={isCommentSubmitting}
                   >
                     {t('video.cancel')}
                   </Button>
                   <Button
                     type="submit"
-                    variant="primary"
+                    className="bg-primary text-white"
                     size="sm"
-                    disabled={isCommentSubmitting}
+                    isDisabled={isCommentSubmitting}
                   >
                     {isCommentSubmitting ? t('video.commenting') : t('video.comment')}
                   </Button>

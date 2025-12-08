@@ -61,7 +61,7 @@ export default function ExplorePage() {
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-[80vh]">
-                <Spinner size="lg" color="primary" />
+                <Spinner size="lg" />
             </div>
         );
     }
@@ -137,10 +137,9 @@ export default function ExplorePage() {
                                     <Link href={`/video/${spotlightVideo.id}`}>
                                         <Button
                                             size="lg"
-                                            color="primary"
-                                            className="font-bold shadow-lg shadow-primary/20 backdrop-blur-md"
-                                            startContent={<Icon icon="solar:play-bold" className="text-xl" />}
+                                            className="font-bold shadow-lg shadow-primary/20 backdrop-blur-md flex items-center gap-2"
                                         >
+                                            <Icon icon="solar:play-bold" className="text-xl" />
                                             {t('explore.watchNow')}
                                         </Button>
                                     </Link>

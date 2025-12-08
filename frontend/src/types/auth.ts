@@ -25,8 +25,8 @@ export interface TokenResponse {
 export interface User {
   userId?: number; // Optional because profile response might not have ID
   username: string;
-  name: string;
-  surname: string;
+  name?: string;
+  surname?: string;
   email: string;
   description?: string;
   profilePictureUrl?: string;

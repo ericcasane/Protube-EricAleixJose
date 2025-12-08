@@ -106,7 +106,7 @@ export default function RegisterPage() {
           <h1 className={title({ size: 'sm' })}>
             {t('auth.register.title')}
             <span aria-label="emoji" className="ml-2" role="img">
-            👋
+              👋
             </span>
           </h1>
           <p className="text-small text-default-500">{t('auth.register.subtitle')}</p>
@@ -190,7 +190,6 @@ export default function RegisterPage() {
 
             <Button
               type="submit"
-              color="primary"
               size="lg"
               isLoading={isLoading}
               className="w-full"
