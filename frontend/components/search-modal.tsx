@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Modal, ModalContent, ModalBody, ModalHeader } from '@heroui/modal';
 import { Input } from '@heroui/input';
 import { Spinner } from '@heroui/spinner';
+import { Kbd } from "@heroui/kbd";
 import { SearchIcon } from '@/components/icons';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Video, Page } from '@/types/video';
@@ -60,6 +61,7 @@ export const SearchModal = ({ isOpen, onOpenChange }: SearchModalProps) => {
         <Modal
             isOpen={isOpen}
             onOpenChange={handleClose}
+            hideCloseButton
             placement="top"
             backdrop="blur"
             size="2xl"
@@ -106,11 +108,10 @@ export const SearchModal = ({ isOpen, onOpenChange }: SearchModalProps) => {
                                 placeholder={t('nav.search')}
                                 size="lg"
                                 startContent={<SearchIcon size={18} />}
+                                endContent={<Kbd>ESC</Kbd>}
                                 value={query}
                                 onValueChange={setQuery}
                                 variant="flat"
-                                isClearable
-                                onClear={() => setQuery('')}
                             />
                         </ModalHeader>
                         {(results.length > 0 || isLoading || (debouncedQuery && results.length === 0)) && (

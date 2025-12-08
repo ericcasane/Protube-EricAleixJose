@@ -17,6 +17,8 @@ import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 import { Icon } from "@iconify/react";
+import { useEffect } from "react";
+import { Kbd } from "@heroui/kbd";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -36,6 +38,20 @@ export const Navbar = () => {
   const t = useTranslations();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+        event.preventDefault();
+        onOpen();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onOpen]);
+
   const searchInput = (
     <>
       <Input
@@ -48,6 +64,12 @@ export const Navbar = () => {
         placeholder={t('nav.search')}
         startContent={
           <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+        }
+        endContent={
+          <div className="flex gap-1">
+            <Kbd className="hidden lg:inline-block">Ctrl</Kbd>
+            <Kbd className="hidden lg:inline-block">K</Kbd>
+          </div>
         }
         type="search"
         isReadOnly
