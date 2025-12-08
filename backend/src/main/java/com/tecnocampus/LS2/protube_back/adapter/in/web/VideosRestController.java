@@ -1,18 +1,21 @@
 package com.tecnocampus.LS2.protube_back.adapter.in.web;
 
 import com.tecnocampus.LS2.protube_back.adapter.in.web.dto.*;
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.UserEntity;
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.repository.UserJpaRepository;
 import com.tecnocampus.LS2.protube_back.domain.model.Video;
+import com.tecnocampus.LS2.protube_back.domain.service.TemporaryCommentService;
+import com.tecnocampus.LS2.protube_back.domain.service.VideoReactionService;
 import com.tecnocampus.LS2.protube_back.domain.service.VideoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -207,9 +210,9 @@ public class VideosRestController {
         );
     }
 
-    private VideoDetailResponseDTO mapVideoToDetailResponse(Video video) {
-        String videoUrl = "/videos/" + video.getVideoFileName();
-        String thumbnailUrl = "/videos/" + video.getThumbnailFileName();
+    private VideoDetailResponseDTO mapVideoToDetailResponse(Video video, UUID userId, String userReaction) {
+        String videoUrl = video.getVideoFileName();
+        String thumbnailUrl = video.getThumbnailFileName();
 
         ChannelDTO channelDTO = null;
         if (video.getChannel() != null) {
@@ -242,7 +245,9 @@ public class VideosRestController {
                 video.getDuration(),
                 video.getDescription(),
                 video.getViewCount(),
-                video.getLikeCount(),
+                likesCount,
+                dislikesCount,
+                userReaction,
                 video.getTimestamp(),
                 channelDTO,
                 commentDTOs
