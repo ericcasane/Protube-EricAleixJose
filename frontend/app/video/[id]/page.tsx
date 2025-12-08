@@ -394,7 +394,7 @@ export default function VideoPage() {
     );
   }
 
-  const videoUrl = `/media${video.videoUrl}`;
+  const videoUrl = `/media/${video.videoUrl}`;
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 py-4">

@@ -9,12 +9,11 @@ class VideoEntityTest {
 
     @Test
     void testConstructorWithoutId() {
-        VideoEntity entity = new VideoEntity(
-                "Test Video",
-                "testuser",
-                "video.mp4",
-                "thumbnail.webp"
-        );
+        VideoEntity entity = new VideoEntity();
+        entity.setTitle("Test Video");
+        entity.setUser("testuser");
+        entity.setVideoFileName("video.mp4");
+        entity.setThumbnailFileName("thumbnail.webp");
 
         assertNull(entity.getId());
         assertEquals("Test Video", entity.getTitle());
@@ -27,13 +26,12 @@ class VideoEntityTest {
     void testConstructorWithAllParameters() {
         UUID id = UUID.randomUUID();
 
-        VideoEntity entity = new VideoEntity(
-                id,
-                "Test Video",
-                "testuser",
-                "video.mp4",
-                "thumbnail.webp"
-        );
+        VideoEntity entity = new VideoEntity();
+        entity.setId(id);
+        entity.setTitle("Test Video");
+        entity.setUser("testuser");
+        entity.setVideoFileName("video.mp4");
+        entity.setThumbnailFileName("thumbnail.webp");
 
         assertEquals(id, entity.getId());
         assertEquals("Test Video", entity.getTitle());

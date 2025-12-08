@@ -17,6 +17,8 @@ import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 import { Icon } from "@iconify/react";
+import { useEffect } from "react";
+import { Kbd } from "@heroui/kbd";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -28,24 +30,54 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslations } from "@/hooks/useTranslations";
 
+import { useDisclosure } from "@heroui/modal";
+import { SearchModal } from "@/components/search-modal";
+
 export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const t = useTranslations();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+        event.preventDefault();
+        onOpen();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onOpen]);
 
   const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      labelPlacement="outside"
-      placeholder={t('nav.search')}
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
+    <>
+      <Input
+        aria-label="Search"
+        classNames={{
+          inputWrapper: "bg-default-100",
+          input: "text-sm",
+        }}
+        labelPlacement="outside"
+        placeholder={t('nav.search')}
+        startContent={
+          <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+        }
+        endContent={
+          <div className="flex gap-1">
+            <Kbd className="hidden lg:inline-block">Ctrl</Kbd>
+            <Kbd className="hidden lg:inline-block">K</Kbd>
+          </div>
+        }
+        type="search"
+        isReadOnly
+        onClick={onOpen}
+        className="cursor-pointer"
+      />
+      <SearchModal isOpen={isOpen} onOpenChange={onOpenChange} />
+    </>
   );
 
   return (

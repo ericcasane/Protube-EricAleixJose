@@ -1,22 +1,18 @@
 package com.tecnocampus.LS2.protube_back.adapter.in.web;
 
 import com.tecnocampus.LS2.protube_back.adapter.in.web.dto.*;
-import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.UserEntity;
-import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.VideoReactionEntity;
 import com.tecnocampus.LS2.protube_back.domain.model.Video;
 import com.tecnocampus.LS2.protube_back.domain.service.VideoService;
-import com.tecnocampus.LS2.protube_back.domain.service.VideoReactionService;
-import com.tecnocampus.LS2.protube_back.domain.service.TemporaryCommentService;
-import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.repository.UserJpaRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,7 +28,7 @@ public class VideosRestController {
 
     @Autowired
     TemporaryCommentService temporaryCommentService;
-    
+
     @Autowired
     UserJpaRepository userRepository;
 
@@ -53,9 +49,8 @@ public class VideosRestController {
             Authentication authentication) {
         List<Video> videos = videoService.getVideos();
 
-        // Match by filename (e.g., "0" matches "0.mp4")
         Video video = videos.stream()
-                .filter(v -> v.getVideoFileName().equals(id + ".mp4") || 
+                .filter(v -> v.getVideoFileName().equals(id + ".mp4") ||
                             v.getVideoFileName().startsWith(id + "."))
                 .findFirst()
                 .orElse(null);
@@ -68,7 +63,7 @@ public class VideosRestController {
         String userReaction = null;
         try {
             if (authentication != null && authentication.getName() != null) {
-                // In a real JWT setup, the subject might be the username or UUID strings. 
+                // In a real JWT setup, the subject might be the username or UUID strings.
                 // We'll try to parse as UUID, if fails, we lookup by username.
                 userId = getUserIdFromAuthentication(authentication);
 
@@ -80,7 +75,7 @@ public class VideosRestController {
         } catch (Exception e) {
             // User is authenticated but ID extraction failed, ignore
         }
-        
+
         return ResponseEntity.ok(mapVideoToDetailResponse(video, userId, userReaction));
     }
 
@@ -163,7 +158,7 @@ public class VideosRestController {
         }
 
         String username = authentication.getName(); // Assuming username is in auth name
-        
+
         if (username == null || commentCreateDTO.getText() == null || commentCreateDTO.getText().trim().isEmpty()) {
             return ResponseEntity.status(400).build();
         }
@@ -178,7 +173,7 @@ public class VideosRestController {
         List<CommentDTO> comments = temporaryCommentService.getComments(id);
         return ResponseEntity.ok(comments);
     }
-    
+
     private UUID getUserIdFromAuthentication(Authentication authentication) {
         if (authentication == null || authentication.getName() == null) {
             return null;
@@ -196,8 +191,8 @@ public class VideosRestController {
     }
 
     private VideoListResponseDTO mapVideoToListResponse(Video video) {
-        String videoUrl = "/videos/" + video.getVideoFileName();
-        String thumbnailUrl = "/videos/" + video.getThumbnailFileName();
+        String videoUrl = video.getVideoFileName();
+        String thumbnailUrl = video.getThumbnailFileName();
         String channelName = video.getChannel() != null ? video.getChannel().getName() : video.getUser();
 
         return new VideoListResponseDTO(
@@ -212,10 +207,9 @@ public class VideosRestController {
         );
     }
 
-    private VideoDetailResponseDTO mapVideoToDetailResponse(Video video, UUID userId, String userReaction) {
+    private VideoDetailResponseDTO mapVideoToDetailResponse(Video video) {
         String videoUrl = "/videos/" + video.getVideoFileName();
         String thumbnailUrl = "/videos/" + video.getThumbnailFileName();
-        String videoIdString = video.getVideoFileName().replaceFirst("\\.mp4$", "");
 
         ChannelDTO channelDTO = null;
         if (video.getChannel() != null) {
@@ -239,21 +233,31 @@ public class VideosRestController {
 
         Long likesCount = video.getLikeCount() != null ? video.getLikeCount() : 0L;
         Long dislikesCount = video.getDislikeCount() != null ? video.getDislikeCount() : 0L;
-        
+
         return new VideoDetailResponseDTO(
-                videoIdString,
+                video.getVideoFileName().replaceFirst("\\.mp4$", ""),
                 video.getTitle(),
                 videoUrl,
                 thumbnailUrl,
                 video.getDuration(),
                 video.getDescription(),
                 video.getViewCount(),
-                likesCount,
-                dislikesCount,
-                userReaction,
+                video.getLikeCount(),
                 video.getTimestamp(),
                 channelDTO,
                 commentDTOs
         );
+    }
+    @GetMapping("/search")
+    @Operation(summary = "Search videos by title, description or username")
+    public ResponseEntity<org.springframework.data.domain.Page<VideoListResponseDTO>> searchVideos(
+            @org.springframework.web.bind.annotation.RequestParam String query,
+            @org.springframework.web.bind.annotation.RequestParam(defaultValue = "0") int page,
+            @org.springframework.web.bind.annotation.RequestParam(defaultValue = "20") int size) {
+
+        org.springframework.data.domain.Page<Video> videos = videoService.searchVideos(query, page, size);
+        org.springframework.data.domain.Page<VideoListResponseDTO> responses = videos.map(this::mapVideoToListResponse);
+
+        return ResponseEntity.ok(responses);
     }
 }
