@@ -52,13 +52,13 @@ class VideosRestControllerTest {
         VideoListResponseDTO response1 = body.get(0);
         assertEquals("video 1", response1.getTitle());
         assertEquals("user1", response1.getChannelName());
-        assertTrue(response1.getVideoUrl().endsWith("/video1.mp4"));
-        assertTrue(response1.getThumbnailUrl().endsWith("/thumb1.webp"));
+        assertTrue(response1.getVideoUrl().endsWith("video1.mp4"));
+        assertTrue(response1.getThumbnailUrl().endsWith("thumb1.webp"));
 
         VideoListResponseDTO response2 = body.get(1);
         assertEquals("video 2", response2.getTitle());
         assertEquals("user2", response2.getChannelName());
-        assertTrue(response2.getVideoUrl().endsWith("/video2.mp4"));
-        assertTrue(response2.getThumbnailUrl().endsWith("/thumb2.webp"));
+        assertTrue(response2.getVideoUrl().endsWith("video2.mp4"));
+        assertTrue(response2.getThumbnailUrl().endsWith("thumb2.webp"));
     }
 }
