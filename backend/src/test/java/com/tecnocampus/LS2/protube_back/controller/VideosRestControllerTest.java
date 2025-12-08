@@ -1,7 +1,7 @@
 package com.tecnocampus.LS2.protube_back.controller;
 
 import com.tecnocampus.LS2.protube_back.adapter.in.web.VideosRestController;
-import com.tecnocampus.LS2.protube_back.adapter.in.web.dto.VideoResponse;
+import com.tecnocampus.LS2.protube_back.adapter.in.web.dto.VideoListResponseDTO;
 import com.tecnocampus.LS2.protube_back.domain.model.Video;
 import com.tecnocampus.LS2.protube_back.domain.service.VideoService;
 import org.junit.jupiter.api.Test;
@@ -25,30 +25,39 @@ class VideosRestControllerTest {
     @Mock
     VideoService videoService;
 
-
     @Test
     void getVideos() {
-        Video video1 = new Video("video 1", "user1", "video1.mp4", "thumb1.webp");
-        Video video2 = new Video("video 2", "user2", "video2.mp4", "thumb2.webp");
+        Video video1 = new Video();
+        video1.setTitle("video 1");
+        video1.setUser("user1");
+        video1.setVideoFileName("video1.mp4");
+        video1.setThumbnailFileName("thumb1.webp");
+
+        Video video2 = new Video();
+        video2.setTitle("video 2");
+        video2.setUser("user2");
+        video2.setVideoFileName("video2.mp4");
+        video2.setThumbnailFileName("thumb2.webp");
+
         List<Video> videos = List.of(video1, video2);
 
         when(videoService.getVideos()).thenReturn(videos);
 
-        ResponseEntity<List<VideoResponse>> response = videosRestController.getVideos();
-        List<VideoResponse> body = response.getBody();
+        ResponseEntity<List<VideoListResponseDTO>> response = videosRestController.getVideos();
+        List<VideoListResponseDTO> body = response.getBody();
 
         assertNotNull(body);
         assertEquals(2, body.size());
 
-        VideoResponse response1 = body.get(0);
+        VideoListResponseDTO response1 = body.get(0);
         assertEquals("video 1", response1.getTitle());
-        assertEquals("user1", response1.getUser());
+        assertEquals("user1", response1.getChannelName());
         assertTrue(response1.getVideoUrl().endsWith("/video1.mp4"));
         assertTrue(response1.getThumbnailUrl().endsWith("/thumb1.webp"));
 
-        VideoResponse response2 = body.get(1);
+        VideoListResponseDTO response2 = body.get(1);
         assertEquals("video 2", response2.getTitle());
-        assertEquals("user2", response2.getUser());
+        assertEquals("user2", response2.getChannelName());
         assertTrue(response2.getVideoUrl().endsWith("/video2.mp4"));
         assertTrue(response2.getThumbnailUrl().endsWith("/thumb2.webp"));
     }

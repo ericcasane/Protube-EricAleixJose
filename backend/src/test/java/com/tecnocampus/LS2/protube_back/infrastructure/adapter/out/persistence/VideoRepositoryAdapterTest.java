@@ -19,11 +19,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.repository.ChannelJpaRepository;
+
 @ExtendWith(MockitoExtension.class)
 class VideoRepositoryAdapterTest {
 
     @Mock
     private VideoJpaRepository jpaRepository;
+
+    @Mock
+    private ChannelJpaRepository channelJpaRepository;
 
     @Mock
     private VideoEntityMapper mapper;
@@ -32,15 +37,36 @@ class VideoRepositoryAdapterTest {
 
     @BeforeEach
     void setUp() {
-        adapter = new VideoRepositoryAdapter(jpaRepository, mapper);
+        adapter = new VideoRepositoryAdapter(jpaRepository, channelJpaRepository, mapper);
     }
 
     @Test
     void testSave() {
-        Video video = new Video("Test Video", "testuser", "video.mp4", "thumbnail.webp");
-        VideoEntity entity = new VideoEntity(UUID.randomUUID(), "Test Video", "testuser", "video.mp4", "thumbnail.webp");
-        VideoEntity savedEntity = new VideoEntity(UUID.randomUUID(), "Test Video", "testuser", "video.mp4", "thumbnail.webp");
-        Video savedVideo = new Video("Test Video", "testuser", "video.mp4", "thumbnail.webp");
+        Video video = new Video();
+        video.setTitle("Test Video");
+        video.setUser("testuser");
+        video.setVideoFileName("video.mp4");
+        video.setThumbnailFileName("thumbnail.webp");
+
+        VideoEntity entity = new VideoEntity();
+        entity.setId(UUID.randomUUID());
+        entity.setTitle("Test Video");
+        entity.setUser("testuser");
+        entity.setVideoFileName("video.mp4");
+        entity.setThumbnailFileName("thumbnail.webp");
+
+        VideoEntity savedEntity = new VideoEntity();
+        savedEntity.setId(UUID.randomUUID());
+        savedEntity.setTitle("Test Video");
+        savedEntity.setUser("testuser");
+        savedEntity.setVideoFileName("video.mp4");
+        savedEntity.setThumbnailFileName("thumbnail.webp");
+        
+        Video savedVideo = new Video();
+        savedVideo.setTitle("Test Video");
+        savedVideo.setUser("testuser");
+        savedVideo.setVideoFileName("video.mp4");
+        savedVideo.setThumbnailFileName("thumbnail.webp");
 
         when(mapper.toEntity(video)).thenReturn(entity);
         when(jpaRepository.save(entity)).thenReturn(savedEntity);
@@ -57,12 +83,33 @@ class VideoRepositoryAdapterTest {
 
     @Test
     void testFindAll() {
-        VideoEntity entity1 = new VideoEntity(UUID.randomUUID(), "Video 1", "user1", "video1.mp4", "thumb1.webp");
-        VideoEntity entity2 = new VideoEntity(UUID.randomUUID(), "Video 2", "user2", "video2.mp4", "thumb2.webp");
+        VideoEntity entity1 = new VideoEntity();
+        entity1.setId(UUID.randomUUID());
+        entity1.setTitle("Video 1");
+        entity1.setUser("user1");
+        entity1.setVideoFileName("video1.mp4");
+        entity1.setThumbnailFileName("thumb1.webp");
+
+        VideoEntity entity2 = new VideoEntity();
+        entity2.setId(UUID.randomUUID());
+        entity2.setTitle("Video 2");
+        entity2.setUser("user2");
+        entity2.setVideoFileName("video2.mp4");
+        entity2.setThumbnailFileName("thumb2.webp");
+
         List<VideoEntity> entities = Arrays.asList(entity1, entity2);
 
-        Video video1 = new Video("Video 1", "user1", "video1.mp4", "thumb1.webp");
-        Video video2 = new Video("Video 2", "user2", "video2.mp4", "thumb2.webp");
+        Video video1 = new Video();
+        video1.setTitle("Video 1");
+        video1.setUser("user1");
+        video1.setVideoFileName("video1.mp4");
+        video1.setThumbnailFileName("thumb1.webp");
+
+        Video video2 = new Video();
+        video2.setTitle("Video 2");
+        video2.setUser("user2");
+        video2.setVideoFileName("video2.mp4");
+        video2.setThumbnailFileName("thumb2.webp");
 
         when(jpaRepository.findAll()).thenReturn(entities);
         when(mapper.toDomain(entity1)).thenReturn(video1);
