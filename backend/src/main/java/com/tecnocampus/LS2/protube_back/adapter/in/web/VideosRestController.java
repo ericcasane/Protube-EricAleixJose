@@ -51,8 +51,8 @@ public class VideosRestController {
     }
 
     private VideoListResponseDTO mapVideoToListResponse(Video video) {
-        String videoUrl = "/videos/" + video.getVideoFileName();
-        String thumbnailUrl = "/videos/" + video.getThumbnailFileName();
+        String videoUrl = video.getVideoFileName();
+        String thumbnailUrl = video.getThumbnailFileName();
         String channelName = video.getChannel() != null ? video.getChannel().getName() : video.getUser();
 
         return new VideoListResponseDTO(
@@ -68,8 +68,8 @@ public class VideosRestController {
     }
 
     private VideoDetailResponseDTO mapVideoToDetailResponse(Video video) {
-        String videoUrl = "/videos/" + video.getVideoFileName();
-        String thumbnailUrl = "/videos/" + video.getThumbnailFileName();
+        String videoUrl = video.getVideoFileName();
+        String thumbnailUrl = video.getThumbnailFileName();
 
         ChannelDTO channelDTO = null;
         if (video.getChannel() != null) {

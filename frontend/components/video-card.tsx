@@ -82,8 +82,8 @@ export function VideoCard({
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const t = useTranslations();
 
-  const mediaUrl = `/media${thumbnailUrl}`;
-  const videoMediaUrl = `/media${videoUrl}`;
+  const mediaUrl = `/media/${thumbnailUrl}`;
+  const videoMediaUrl = `/media/${videoUrl}`;
   const formattedDuration = formatDuration(duration);
   const formattedViews = formatViewCount(viewCount);
   const formattedDate = formatDate(timestamp, t);
