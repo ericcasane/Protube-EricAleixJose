@@ -28,24 +28,34 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslations } from "@/hooks/useTranslations";
 
+import { useDisclosure } from "@heroui/modal";
+import { SearchModal } from "@/components/search-modal";
+
 export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const t = useTranslations();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      labelPlacement="outside"
-      placeholder={t('nav.search')}
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
+    <>
+      <Input
+        aria-label="Search"
+        classNames={{
+          inputWrapper: "bg-default-100",
+          input: "text-sm",
+        }}
+        labelPlacement="outside"
+        placeholder={t('nav.search')}
+        startContent={
+          <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+        }
+        type="search"
+        isReadOnly
+        onClick={onOpen}
+        className="cursor-pointer"
+      />
+      <SearchModal isOpen={isOpen} onOpenChange={onOpenChange} />
+    </>
   );
 
   return (
