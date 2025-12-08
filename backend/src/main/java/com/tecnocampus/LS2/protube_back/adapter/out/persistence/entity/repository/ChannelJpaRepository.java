@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import java.util.UUID;
+
 @Repository
-public interface ChannelJpaRepository extends JpaRepository<ChannelEntity, Long> {
+public interface ChannelJpaRepository extends JpaRepository<ChannelEntity, UUID> {
     Optional<ChannelEntity> findByName(String name);
 }

@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtTokenProvider {
@@ -34,13 +36,11 @@ public class JwtTokenProvider {
         return getTokenBody(token).getSubject();
     }
 
-    public Long getUserIdFromToken(String token) {
+    public UUID getUserIdFromToken(String token) {
         Claims claims = getTokenBody(token);
-        Object userIdClaim = claims.get("userId");
-        if (userIdClaim instanceof Integer) {
-            return ((Integer) userIdClaim).longValue();
-        } else if (userIdClaim instanceof Long) {
-            return (Long) userIdClaim;
+        String userIdStr = claims.get("userId", String.class);
+        if (userIdStr != null) {
+            return UUID.fromString(userIdStr);
         }
         throw new IllegalArgumentException("Invalid userId in token");
     }

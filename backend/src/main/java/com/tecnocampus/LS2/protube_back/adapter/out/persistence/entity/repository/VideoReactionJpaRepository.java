@@ -12,7 +12,7 @@ import java.util.UUID;
 @Repository
 public interface VideoReactionJpaRepository extends JpaRepository<VideoReactionEntity, UUID> {
     
-    Optional<VideoReactionEntity> findByUserIdAndVideoId(Long userId, UUID videoId);
+    Optional<VideoReactionEntity> findByUserIdAndVideoId(UUID userId, UUID videoId);
     
     @Query("SELECT COUNT(vr) FROM VideoReactionEntity vr WHERE vr.video.id = :videoId AND vr.reactionType = 'LIKE'")
     Long countLikesByVideoId(@Param("videoId") UUID videoId);
@@ -20,5 +20,5 @@ public interface VideoReactionJpaRepository extends JpaRepository<VideoReactionE
     @Query("SELECT COUNT(vr) FROM VideoReactionEntity vr WHERE vr.video.id = :videoId AND vr.reactionType = 'DISLIKE'")
     Long countDislikesByVideoId(@Param("videoId") UUID videoId);
     
-    void deleteByUserIdAndVideoId(Long userId, UUID videoId);
+    void deleteByUserIdAndVideoId(UUID userId, UUID videoId);
 }

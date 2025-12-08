@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class Channel {
-    private Long id;
+    private UUID id;
     private String name;
     private Long followerCount;
     private List<Video> videos;

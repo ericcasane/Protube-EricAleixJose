@@ -48,6 +48,9 @@ public class VideoEntity {
     @Column
     private Long likeCount;
 
+    @Column
+    private Long dislikeCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "channel_id", nullable = false)
     private ChannelEntity channel;
@@ -60,5 +63,8 @@ public class VideoEntity {
         this.user = user;
         this.videoFileName = videoFileName;
         this.thumbnailFileName = thumbnailFileName;
+        this.likeCount = 0L;
+        this.dislikeCount = 0L;
+        this.viewCount = 0L;
     }
 }

@@ -1,10 +1,13 @@
 package com.tecnocampus.LS2.protube_back.adapter.in.web;
 
 import com.tecnocampus.LS2.protube_back.adapter.in.web.dto.*;
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.UserEntity;
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.VideoReactionEntity;
 import com.tecnocampus.LS2.protube_back.domain.model.Video;
 import com.tecnocampus.LS2.protube_back.domain.service.VideoService;
-import com.tecnocampus.LS2.protube_back.domain.service.TemporaryVideoReactionService;
+import com.tecnocampus.LS2.protube_back.domain.service.VideoReactionService;
 import com.tecnocampus.LS2.protube_back.domain.service.TemporaryCommentService;
+import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.repository.UserJpaRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,10 +28,13 @@ public class VideosRestController {
     VideoService videoService;
 
     @Autowired
-    TemporaryVideoReactionService temporaryReactionService;
+    VideoReactionService reactionService;
 
     @Autowired
     TemporaryCommentService temporaryCommentService;
+    
+    @Autowired
+    UserJpaRepository userRepository;
 
     @GetMapping("")
     @Operation(summary = "Get all videos with basic information for list view")
@@ -57,16 +64,24 @@ public class VideosRestController {
             return ResponseEntity.notFound().build();
         }
 
-        Long userId = null;
+        UUID userId = null;
+        String userReaction = null;
         try {
             if (authentication != null && authentication.getName() != null) {
-                userId = Long.parseLong(authentication.getName());
+                // In a real JWT setup, the subject might be the username or UUID strings. 
+                // We'll try to parse as UUID, if fails, we lookup by username.
+                userId = getUserIdFromAuthentication(authentication);
+
+                if (userId != null) {
+                    VideoReactionResponseDTO reactionStats = reactionService.getReactionStats(userId, id);
+                    userReaction = reactionStats.getUserReaction();
+                }
             }
-        } catch (NumberFormatException e) {
-            // User is authenticated but ID is not numeric, ignore
+        } catch (Exception e) {
+            // User is authenticated but ID extraction failed, ignore
         }
         
-        return ResponseEntity.ok(mapVideoToDetailResponse(video, userId));
+        return ResponseEntity.ok(mapVideoToDetailResponse(video, userId, userReaction));
     }
 
     @PostMapping("/{id}/like")
@@ -78,14 +93,12 @@ public class VideosRestController {
             return ResponseEntity.status(401).build();
         }
 
-        Long userId;
-        try {
-            userId = Long.parseLong(authentication.getName());
-        } catch (NumberFormatException e) {
+        UUID userId = getUserIdFromAuthentication(authentication);
+        if (userId == null) {
             return ResponseEntity.status(400).body(null);
         }
 
-        VideoReactionResponseDTO response = temporaryReactionService.addLike(userId, id);
+        VideoReactionResponseDTO response = reactionService.addLike(userId, id);
         return ResponseEntity.ok(response);
     }
 
@@ -98,14 +111,12 @@ public class VideosRestController {
             return ResponseEntity.status(401).build();
         }
 
-        Long userId;
-        try {
-            userId = Long.parseLong(authentication.getName());
-        } catch (NumberFormatException e) {
+        UUID userId = getUserIdFromAuthentication(authentication);
+        if (userId == null) {
             return ResponseEntity.status(400).body(null);
         }
 
-        VideoReactionResponseDTO response = temporaryReactionService.addDislike(userId, id);
+        VideoReactionResponseDTO response = reactionService.addDislike(userId, id);
         return ResponseEntity.ok(response);
     }
 
@@ -118,14 +129,12 @@ public class VideosRestController {
             return ResponseEntity.status(401).build();
         }
 
-        Long userId;
-        try {
-            userId = Long.parseLong(authentication.getName());
-        } catch (NumberFormatException e) {
+        UUID userId = getUserIdFromAuthentication(authentication);
+        if (userId == null) {
             return ResponseEntity.status(400).body(null);
         }
 
-        VideoReactionResponseDTO response = temporaryReactionService.removeReaction(userId, id);
+        VideoReactionResponseDTO response = reactionService.removeReaction(userId, id);
         return ResponseEntity.ok(response);
     }
 
@@ -134,16 +143,12 @@ public class VideosRestController {
     public ResponseEntity<VideoReactionResponseDTO> getVideoReactions(
             @PathVariable String id,
             Authentication authentication) {
-        Long userId = null;
+        UUID userId = null;
         if (authentication != null) {
-            try {
-                userId = Long.parseLong(authentication.getName());
-            } catch (NumberFormatException e) {
-                // Ignore, user is authenticated but ID is not numeric
-            }
+            userId = getUserIdFromAuthentication(authentication);
         }
 
-        VideoReactionResponseDTO response = temporaryReactionService.getReactionStats(userId, id);
+        VideoReactionResponseDTO response = reactionService.getReactionStats(userId, id);
         return ResponseEntity.ok(response);
     }
 
@@ -157,9 +162,7 @@ public class VideosRestController {
             return ResponseEntity.status(401).build();
         }
 
-        // Get username from authentication (we need to extract it from JWT claims)
-        // For now, we'll use a workaround to get the username
-        String username = getUsernameFromAuthentication(authentication);
+        String username = authentication.getName(); // Assuming username is in auth name
         
         if (username == null || commentCreateDTO.getText() == null || commentCreateDTO.getText().trim().isEmpty()) {
             return ResponseEntity.status(400).build();
@@ -175,20 +178,20 @@ public class VideosRestController {
         List<CommentDTO> comments = temporaryCommentService.getComments(id);
         return ResponseEntity.ok(comments);
     }
-
-    private String getUsernameFromAuthentication(Authentication authentication) {
-        // Since we're storing userId as the principal, we need to load the user to get username
-        // For now, we'll use a simple mapping based on userId
-        // In a real app, you'd query the database
-        try {
-            Long userId = Long.parseLong(authentication.getName());
-            // Temporary mapping - in production, query user service
-            if (userId == 1L) return "jmartorell";
-            if (userId == 2L) return "ealeix";
-            if (userId == 3L) return "jcasane";
-            return "user" + userId;
-        } catch (Exception e) {
+    
+    private UUID getUserIdFromAuthentication(Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
             return null;
+        }
+        String principal = authentication.getName();
+        try {
+            // Try explicit UUID
+            return UUID.fromString(principal);
+        } catch (IllegalArgumentException e) {
+            // Look up by username if not a UUID
+            return userRepository.findByUsername(principal)
+                    .map(UserEntity::getId)
+                    .orElse(null);
         }
     }
 
@@ -209,7 +212,7 @@ public class VideosRestController {
         );
     }
 
-    private VideoDetailResponseDTO mapVideoToDetailResponse(Video video, Long userId) {
+    private VideoDetailResponseDTO mapVideoToDetailResponse(Video video, UUID userId, String userReaction) {
         String videoUrl = "/videos/" + video.getVideoFileName();
         String thumbnailUrl = "/videos/" + video.getThumbnailFileName();
         String videoIdString = video.getVideoFileName().replaceFirst("\\.mp4$", "");
@@ -234,12 +237,9 @@ public class VideosRestController {
                     .collect(Collectors.toList());
         }
 
-        // For like/dislike functionality, we'll use a simple counter based on the video data
-        // Since we don't have a real UUID-based system yet, we'll return defaults
         Long likesCount = video.getLikeCount() != null ? video.getLikeCount() : 0L;
-        Long dislikesCount = 0L; // Default for now
-        String userReaction = null; // Default for now - can be implemented later with proper ID system
-
+        Long dislikesCount = video.getDislikeCount() != null ? video.getDislikeCount() : 0L;
+        
         return new VideoDetailResponseDTO(
                 videoIdString,
                 video.getTitle(),
