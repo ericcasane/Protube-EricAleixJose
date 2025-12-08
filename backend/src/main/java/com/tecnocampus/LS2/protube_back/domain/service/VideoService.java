@@ -22,4 +22,9 @@ public class VideoService {
     public Video saveVideo(Video video) {
         return videoRepository.save(video);
     }
+
+    public org.springframework.data.domain.Page<Video> searchVideos(String query, int page, int size) {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        return videoRepository.searchVideos(query, pageable);
+    }
 }

@@ -105,4 +105,16 @@ public class VideosRestController {
                 commentDTOs
         );
     }
+    @GetMapping("/search")
+    @Operation(summary = "Search videos by title, description or username")
+    public ResponseEntity<org.springframework.data.domain.Page<VideoListResponseDTO>> searchVideos(
+            @org.springframework.web.bind.annotation.RequestParam String query,
+            @org.springframework.web.bind.annotation.RequestParam(defaultValue = "0") int page,
+            @org.springframework.web.bind.annotation.RequestParam(defaultValue = "20") int size) {
+        
+        org.springframework.data.domain.Page<Video> videos = videoService.searchVideos(query, page, size);
+        org.springframework.data.domain.Page<VideoListResponseDTO> responses = videos.map(this::mapVideoToListResponse);
+        
+        return ResponseEntity.ok(responses);
+    }
 }
