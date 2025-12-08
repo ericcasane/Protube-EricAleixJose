@@ -3,8 +3,10 @@ package com.tecnocampus.LS2.protube_back.domain.model;
 import com.tecnocampus.LS2.protube_back.application.port.in.command.RegisterUserCommand;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.UUID;
+
 public record User(
-        Long id,
+        UUID id,
         String name,
         String surname,
         String email,
@@ -27,7 +29,7 @@ public record User(
         );
     }
 
-    public static User from(Long id, String name, String surname, String email, String username, String hashedPassword) {
+    public static User from(UUID id, String name, String surname, String email, String username, String hashedPassword) {
         return new User(id, name, surname, email, username, hashedPassword);
     }
 

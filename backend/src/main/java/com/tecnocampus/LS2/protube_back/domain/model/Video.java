@@ -21,6 +21,7 @@ public class Video {
     private Long timestamp;
     private Long viewCount;
     private Long likeCount;
+    private Long dislikeCount;
     private Channel channel;
     private List<Comment> comments;
 }

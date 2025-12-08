@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Spinner, Avatar, Button, Card } from '@heroui/react';
-import { VideoDetail, VideoListItem } from '@/src/types/video';
+import { VideoDetail, VideoListItem, VideoReactionResponse } from '@/types/video';
 import { VideoCard } from '@/components/video-card';
+import { useAuth } from '@/contexts/AuthContext';
+import { AuthService } from '@/utils/authService';
 import { useTranslations } from '@/hooks/useTranslations';
 
 // SVG Icons
@@ -152,6 +154,7 @@ export default function VideoPage() {
   const params = useParams();
   const videoId = params.id as string;
   const t = useTranslations();
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
   const [video, setVideo] = useState<VideoDetail | null>(null);
   const [recommendedVideos, setRecommendedVideos] = useState<VideoListItem[]>(
@@ -160,6 +163,10 @@ export default function VideoPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [isLikeLoading, setIsLikeLoading] = useState(false);
+  const [isDislikeLoading, setIsDislikeLoading] = useState(false);
+  const [commentText, setCommentText] = useState('');
+  const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchVideoDetail = async () => {
@@ -167,11 +174,18 @@ export default function VideoPage() {
         setIsLoading(true);
 
         // Fetch video detail
+        console.log('Fetching video with ID:', videoId);
         const videoResponse = await fetch(`/api/videos/${videoId}`);
+        console.log('Video response status:', videoResponse.status);
+        
         if (!videoResponse.ok) {
-          throw new Error('Failed to fetch video');
+          const errorText = await videoResponse.text();
+          console.error('Video fetch error:', errorText);
+          throw new Error(`Failed to fetch video: ${videoResponse.status} ${errorText}`);
         }
+        
         const videoData = await videoResponse.json();
+        console.log('Video data received:', videoData);
         setVideo(videoData);
 
         // Fetch all videos for recommendations
@@ -198,6 +212,168 @@ export default function VideoPage() {
       fetchVideoDetail();
     }
   }, [videoId]);
+
+  const handleLike = async () => {
+    const token = AuthService.getToken();
+    const userData = AuthService.getUserData();
+    
+    console.log('Like button clicked:');
+    console.log('- isAuthenticated:', isAuthenticated);
+    console.log('- token exists:', !!token);
+    console.log('- userData:', userData);
+    
+    if (!isAuthenticated || !token) {
+      alert(t('video.loginRequired') || 'Please login to like videos');
+      return;
+    }
+
+    try {
+      setIsLikeLoading(true);
+      
+      const response = await fetch(`/api/videos/${videoId}/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 401) {
+        alert(t('video.loginRequired') || 'Please login to like videos');
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Like error:', errorData);
+        throw new Error('Failed to like video');
+      }
+
+      const reactionData: VideoReactionResponse = await response.json();
+      
+      // Update video state with new counts and user reaction
+      setVideo(prev => prev ? {
+        ...prev,
+        likeCount: reactionData.likesCount,
+        dislikeCount: reactionData.dislikesCount,
+        userReaction: reactionData.userReaction,
+      } : null);
+    } catch (error) {
+      console.error('Error liking video:', error);
+      alert(t('video.errorLiking') || 'Failed to like video. Please try again.');
+    } finally {
+      setIsLikeLoading(false);
+    }
+  };
+
+  const handleDislike = async () => {
+    const token = AuthService.getToken();
+    const userData = AuthService.getUserData();
+    
+    console.log('Dislike button clicked:');
+    console.log('- isAuthenticated:', isAuthenticated);
+    console.log('- token exists:', !!token);
+    console.log('- userData:', userData);
+    
+    if (!isAuthenticated || !token) {
+      alert(t('video.loginRequired') || 'Please login to dislike videos');
+      return;
+    }
+
+    try {
+      setIsDislikeLoading(true);
+      
+      const response = await fetch(`/api/videos/${videoId}/dislike`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 401) {
+        alert(t('video.loginRequired') || 'Please login to dislike videos');
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Dislike error:', errorData);
+        throw new Error('Failed to dislike video');
+      }
+
+      const reactionData: VideoReactionResponse = await response.json();
+      
+      // Update video state with new counts and user reaction
+      setVideo(prev => prev ? {
+        ...prev,
+        likeCount: reactionData.likesCount,
+        dislikeCount: reactionData.dislikesCount,
+        userReaction: reactionData.userReaction,
+      } : null);
+    } catch (error) {
+      console.error('Error disliking video:', error);
+      alert(t('video.errorDisliking') || 'Failed to dislike video. Please try again.');
+    } finally {
+      setIsDislikeLoading(false);
+    }
+  };
+
+  const handleAddComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const token = AuthService.getToken();
+    const userData = AuthService.getUserData();
+    
+    if (!isAuthenticated || !token) {
+      alert(t('video.loginRequired') || 'Please login to comment');
+      return;
+    }
+
+    if (!commentText.trim()) {
+      return;
+    }
+
+    try {
+      setIsCommentSubmitting(true);
+      
+      const response = await fetch(`/api/videos/${videoId}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ text: commentText }),
+      });
+
+      if (response.status === 401) {
+        alert(t('video.loginRequired') || 'Please login to comment');
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Comment error:', errorData);
+        throw new Error('Failed to add comment');
+      }
+
+      const newComment = await response.json();
+      
+      // Add new comment to the beginning of the comments list
+      setVideo(prev => prev ? {
+        ...prev,
+        comments: [newComment, ...(prev.comments || [])],
+      } : null);
+
+      // Clear the input
+      setCommentText('');
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      alert(t('video.errorComment') || 'Failed to add comment. Please try again.');
+    } finally {
+      setIsCommentSubmitting(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -262,15 +438,30 @@ export default function VideoPage() {
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-default-100 rounded-full overflow-hidden">
-              <button className="flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors">
+              <button 
+                onClick={handleLike}
+                disabled={isLikeLoading}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${
+                  video.userReaction === 'LIKE' ? 'bg-blue-500/20 text-blue-500' : ''
+                }`}
+              >
                 <ThumbsUpIcon />
                 <span className="text-sm font-medium">
                   {formatNumber(video.likeCount)}
                 </span>
               </button>
               <div className="w-px h-6 bg-default-300" />
-              <button className="flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors">
+              <button 
+                onClick={handleDislike}
+                disabled={isDislikeLoading}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${
+                  video.userReaction === 'DISLIKE' ? 'bg-red-500/20 text-red-500' : ''
+                }`}
+              >
                 <ThumbsDownIcon />
+                <span className="text-sm font-medium">
+                  {formatNumber(video.dislikeCount)}
+                </span>
               </button>
             </div>
             <Button variant="secondary" className="rounded-full">
@@ -315,16 +506,44 @@ export default function VideoPage() {
           </h2>
 
           {/* Comment Input */}
-          <div className="flex gap-3 mb-6">
+          <form onSubmit={handleAddComment} className="flex gap-3 mb-6">
             <Avatar size="md" className="rounded-full">
-              <Avatar.Fallback>U</Avatar.Fallback>
+              <Avatar.Fallback>
+                {AuthService.getUserData()?.username?.charAt(0).toUpperCase() || 'U'}
+              </Avatar.Fallback>
             </Avatar>
-            <input
-              type="text"
-              placeholder={t('video.addComment')}
-              className="flex-1 bg-transparent border-b-2 border-default-200 focus:border-primary outline-none pb-2 transition-colors"
-            />
-          </div>
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder={t('video.addComment')}
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                disabled={isCommentSubmitting || !isAuthenticated}
+                className="w-full bg-transparent border-b-2 border-default-200 focus:border-primary outline-none pb-2 transition-colors disabled:opacity-50"
+              />
+              {commentText.trim() && (
+                <div className="flex justify-end gap-2 mt-2">
+                  <Button
+                    type="button"
+                    variant="flat"
+                    size="sm"
+                    onClick={() => setCommentText('')}
+                    disabled={isCommentSubmitting}
+                  >
+                    {t('video.cancel')}
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="sm"
+                    disabled={isCommentSubmitting}
+                  >
+                    {isCommentSubmitting ? t('video.commenting') : t('video.comment')}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </form>
 
           {/* Comments List */}
           <div className="space-y-4">

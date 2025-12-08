@@ -78,7 +78,13 @@
       "weeksAgo": "Hace {count} semanas",
       "monthsAgo": "Hace {count} meses",
       "yearsAgo": "Hace {count} años"
-    }
+    },
+    "loginRequired": "Por favor inicia sesión para continuar",
+    "comment": "Comentar",
+    "commenting": "Comentando...",
+    "errorComment": "Error al añadir comentario",
+    "errorLiking": "Error al dar like",
+    "errorDisliking": "Error al dar dislike"
   },
   "common": {
     "error": "Error",

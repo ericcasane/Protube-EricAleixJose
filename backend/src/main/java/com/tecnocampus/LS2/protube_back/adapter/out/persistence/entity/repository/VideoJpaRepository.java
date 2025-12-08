@@ -4,6 +4,7 @@ import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.VideoEnti
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -13,4 +14,6 @@ public interface VideoJpaRepository extends JpaRepository<VideoEntity, UUID> {
             "LOWER(v.description) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(v.user) LIKE LOWER(CONCAT('%', :query, '%'))")
     org.springframework.data.domain.Page<VideoEntity> findBySearchQuery(@org.springframework.data.repository.query.Param("query") String query, org.springframework.data.domain.Pageable pageable);
+
+    java.util.Optional<VideoEntity> findByVideoFileName(String videoFileName);
 }
