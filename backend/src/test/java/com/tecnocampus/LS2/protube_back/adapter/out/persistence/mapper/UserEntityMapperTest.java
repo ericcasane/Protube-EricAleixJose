@@ -1,5 +1,8 @@
 package com.tecnocampus.LS2.protube_back.adapter.out.persistence.mapper;
 
+
+import java.util.UUID;
+
 import com.tecnocampus.LS2.protube_back.adapter.out.persistence.entity.UserEntity;
 import com.tecnocampus.LS2.protube_back.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +21,13 @@ class UserEntityMapperTest {
 
     @Test
     void testToDomain() {
-        UserEntity entity = new UserEntity(1L, "John", "Doe", "john@example.com", "johndoe", "hashedPassword");
+        UUID id = UUID.randomUUID();
+        UserEntity entity = new UserEntity(id, "John", "Doe", "john@example.com", "johndoe", "hashedPassword", null, null, null);
 
         User domain = mapper.toDomain(entity);
 
         assertNotNull(domain);
-        assertEquals(1L, domain.id());
+        assertEquals(id, domain.id());
         assertEquals("John", domain.name());
         assertEquals("Doe", domain.surname());
         assertEquals("john@example.com", domain.email());
@@ -33,12 +37,13 @@ class UserEntityMapperTest {
 
     @Test
     void testToEntity() {
-        User domain = new User(2L, "Jane", "Smith", "jane@example.com", "janesmith", "hashedPassword");
+        UUID id = UUID.randomUUID();
+        User domain = User.from(id, "Jane", "Smith", "jane@example.com", "janesmith", "hashedPassword", null, null, null);
 
         UserEntity entity = mapper.toEntity(domain);
 
         assertNotNull(entity);
-        assertEquals(2L, entity.getId());
+        assertEquals(id, entity.getId());
         assertEquals("Jane", entity.getName());
         assertEquals("Smith", entity.getSurname());
         assertEquals("jane@example.com", entity.getEmail());
@@ -48,7 +53,8 @@ class UserEntityMapperTest {
 
     @Test
     void testToDomainThenToEntity() {
-        UserEntity originalEntity = new UserEntity(3L, "Bob", "Johnson", "bob@example.com", "bobjohnson", "pwd");
+        UUID id = UUID.randomUUID();
+        UserEntity originalEntity = new UserEntity(id, "Bob", "Johnson", "bob@example.com", "bobjohnson", "pwd", null, null, null);
 
         User domain = mapper.toDomain(originalEntity);
         UserEntity mappedEntity = mapper.toEntity(domain);
@@ -63,7 +69,8 @@ class UserEntityMapperTest {
 
     @Test
     void testToEntityThenToDomain() {
-        User originalDomain = new User(4L, "Alice", "Brown", "alice@example.com", "alicebrown", "pwd");
+        UUID id = UUID.randomUUID();
+        User originalDomain = User.from(id, "Alice", "Brown", "alice@example.com", "alicebrown", "pwd", null, null, null);
 
         UserEntity entity = mapper.toEntity(originalDomain);
         User mappedDomain = mapper.toDomain(entity);
@@ -78,7 +85,7 @@ class UserEntityMapperTest {
 
     @Test
     void testToDomainWithoutId() {
-        UserEntity entity = new UserEntity(null, "Test", "User", "test@example.com", "testuser", "pwd");
+        UserEntity entity = new UserEntity(null, "Test", "User", "test@example.com", "testuser", "pwd", null, null, null);
 
         User domain = mapper.toDomain(entity);
 
@@ -89,7 +96,7 @@ class UserEntityMapperTest {
 
     @Test
     void testToEntityWithoutId() {
-        User domain = new User(null, "NoId", "User", "noid@example.com", "noiduser", "pwd");
+        User domain = new User("NoId", "User", "noid@example.com", "noiduser", "pwd");
 
         UserEntity entity = mapper.toEntity(domain);
 
@@ -100,8 +107,10 @@ class UserEntityMapperTest {
 
     @Test
     void testToDomainMultipleUsers() {
-        UserEntity entity1 = new UserEntity(1L, "User1", "Last1", "user1@example.com", "user1", "pwd1");
-        UserEntity entity2 = new UserEntity(2L, "User2", "Last2", "user2@example.com", "user2", "pwd2");
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+        UserEntity entity1 = new UserEntity(id1, "User1", "Last1", "user1@example.com", "user1", "pwd1", null, null, null);
+        UserEntity entity2 = new UserEntity(id2, "User2", "Last2", "user2@example.com", "user2", "pwd2", null, null, null);
 
         User domain1 = mapper.toDomain(entity1);
         User domain2 = mapper.toDomain(entity2);
@@ -113,8 +122,10 @@ class UserEntityMapperTest {
 
     @Test
     void testToEntityMultipleUsers() {
-        User domain1 = new User(1L, "User1", "Last1", "user1@example.com", "user1", "pwd1");
-        User domain2 = new User(2L, "User2", "Last2", "user2@example.com", "user2", "pwd2");
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+        User domain1 = User.from(id1, "User1", "Last1", "user1@example.com", "user1", "pwd1", null, null, null);
+        User domain2 = User.from(id2, "User2", "Last2", "user2@example.com", "user2", "pwd2", null, null, null);
 
         UserEntity entity1 = mapper.toEntity(domain1);
         UserEntity entity2 = mapper.toEntity(domain2);
@@ -126,7 +137,8 @@ class UserEntityMapperTest {
 
     @Test
     void testToDomainWithSpecialCharacters() {
-        UserEntity entity = new UserEntity(1L, "José", "García", "josé@example.com", "josé_garcía", "pwd");
+        UUID id = UUID.randomUUID();
+        UserEntity entity = new UserEntity(id, "José", "García", "josé@example.com", "josé_garcía", "pwd", null, null, null);
 
         User domain = mapper.toDomain(entity);
 

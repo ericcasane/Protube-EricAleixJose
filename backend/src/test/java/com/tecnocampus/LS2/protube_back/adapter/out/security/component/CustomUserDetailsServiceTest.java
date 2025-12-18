@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
+
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,7 +36,7 @@ class CustomUserDetailsServiceTest {
     void testLoadUserByUsernameSuccess() {
         String username = "johndoe";
         String hashedPassword = "hashed_password";
-        User user = new User(1L, "John", "Doe", "john@example.com", username, hashedPassword);
+        User user = User.from(UUID.randomUUID(), "John", "Doe", "john@example.com", username, hashedPassword, null, null, null);
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
@@ -64,7 +67,7 @@ class CustomUserDetailsServiceTest {
     void testLoadUserByUsernameWithSpecialCharacters() {
         String username = "user_special.123";
         String hashedPassword = "hashed_pwd";
-        User user = new User(2L, "User", "Special", "special@example.com", username, hashedPassword);
+        User user = User.from(UUID.randomUUID(), "User", "Special", "special@example.com", username, hashedPassword, null, null, null);
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
@@ -81,8 +84,8 @@ class CustomUserDetailsServiceTest {
         String username1 = "alice";
         String username2 = "bob";
 
-        User user1 = new User(1L, "Alice", "Brown", "alice@example.com", username1, "hash1");
-        User user2 = new User(2L, "Bob", "Johnson", "bob@example.com", username2, "hash2");
+        User user1 = User.from(UUID.randomUUID(), "Alice", "Brown", "alice@example.com", username1, "hash1", null, null, null);
+        User user2 = User.from(UUID.randomUUID(), "Bob", "Johnson", "bob@example.com", username2, "hash2", null, null, null);
 
         when(userRepository.findByUsername(username1)).thenReturn(Optional.of(user1));
         when(userRepository.findByUsername(username2)).thenReturn(Optional.of(user2));
@@ -112,7 +115,7 @@ class CustomUserDetailsServiceTest {
     @Test
     void testLoadUserByUsernameAuthoritiesAreEmpty() {
         String username = "testuser";
-        User user = new User(1L, "Test", "User", "test@example.com", username, "hashed");
+        User user = User.from(UUID.randomUUID(), "Test", "User", "test@example.com", username, "hashed", null, null, null);
 
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 

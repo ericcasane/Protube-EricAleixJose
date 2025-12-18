@@ -3,3 +3,5 @@
 /.run
 /videos
 CLAUDE.md
+.env
+.DS_Store

@@ -11,6 +11,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -34,8 +35,30 @@ public class AppStartupRunner implements ApplicationRunner {
 
     public AppStartupRunner(Environment env) {
         this.env = env;
-        final var rootDir = env.getProperty("pro_tube.store.dir");
-        this.rootPath = Paths.get(rootDir);
+        String rootDir = env.getProperty("pro_tube.store.dir");
+        Path path = Paths.get(rootDir);
+
+        if (!Files.exists(path)) {
+            LOG.warn("Configured video directory does not exist: {}", path.toAbsolutePath());
+            // Try to find it in common locations relative to execution directory
+            if (rootDir.equals("../videos/") || rootDir.equals("../videos")) {
+                Path alt = Paths.get("videos");
+                if (Files.exists(alt)) {
+                    path = alt;
+                    LOG.info("Found videos directory at: {}", path.toAbsolutePath());
+                }
+            } else if (rootDir.equals("videos/") || rootDir.equals("videos")) {
+                Path alt = Paths.get("../videos");
+                if (Files.exists(alt)) {
+                    path = alt;
+                    LOG.info("Found videos directory at: {}", path.toAbsolutePath());
+                }
+            }
+        } else {
+             LOG.info("Using video directory: {}", path.toAbsolutePath());
+        }
+        
+        this.rootPath = path;
         loadInitialData = env.getProperty("pro_tube.load_initial_data", Boolean.class);
     }
 

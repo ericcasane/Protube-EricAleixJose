@@ -19,12 +19,11 @@ class VideoEntityMapperTest {
 
     @Test
     void testToEntity() {
-        Video video = new Video(
-                "Test Video",
-                "testuser",
-                "video.mp4",
-                "thumbnail.webp"
-        );
+        Video video = new Video();
+        video.setTitle("Test Video");
+        video.setUser("testuser");
+        video.setVideoFileName("video.mp4");
+        video.setThumbnailFileName("thumbnail.webp");
 
         VideoEntity entity = mapper.toEntity(video);
 
@@ -37,13 +36,12 @@ class VideoEntityMapperTest {
 
     @Test
     void testToDomain() {
-        VideoEntity entity = new VideoEntity(
-                UUID.randomUUID(),
-                "Test Video",
-                "testuser",
-                "video.mp4",
-                "thumbnail.webp"
-        );
+        VideoEntity entity = new VideoEntity();
+        entity.setId(UUID.randomUUID());
+        entity.setTitle("Test Video");
+        entity.setUser("testuser");
+        entity.setVideoFileName("video.mp4");
+        entity.setThumbnailFileName("thumbnail.webp");
 
         Video video = mapper.toDomain(entity);
 
@@ -56,12 +54,11 @@ class VideoEntityMapperTest {
 
     @Test
     void testRoundTripMapping() {
-        Video originalVideo = new Video(
-                "Original Video",
-                "originaluser",
-                "original.mp4",
-                "original.webp"
-        );
+        Video originalVideo = new Video();
+        originalVideo.setTitle("Original Video");
+        originalVideo.setUser("originaluser");
+        originalVideo.setVideoFileName("original.mp4");
+        originalVideo.setThumbnailFileName("original.webp");
 
         VideoEntity entity = mapper.toEntity(originalVideo);
         Video mappedVideo = mapper.toDomain(entity);

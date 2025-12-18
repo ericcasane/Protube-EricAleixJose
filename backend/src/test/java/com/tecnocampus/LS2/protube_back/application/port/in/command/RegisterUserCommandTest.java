@@ -13,7 +13,8 @@ class RegisterUserCommandTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Test Description"
         );
 
         assertEquals("John", command.name());
@@ -21,6 +22,7 @@ class RegisterUserCommandTest {
         assertEquals("john@example.com", command.email());
         assertEquals("johndoe", command.username());
         assertEquals("password123", command.password());
+        assertEquals("Test Description", command.description());
     }
 
     @Test
@@ -30,7 +32,8 @@ class RegisterUserCommandTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Description"
         );
 
         RegisterUserCommand command2 = new RegisterUserCommand(
@@ -38,7 +41,8 @@ class RegisterUserCommandTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Description"
         );
 
         assertEquals(command1, command2);
@@ -51,7 +55,8 @@ class RegisterUserCommandTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Description 1"
         );
 
         RegisterUserCommand command2 = new RegisterUserCommand(
@@ -59,7 +64,8 @@ class RegisterUserCommandTest {
                 "Smith",
                 "jane@example.com",
                 "janesmith",
-                "password456"
+                "password456",
+                "Description 2"
         );
 
         assertNotEquals(command1, command2);
@@ -72,7 +78,8 @@ class RegisterUserCommandTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Description"
         );
 
         String str = command.toString();

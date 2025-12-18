@@ -4,16 +4,20 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
@@ -29,4 +33,13 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "profile_picture_url")
+    private String profilePictureUrl;
+
+    @Column(name = "banner_url")
+    private String bannerUrl;
 }

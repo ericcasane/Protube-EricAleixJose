@@ -1,0 +1,119 @@
+{
+  "nav": {
+    "search": "Buscar...",
+    "signIn": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
+    "home": "Inicio",
+    "explore": "Explorar",
+    "myChannel": "Mi Canal",
+    "platformDescription": "La plataforma definitiva para entusiastes de vídeos."
+  },
+  "home": {
+    "title": {
+      "the": "La",
+      "ultimate": "mejor",
+      "platform": "plataforma de vídeos."
+    },
+    "badge": "Descubre contenido asombroso",
+    "errorLoading": "Error al cargar vídeos",
+    "noVideos": "No hay vídeos disponibles"
+  },
+  "explore": {
+    "title": "Explorar",
+    "subtitle": "Contenido seleccionado para ti.",
+    "watchNow": "Ver ahora",
+    "trending": "Tendencias",
+    "freshUploads": "Nuevas subidas",
+    "trendingBadge": "#1 en Tendencias"
+  },
+  "profile": {
+    "edit": "Editar Perfil",
+    "videos": "Vídeos",
+    "noVideos": "Aún no hay vídeos",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Cuéntale a los espectadores sobre tu canal",
+    "profilePictureUrl": "URL Foto de Perfil",
+    "bannerUrl": "URL Banner",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "loadError": "Error al cargar perfil",
+    "updateError": "Error al actualizar perfil",
+    "userNotFound": "Usuario no encontrado"
+  },
+  "auth": {
+    "signIn": {
+      "logIn": "Iniciar sesión",
+      "subtitle": "Inicia sesión para continuar",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "usernameRequired": "El nombre de usuario es obligatorio",
+      "passwordRequired": "La contraseña es obligatoria",
+      "signInButton": "Iniciar sesión",
+      "noAccount": "¿No tienes cuenta?",
+      "registerNow": "Regístrate ahora",
+      "error": "Error al iniciar sesión. Verifica tus credenciales.",
+      "welcome": "Bienvenido"
+    },
+    "register": {
+      "title": "Regístro",
+      "subtitle": "Crea tu cuenta para comenzar",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo electrónico",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "confirmPassword": "Confirma la contraseña",
+      "firstNameRequired": "El nombre es obligatorio",
+      "lastNameRequired": "El apellido es obligatorio",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "emailInvalid": "El correo electrónico no es válido",
+      "usernameRequired": "El nombre de usuario es obligatorio",
+      "usernameTaken": "El nombre de usuario ya está en uso",
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden",
+      "registerButton": "Registrarse",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "signIn": "Inicia sesión",
+      "error": "Error al registrarse. Por favor, intenta de nuevo."
+    }
+  },
+  "video": {
+    "viewsLabel": "visualizaciones",
+    "subscribers": "suscriptores",
+    "subscribe": "Suscribirse",
+    "share": "Compartir",
+    "download": "Descargar",
+    "showMore": "Mostrar más",
+    "showLess": "Mostrar menos",
+    "comments": "{count} Comentarios",
+    "addComment": "Añade un comentario...",
+    "reply": "Responder",
+    "recommended": "Recomendado",
+    "errorLoading": "Error al cargar el vídeo",
+    "notFound": "Vídeo no encontrado",
+    "browserNotSupported": "Tu navegador no admite la etiqueta de vídeo.",
+    "timeAgo": {
+      "justNow": "Hace poco",
+      "minutesAgo": "Hace {count} minutos",
+      "hoursAgo": "Hace {count} horas",
+      "daysAgo": "Hace {count} días",
+      "weeksAgo": "Hace {count} semanas",
+      "monthsAgo": "Hace {count} meses",
+      "yearsAgo": "Hace {count} años"
+    },
+    "loginRequired": "Por favor inicia sesión para continuar",
+    "comment": "Comentar",
+    "commenting": "Comentando...",
+    "errorComment": "Error al añadir comentario",
+    "errorLiking": "Error al dar like",
+    "errorDisliking": "Error al dar dislike"
+  },
+  "common": {
+    "error": "Error",
+    "loading": "Cargando...",
+    "cancel": "Cancelar",
+    "save": "Guardar"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "nav": {
+    "search": "Search...",
+    "signIn": "Sign in",
+    "register": "Register",
+    "logout": "Log out",
+    "home": "Home",
+    "explore": "Explore",
+    "myChannel": "My Channel",
+    "platformDescription": "The ultimate platform for video enthusiasts."
+  },
+  "home": {
+    "title": {
+      "the": "The",
+      "ultimate": "ultimate",
+      "platform": "platform for videos."
+    },
+    "badge": "Discover amazing content",
+    "errorLoading": "Error loading videos",
+    "noVideos": "No videos available"
+  },
+  "explore": {
+    "title": "Explore",
+    "subtitle": "Curated content just for you.",
+    "watchNow": "Watch Now",
+    "trending": "Trending Now",
+    "freshUploads": "Fresh Uploads",
+    "trendingBadge": "#1 Trending"
+  },
+  "profile": {
+    "edit": "Edit Profile",
+    "videos": "Videos",
+    "noVideos": "No videos yet",
+    "description": "Description",
+    "descriptionPlaceholder": "Tell viewers about your channel",
+    "profilePictureUrl": "Profile Picture URL",
+    "bannerUrl": "Banner URL",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loadError": "Failed to load profile",
+    "updateError": "Failed to update profile",
+    "userNotFound": "User not found"
+  },
+  "auth": {
+    "signIn": {
+      "logIn": "Log In",
+      "subtitle": "Sign in to continue",
+      "username": "Username",
+      "password": "Password",
+      "usernameRequired": "Username is required",
+      "passwordRequired": "Password is required",
+      "signInButton": "Sign in",
+      "noAccount": "Don't have an account?",
+      "registerNow": "Register now",
+      "error": "Sign in error. Check your credentials.",
+      "welcome": "Welcome"
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Create your account to get started",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "username": "Username",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email is invalid",
+      "usernameRequired": "Username is required",
+      "usernameTaken": "Username is already taken",
+      "passwordRequired": "Password is required",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "registerButton": "Register",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "error": "Registration error. Please try again."
+    }
+  },
+  "video": {
+    "viewsLabel": "views",
+    "subscribers": "subscribers",
+    "subscribe": "Subscribe",
+    "share": "Share",
+    "download": "Download",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "comments": "{count} Comments",
+    "addComment": "Add a comment...",
+    "reply": "Reply",
+    "recommended": "Recommended",
+    "errorLoading": "Error loading video",
+    "notFound": "Video not found",
+    "browserNotSupported": "Your browser does not support the video tag.",
+    "timeAgo": {
+      "justNow": "Just now",
+      "minutesAgo": "{count} minutes ago",
+      "hoursAgo": "{count} hours ago",
+      "daysAgo": "{count} days ago",
+      "weeksAgo": "{count} weeks ago",
+      "monthsAgo": "{count} months ago",
+      "yearsAgo": "{count} years ago"
+    },
+    "loginRequired": "Please login to continue",
+    "comment": "Comment",
+    "commenting": "Commenting...",
+    "errorComment": "Failed to add comment",
+    "errorLiking": "Failed to like video",
+    "errorDisliking": "Failed to dislike video"
+  },
+  "common": {
+    "error": "Error",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "save": "Save"
+  }
+}

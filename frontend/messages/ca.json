@@ -1,0 +1,119 @@
+{
+  "nav": {
+    "search": "Cercar...",
+    "signIn": "Iniciar sessió",
+    "register": "Registrar-se",
+    "logout": "Tancar sessió",
+    "home": "Inici",
+    "explore": "Explorar",
+    "myChannel": "El Meu Canal",
+    "platformDescription": "La plataforma definitiva per a entusiastes de vídeo."
+  },
+  "home": {
+    "title": {
+      "the": "La",
+      "ultimate": "millor",
+      "platform": "plataforma de vídeos."
+    },
+    "badge": "Descobreix contingut sorprenent",
+    "errorLoading": "Error carregant vídeos",
+    "noVideos": "Cap vídeo disponible"
+  },
+  "explore": {
+    "title": "Explorar",
+    "subtitle": "Contingut seleccionat per a tu.",
+    "watchNow": "Veure ara",
+    "trending": "Tendències",
+    "freshUploads": "Noves pujades",
+    "trendingBadge": "#1 en Tendències"
+  },
+  "profile": {
+    "edit": "Editar Perfil",
+    "videos": "Vídeos",
+    "noVideos": "Encara no hi ha vídeos",
+    "description": "Descripció",
+    "descriptionPlaceholder": "Explica als espectadors sobre el teu canal",
+    "profilePictureUrl": "URL Foto de Perfil",
+    "bannerUrl": "URL Banner",
+    "save": "Guardar",
+    "cancel": "Cancel·lar",
+    "loadError": "Error carregant perfil",
+    "updateError": "Error actualitzant perfil",
+    "userNotFound": "Usuari no trobat"
+  },
+  "auth": {
+    "signIn": {
+      "logIn": "Iniciar sessió",
+      "subtitle": "Inicia sessió per continuar",
+      "username": "Nom d'usuari",
+      "password": "Contrasenya",
+      "usernameRequired": "El nom d'usuari és obligatori",
+      "passwordRequired": "La contrasenya és obligatòria",
+      "signInButton": "Iniciar sessió",
+      "noAccount": "No tens compte?",
+      "registerNow": "Registra't ara",
+      "error": "Error en l'inici de sessió. Comprova les teves credencials.",
+      "welcome": "Benvingut"
+    },
+    "register": {
+      "title": "Registre",
+      "subtitle": "Crea el teu compte per començar",
+      "firstName": "Nom",
+      "lastName": "Cognoms",
+      "email": "Correu electrònic",
+      "username": "Nom d'usuari",
+      "password": "Contrasenya",
+      "confirmPassword": "Confirma la contrasenya",
+      "firstNameRequired": "El nom és obligatori",
+      "lastNameRequired": "Els cognoms són obligatoris",
+      "emailRequired": "El correu electrònic és obligatori",
+      "emailInvalid": "El correu electrònic no és vàlid",
+      "usernameRequired": "El nom d'usuari és obligatori",
+      "usernameTaken": "El nom d'usuari ja està en ús",
+      "passwordRequired": "La contrasenya és obligatòria",
+      "passwordTooShort": "La contrasenya ha de tenir almenys 8 caràcters",
+      "passwordsDoNotMatch": "Les contrasenyes no coincideixen",
+      "registerButton": "Registrar-se",
+      "haveAccount": "Ja tens compte?",
+      "signIn": "Inicia sessió",
+      "error": "Error al registrar-se. Si us plau, intenta de nou."
+    }
+  },
+  "video": {
+    "viewsLabel": "visualitzacions",
+    "subscribers": "subscriptors",
+    "subscribe": "Subscriure's",
+    "share": "Compartir",
+    "download": "Descarregar",
+    "showMore": "Mostrar més",
+    "showLess": "Mostrar menys",
+    "comments": "{count} Comentaris",
+    "addComment": "Afegeix un comentari...",
+    "reply": "Respondre",
+    "recommended": "Recomanat",
+    "errorLoading": "Error carregant el vídeo",
+    "notFound": "Vídeo no trobat",
+    "browserNotSupported": "El teu navegador no suporta l'etiqueta de vídeo.",
+    "timeAgo": {
+      "justNow": "Ara mateix",
+      "minutesAgo": "Fa {count} minuts",
+      "hoursAgo": "Fa {count} hores",
+      "daysAgo": "Fa {count} dies",
+      "weeksAgo": "Fa {count} setmanes",
+      "monthsAgo": "Fa {count} mesos",
+      "yearsAgo": "Fa {count} anys"
+    },
+    "loginRequired": "Si us plau inicia sessió per continuar",
+    "comment": "Comentar",
+    "commenting": "Comentant...",
+    "errorComment": "Error en afegir comentari",
+    "errorLiking": "Error en donar m'agrada",
+    "errorDisliking": "Error en donar no m'agrada"
+  },
+  "common": {
+    "error": "Error",
+    "loading": "Carregant...",
+    "cancel": "Cancel·lar",
+    "save": "Guardar"
+  }
+}

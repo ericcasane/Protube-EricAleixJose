@@ -1,5 +1,8 @@
 package com.tecnocampus.LS2.protube_back.adapter.in.web.dto;
 
+
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +12,7 @@ class AuthResponseTest {
     @Test
     void testAuthResponseCreation() {
         String token = "jwt-token-123";
-        Long userId = 1L;
+        UUID userId = UUID.randomUUID();
         String username = "johndoe";
         String email = "john@example.com";
 
@@ -23,7 +26,7 @@ class AuthResponseTest {
 
     @Test
     void testAuthResponseGetters() {
-        AuthResponse response = new AuthResponse("token", 2L, "alice", "alice@example.com");
+        AuthResponse response = new AuthResponse("token", UUID.randomUUID(), "alice", "alice@example.com");
 
         assertNotNull(response.getToken());
         assertNotNull(response.getUserId());
@@ -33,47 +36,50 @@ class AuthResponseTest {
 
     @Test
     void testAuthResponseInequality() {
-        AuthResponse response1 = new AuthResponse("token1", 1L, "user1", "email1@example.com");
-        AuthResponse response2 = new AuthResponse("token2", 2L, "user2", "email2@example.com");
+        AuthResponse response1 = new AuthResponse("token1", UUID.randomUUID(), "user1", "email1@example.com");
+        AuthResponse response2 = new AuthResponse("token2", UUID.randomUUID(), "user2", "email2@example.com");
 
         assertNotEquals(response1, response2);
     }
 
     @Test
     void testAuthResponseWithDifferentTokens() {
-        AuthResponse response1 = new AuthResponse("token1", 1L, "user", "email@example.com");
-        AuthResponse response2 = new AuthResponse("token2", 1L, "user", "email@example.com");
+        UUID userId = UUID.randomUUID();
+        AuthResponse response1 = new AuthResponse("token1", userId, "user", "email@example.com");
+        AuthResponse response2 = new AuthResponse("token2", userId, "user", "email@example.com");
 
         assertNotEquals(response1, response2);
     }
 
     @Test
     void testAuthResponseWithDifferentUserIds() {
-        AuthResponse response1 = new AuthResponse("token", 1L, "user", "email@example.com");
-        AuthResponse response2 = new AuthResponse("token", 2L, "user", "email@example.com");
+        AuthResponse response1 = new AuthResponse("token", UUID.randomUUID(), "user", "email@example.com");
+        AuthResponse response2 = new AuthResponse("token", UUID.randomUUID(), "user", "email@example.com");
 
         assertNotEquals(response1, response2);
     }
 
     @Test
     void testAuthResponseWithDifferentUsernames() {
-        AuthResponse response1 = new AuthResponse("token", 1L, "user1", "email@example.com");
-        AuthResponse response2 = new AuthResponse("token", 1L, "user2", "email@example.com");
+        UUID userId = UUID.randomUUID();
+        AuthResponse response1 = new AuthResponse("token", userId, "user1", "email@example.com");
+        AuthResponse response2 = new AuthResponse("token", userId, "user2", "email@example.com");
 
         assertNotEquals(response1, response2);
     }
 
     @Test
     void testAuthResponseWithDifferentEmails() {
-        AuthResponse response1 = new AuthResponse("token", 1L, "user", "email1@example.com");
-        AuthResponse response2 = new AuthResponse("token", 1L, "user", "email2@example.com");
+        UUID userId = UUID.randomUUID();
+        AuthResponse response1 = new AuthResponse("token", userId, "user", "email1@example.com");
+        AuthResponse response2 = new AuthResponse("token", userId, "user", "email2@example.com");
 
         assertNotEquals(response1, response2);
     }
 
     @Test
     void testAuthResponseToString() {
-        AuthResponse response = new AuthResponse("token", 1L, "user", "email@example.com");
+        AuthResponse response = new AuthResponse("token", UUID.randomUUID(), "user", "email@example.com");
 
         String str = response.toString();
         assertNotNull(str);
@@ -88,12 +94,5 @@ class AuthResponseTest {
         assertNull(response.getUserId());
         assertNull(response.getUsername());
         assertNull(response.getEmail());
-    }
-
-    @Test
-    void testAuthResponseWithLargeUserId() {
-        AuthResponse response = new AuthResponse("token", 999999999L, "user", "email@example.com");
-
-        assertEquals(999999999L, response.getUserId());
     }
 }

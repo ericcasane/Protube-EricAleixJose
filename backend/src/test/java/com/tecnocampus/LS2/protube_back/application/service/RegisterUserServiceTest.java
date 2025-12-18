@@ -13,6 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -40,11 +43,12 @@ class RegisterUserServiceTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Description"
         );
 
         User newUser = User.from(command);
-        User savedUser = new User(1L, newUser.name(), newUser.surname(), newUser.email(), newUser.username(), newUser.hashedPassword());
+        User savedUser = User.from(UUID.randomUUID(), newUser.name(), newUser.surname(), newUser.email(), newUser.username(), newUser.hashedPassword(), newUser.description(), null, null);
         String token = "jwt-token-123";
 
         when(userRepository.findByEmail(command.email())).thenReturn(Optional.empty());
@@ -56,7 +60,7 @@ class RegisterUserServiceTest {
 
         assertNotNull(response);
         assertEquals(token, response.getToken());
-        assertEquals(1L, response.getUserId());
+        assertEquals(savedUser.id(), response.getUserId());
         assertEquals("johndoe", response.getUsername());
         assertEquals("john@example.com", response.getEmail());
 
@@ -73,10 +77,11 @@ class RegisterUserServiceTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Description"
         );
 
-        User existingUser = new User(1L, "Jane", "Smith", "john@example.com", "janesmith", "hashed");
+        User existingUser = User.from(UUID.randomUUID(), "Jane", "Smith", "john@example.com", "janesmith", "hashed", null, null, null);
 
         when(userRepository.findByEmail(command.email())).thenReturn(Optional.of(existingUser));
 
@@ -95,10 +100,11 @@ class RegisterUserServiceTest {
                 "Doe",
                 "john@example.com",
                 "johndoe",
-                "password123"
+                "password123",
+                "Description"
         );
 
-        User existingUser = new User(1L, "Jane", "Smith", "jane@example.com", "johndoe", "hashed");
+        User existingUser = User.from(UUID.randomUUID(), "Jane", "Smith", "jane@example.com", "johndoe", "hashed", null, null, null);
 
         when(userRepository.findByEmail(command.email())).thenReturn(Optional.empty());
         when(userRepository.findByUsername(command.username())).thenReturn(Optional.of(existingUser));
@@ -118,11 +124,12 @@ class RegisterUserServiceTest {
                 "García",
                 "jose@example.com",
                 "jose_garcia",
-                "p@ssw0rd"
+                "p@ssw0rd",
+                "Descripción"
         );
 
         User newUser = User.from(command);
-        User savedUser = new User(1L, newUser.name(), newUser.surname(), newUser.email(), newUser.username(), newUser.hashedPassword());
+        User savedUser = User.from(UUID.randomUUID(), newUser.name(), newUser.surname(), newUser.email(), newUser.username(), newUser.hashedPassword(), newUser.description(), null, null);
         String token = "jwt-token-456";
 
         when(userRepository.findByEmail(command.email())).thenReturn(Optional.empty());
