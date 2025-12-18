@@ -70,7 +70,9 @@ public class VideoReactionServiceTest {
     void addLike_NewReaction_ShouldIncrementLikes() {
         when(videoRepository.findByVideoFileName(videoFileName)).thenReturn(Optional.of(sampleVideo));
         when(userRepository.findById(userId)).thenReturn(Optional.of(sampleUser));
-        when(videoReactionRepository.findByUserIdAndVideoId(userId, videoId)).thenReturn(Optional.empty());
+        when(videoReactionRepository.findByUserIdAndVideoId(userId, videoId))
+                .thenReturn(Optional.empty())
+                .thenReturn(Optional.of(sampleReaction));
 
         VideoReactionResponseDTO result = videoReactionService.addLike(userId, videoFileName);
 
@@ -86,7 +88,11 @@ public class VideoReactionServiceTest {
     void addLike_ExistingLike_ShouldToggleOff() {
         when(videoRepository.findByVideoFileName(videoFileName)).thenReturn(Optional.of(sampleVideo));
         when(userRepository.findById(userId)).thenReturn(Optional.of(sampleUser));
-        when(videoReactionRepository.findByUserIdAndVideoId(userId, videoId)).thenReturn(Optional.of(sampleReaction));
+        
+        // First returns existing, second returns empty (deleted)
+        when(videoReactionRepository.findByUserIdAndVideoId(userId, videoId))
+                .thenReturn(Optional.of(sampleReaction))
+                .thenReturn(Optional.empty());
 
         VideoReactionResponseDTO result = videoReactionService.addLike(userId, videoFileName);
 
@@ -104,6 +110,8 @@ public class VideoReactionServiceTest {
         
         when(videoRepository.findByVideoFileName(videoFileName)).thenReturn(Optional.of(sampleVideo));
         when(userRepository.findById(userId)).thenReturn(Optional.of(sampleUser));
+        
+        // Returns the same object reference, which will be mutated by the service
         when(videoReactionRepository.findByUserIdAndVideoId(userId, videoId)).thenReturn(Optional.of(sampleReaction));
 
         VideoReactionResponseDTO result = videoReactionService.addLike(userId, videoFileName);
@@ -120,7 +128,14 @@ public class VideoReactionServiceTest {
     void addDislike_NewReaction_ShouldIncrementDislikes() {
         when(videoRepository.findByVideoFileName(videoFileName)).thenReturn(Optional.of(sampleVideo));
         when(userRepository.findById(userId)).thenReturn(Optional.of(sampleUser));
-        when(videoReactionRepository.findByUserIdAndVideoId(userId, videoId)).thenReturn(Optional.empty());
+        
+        // Create a dislike reaction mock for the second call
+        VideoReactionEntity dislikeReaction = new VideoReactionEntity();
+        dislikeReaction.setReactionType(VideoReactionEntity.ReactionType.DISLIKE);
+        
+        when(videoReactionRepository.findByUserIdAndVideoId(userId, videoId))
+                .thenReturn(Optional.empty())
+                .thenReturn(Optional.of(dislikeReaction));
 
         VideoReactionResponseDTO result = videoReactionService.addDislike(userId, videoFileName);
 
@@ -132,7 +147,11 @@ public class VideoReactionServiceTest {
     @Test
     void removeReaction_WhenExists_ShouldDecrementCounters() {
         when(videoRepository.findByVideoFileName(videoFileName)).thenReturn(Optional.of(sampleVideo));
-        when(videoReactionRepository.findByUserIdAndVideoId(userId, videoId)).thenReturn(Optional.of(sampleReaction));
+        
+        // First found, then not found (deleted)
+        when(videoReactionRepository.findByUserIdAndVideoId(userId, videoId))
+                .thenReturn(Optional.of(sampleReaction))
+                .thenReturn(Optional.empty());
 
         VideoReactionResponseDTO result = videoReactionService.removeReaction(userId, videoFileName);
 

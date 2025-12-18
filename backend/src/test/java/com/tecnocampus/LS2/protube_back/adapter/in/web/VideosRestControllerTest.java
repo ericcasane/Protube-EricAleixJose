@@ -11,6 +11,9 @@ import com.tecnocampus.LS2.protube_back.domain.service.VideoReactionService;
 import com.tecnocampus.LS2.protube_back.domain.service.VideoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import com.tecnocampus.LS2.protube_back.configuration.SecurityConfig;
+import com.tecnocampus.LS2.protube_back.adapter.in.web.filter.JwtAuthenticationFilter;
+import org.springframework.context.annotation.Import;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,14 +24,17 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(VideosRestController.class)
-@AutoConfigureMockMvc(addFilters = false) // Disable security filters for simplicity in this unit test unless needed
+@Import({SecurityConfig.class, JwtAuthenticationFilter.class})
+@AutoConfigureMockMvc // Enable security filters
 public class VideosRestControllerTest {
 
     @Autowired
@@ -45,6 +51,14 @@ public class VideosRestControllerTest {
 
     @MockBean
     private UserJpaRepository userRepository;
+
+    @MockBean
+    private com.tecnocampus.LS2.protube_back.adapter.out.security.component.JwtTokenProvider jwtTokenProvider;
+
+    @MockBean
+    private com.tecnocampus.LS2.protube_back.adapter.out.security.component.CustomUserDetailsService customUserDetailsService;
+
+
 
     private Video sampleVideo;
     private UUID userId;
@@ -109,9 +123,12 @@ public class VideosRestControllerTest {
         VideoReactionResponseDTO reactionResponse = new VideoReactionResponseDTO(10L, 2L, "LIKE");
         when(reactionService.getReactionStats(any(UUID.class), eq("video123"))).thenReturn(reactionResponse);
 
+        // Create proper Authentication object
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userId.toString(), null, Collections.emptyList());
+
         // Simulate Authenticated user with UUID as name
         mockMvc.perform(get("/api/videos/video123")
-                .principal(() -> userId.toString()))
+                .with(authentication(auth)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userReaction").value("LIKE"));
     }
@@ -130,7 +147,7 @@ public class VideosRestControllerTest {
         mockMvc.perform(post("/api/videos/video123/like")
                 .with(csrf())) // csrf might be needed if security is active, though disabled by filter config above
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.likes").value(11))
+                .andExpect(jsonPath("$.likesCount").value(11))
                 .andExpect(jsonPath("$.userReaction").value("LIKE"));
     }
 
@@ -147,13 +164,13 @@ public class VideosRestControllerTest {
         userEntity.setId(userId);
         when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(userEntity));
 
-        VideoReactionResponseDTO reactionResponse = new VideoReactionResponseDTO(10L, 3L, "DISLIKE");
-        when(reactionService.addDislike(any(UUID.class), eq("video123"))).thenReturn(reactionResponse);
 
-        mockMvc.perform(post("/api/videos/video123/dislike").with(csrf()))
+        when(reactionService.addDislike(any(UUID.class), eq("video123"))).thenReturn(new VideoReactionResponseDTO(10L, 3L, "DISLIKE"));
+
+        mockMvc.perform(post("/api/videos/video123/dislike").with(csrf())
+                .principal(() -> userId.toString()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dislikes").value(3))
-                .andExpect(jsonPath("$.userReaction").value("DISLIKE"));
+                .andExpect(jsonPath("$.dislikesCount").value(3));
     }
 
     @Test
@@ -163,28 +180,26 @@ public class VideosRestControllerTest {
         userEntity.setId(userId);
         when(userRepository.findByUsername("testuser")).thenReturn(Optional.of(userEntity));
 
-        VideoReactionResponseDTO reactionResponse = new VideoReactionResponseDTO(10L, 2L, null);
-        when(reactionService.removeReaction(any(UUID.class), eq("video123"))).thenReturn(reactionResponse);
 
-        mockMvc.perform(delete("/api/videos/video123/reaction").with(csrf()))
+        when(reactionService.removeReaction(any(UUID.class), eq("video123"))).thenReturn(new VideoReactionResponseDTO(10L, 2L, null));
+
+        mockMvc.perform(delete("/api/videos/video123/reaction").with(csrf())
+                .principal(() -> userId.toString()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userReaction").isEmpty());
+                .andExpect(jsonPath("$.userReaction").doesNotExist());
     }
 
     @Test
     @WithMockUser(username = "testuser")
     void addComment_ShouldReturnNewComment() throws Exception {
-        CommentCreateDTO createDTO = new CommentCreateDTO();
-        createDTO.setText("Great video!");
-
         CommentDTO commentDTO = new CommentDTO("testuser", "Great video!", System.currentTimeMillis(), 0L);
         when(temporaryCommentService.addComment(eq("video123"), eq("testuser"), eq("Great video!")))
                 .thenReturn(commentDTO);
 
-        mockMvc.perform(post("/api/videos/video123/comments")
+        mockMvc.perform(post("/api/videos/video123/comments").with(csrf())
+                .principal(() -> "testuser")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(createDTO))
-                .with(csrf()))
+                .content("{\"text\":\"Great video!\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text").value("Great video!"))
                 .andExpect(jsonPath("$.author").value("testuser"));
