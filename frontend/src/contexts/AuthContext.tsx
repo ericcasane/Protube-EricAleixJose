@@ -1,8 +1,16 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AuthService } from '../utils/authService';
-import type { RegisterData, LoginData, User } from '../types/auth';
+import type { RegisterData, LoginData, User } from "../types/auth";
+
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+
+import { AuthService } from "../utils/authService";
 
 interface AuthContextType {
   user: User | null;
@@ -22,6 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Verificar si hay un usuario autenticado al cargar
     const userData = AuthService.getUserData();
+
     if (userData) {
       setUser(userData);
     }
@@ -30,6 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (data: LoginData) => {
     const response = await AuthService.login(data);
+
     setUser({
       userId: response.userId,
       username: response.username,
@@ -39,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (data: RegisterData) => {
     const response = await AuthService.register(data);
+
     setUser({
       userId: response.userId,
       username: response.username,
@@ -69,9 +80,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
+
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
+
   return context;
 }
-

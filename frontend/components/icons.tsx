@@ -2,18 +2,15 @@ import * as React from "react";
 
 import { IconSvgProps } from "@/types";
 
-export const Logo: React.FC<React.ImgHTMLAttributes<HTMLImageElement> & { size?: number }> = ({
-  size = 36,
-  width,
-  height,
-  ...props
-}) => (
+export const Logo: React.FC<
+  React.ImgHTMLAttributes<HTMLImageElement> & { size?: number }
+> = ({ size = 36, width, height, ...props }) => (
   <img
-    src="/protube-icon.png"
     alt="ProTube Logo"
-    width={size || width || 36}
     height={size || height || 36}
-    style={{ objectFit: 'contain' }}
+    src="/protube-icon.png"
+    style={{ objectFit: "contain" }}
+    width={size || width || 36}
     {...props}
   />
 );

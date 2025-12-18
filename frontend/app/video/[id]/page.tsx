@@ -1,13 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { Spinner, Avatar, Button, Card } from '@heroui/react';
-import { VideoDetail, VideoListItem, VideoReactionResponse } from '@/src/types/video';
-import { VideoCard } from '@/components/video-card';
-import { useAuth } from '@/contexts/AuthContext';
-import { AuthService } from '@/utils/authService';
-import { useTranslations } from '@/hooks/useTranslations';
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { Spinner, Avatar, Button, Card } from "@heroui/react";
+
+import {
+  VideoDetail,
+  VideoListItem,
+  VideoReactionResponse,
+} from "@/src/types/video";
+import { VideoCard } from "@/components/video-card";
+import { useAuth } from "@/contexts/AuthContext";
+import { AuthService } from "@/utils/authService";
+import { useTranslations } from "@/hooks/useTranslations";
 
 // SVG Icons
 const ThumbsUpIcon = ({ className }: { className?: string }) => (
@@ -101,29 +106,34 @@ const MoreIcon = ({ className }: { className?: string }) => (
 // Función para formatear números grandes
 function formatNumber(count: number): string {
   if (count >= 1000000000) {
-    return (count / 1000000000).toFixed(1) + 'B';
+    return (count / 1000000000).toFixed(1) + "B";
   }
   if (count >= 1000000) {
-    return (count / 1000000).toFixed(1) + 'M';
+    return (count / 1000000).toFixed(1) + "M";
   }
   if (count >= 1000) {
-    return (count / 1000).toFixed(1) + 'K';
+    return (count / 1000).toFixed(1) + "K";
   }
+
   return count.toString();
 }
 
 // Función para formatear fecha
 function formatDate(timestamp: number): string {
   const date = new Date(timestamp * 1000);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 }
 
 // Función para formatear fecha de comentarios
-function formatCommentDate(timestamp: number, t: (key: string, options?: Record<string, string | number>) => string): string {
+function formatCommentDate(
+  timestamp: number,
+  t: (key: string, options?: Record<string, string | number>) => string,
+): string {
   const date = new Date(timestamp * 1000);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -131,23 +141,31 @@ function formatCommentDate(timestamp: number, t: (key: string, options?: Record<
 
   if (diffDays === 0) {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
     if (diffHours === 0) {
       const diffMins = Math.floor(diffMs / (1000 * 60));
-      return diffMins <= 0 ? t('video.timeAgo.justNow') : t('video.timeAgo.minutesAgo', { count: diffMins });
+
+      return diffMins <= 0
+        ? t("video.timeAgo.justNow")
+        : t("video.timeAgo.minutesAgo", { count: diffMins });
     }
-    return t('video.timeAgo.hoursAgo', { count: diffHours });
+
+    return t("video.timeAgo.hoursAgo", { count: diffHours });
   }
-  if (diffDays < 7) return t('video.timeAgo.daysAgo', { count: diffDays });
+  if (diffDays < 7) return t("video.timeAgo.daysAgo", { count: diffDays });
   if (diffDays < 30) {
     const weeks = Math.floor(diffDays / 7);
-    return t('video.timeAgo.weeksAgo', { count: weeks });
+
+    return t("video.timeAgo.weeksAgo", { count: weeks });
   }
   if (diffDays < 365) {
     const months = Math.floor(diffDays / 30);
-    return t('video.timeAgo.monthsAgo', { count: months });
+
+    return t("video.timeAgo.monthsAgo", { count: months });
   }
   const years = Math.floor(diffDays / 365);
-  return t('video.timeAgo.yearsAgo', { count: years });
+
+  return t("video.timeAgo.yearsAgo", { count: years });
 }
 
 export default function VideoPage() {
@@ -158,14 +176,14 @@ export default function VideoPage() {
 
   const [video, setVideo] = useState<VideoDetail | null>(null);
   const [recommendedVideos, setRecommendedVideos] = useState<VideoListItem[]>(
-    []
+    [],
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
   const [isDislikeLoading, setIsDislikeLoading] = useState(false);
-  const [commentText, setCommentText] = useState('');
+  const [commentText, setCommentText] = useState("");
   const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
 
   useEffect(() => {
@@ -174,35 +192,42 @@ export default function VideoPage() {
         setIsLoading(true);
 
         // Fetch video detail
-        console.log('Fetching video with ID:', videoId);
+        console.log("Fetching video with ID:", videoId);
         const videoResponse = await fetch(`/api/videos/${videoId}`);
-        console.log('Video response status:', videoResponse.status);
+
+        console.log("Video response status:", videoResponse.status);
 
         if (!videoResponse.ok) {
           const errorText = await videoResponse.text();
-          console.error('Video fetch error:', errorText);
-          throw new Error(`Failed to fetch video: ${videoResponse.status} ${errorText}`);
+
+          console.error("Video fetch error:", errorText);
+          throw new Error(
+            `Failed to fetch video: ${videoResponse.status} ${errorText}`,
+          );
         }
 
         const videoData = await videoResponse.json();
-        console.log('Video data received:', videoData);
+
+        console.log("Video data received:", videoData);
         setVideo(videoData);
 
         // Fetch all videos for recommendations
-        const videosResponse = await fetch('/api/videos');
+        const videosResponse = await fetch("/api/videos");
+
         if (videosResponse.ok) {
           const allVideos = await videosResponse.json();
           // Filter out current video and take first 10
           const filtered = allVideos
             .filter((v: VideoListItem) => v.id !== videoId)
             .slice(0, 10);
+
           setRecommendedVideos(filtered);
         }
 
         setError(null);
       } catch (err) {
-        console.error('Error fetching video:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch video');
+        console.error("Error fetching video:", err);
+        setError(err instanceof Error ? err.message : "Failed to fetch video");
       } finally {
         setIsLoading(false);
       }
@@ -217,13 +242,14 @@ export default function VideoPage() {
     const token = AuthService.getToken();
     const userData = AuthService.getUserData();
 
-    console.log('Like button clicked:');
-    console.log('- isAuthenticated:', isAuthenticated);
-    console.log('- token exists:', !!token);
-    console.log('- userData:', userData);
+    console.log("Like button clicked:");
+    console.log("- isAuthenticated:", isAuthenticated);
+    console.log("- token exists:", !!token);
+    console.log("- userData:", userData);
 
     if (!isAuthenticated || !token) {
-      alert(t('video.loginRequired') || 'Please login to like videos');
+      alert(t("video.loginRequired") || "Please login to like videos");
+
       return;
     }
 
@@ -231,36 +257,44 @@ export default function VideoPage() {
       setIsLikeLoading(true);
 
       const response = await fetch(`/api/videos/${videoId}/like`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.status === 401) {
-        alert(t('video.loginRequired') || 'Please login to like videos');
+        alert(t("video.loginRequired") || "Please login to like videos");
+
         return;
       }
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('Like error:', errorData);
-        throw new Error('Failed to like video');
+
+        console.error("Like error:", errorData);
+        throw new Error("Failed to like video");
       }
 
       const reactionData: VideoReactionResponse = await response.json();
 
       // Update video state with new counts and user reaction
-      setVideo(prev => prev ? {
-        ...prev,
-        likeCount: reactionData.likesCount,
-        dislikeCount: reactionData.dislikesCount,
-        userReaction: reactionData.userReaction,
-      } : null);
+      setVideo((prev) =>
+        prev
+          ? {
+              ...prev,
+              likeCount: reactionData.likesCount,
+              dislikeCount: reactionData.dislikesCount,
+              userReaction: reactionData.userReaction,
+            }
+          : null,
+      );
     } catch (error) {
-      console.error('Error liking video:', error);
-      alert(t('video.errorLiking') || 'Failed to like video. Please try again.');
+      console.error("Error liking video:", error);
+      alert(
+        t("video.errorLiking") || "Failed to like video. Please try again.",
+      );
     } finally {
       setIsLikeLoading(false);
     }
@@ -270,13 +304,14 @@ export default function VideoPage() {
     const token = AuthService.getToken();
     const userData = AuthService.getUserData();
 
-    console.log('Dislike button clicked:');
-    console.log('- isAuthenticated:', isAuthenticated);
-    console.log('- token exists:', !!token);
-    console.log('- userData:', userData);
+    console.log("Dislike button clicked:");
+    console.log("- isAuthenticated:", isAuthenticated);
+    console.log("- token exists:", !!token);
+    console.log("- userData:", userData);
 
     if (!isAuthenticated || !token) {
-      alert(t('video.loginRequired') || 'Please login to dislike videos');
+      alert(t("video.loginRequired") || "Please login to dislike videos");
+
       return;
     }
 
@@ -284,36 +319,45 @@ export default function VideoPage() {
       setIsDislikeLoading(true);
 
       const response = await fetch(`/api/videos/${videoId}/dislike`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.status === 401) {
-        alert(t('video.loginRequired') || 'Please login to dislike videos');
+        alert(t("video.loginRequired") || "Please login to dislike videos");
+
         return;
       }
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('Dislike error:', errorData);
-        throw new Error('Failed to dislike video');
+
+        console.error("Dislike error:", errorData);
+        throw new Error("Failed to dislike video");
       }
 
       const reactionData: VideoReactionResponse = await response.json();
 
       // Update video state with new counts and user reaction
-      setVideo(prev => prev ? {
-        ...prev,
-        likeCount: reactionData.likesCount,
-        dislikeCount: reactionData.dislikesCount,
-        userReaction: reactionData.userReaction,
-      } : null);
+      setVideo((prev) =>
+        prev
+          ? {
+              ...prev,
+              likeCount: reactionData.likesCount,
+              dislikeCount: reactionData.dislikesCount,
+              userReaction: reactionData.userReaction,
+            }
+          : null,
+      );
     } catch (error) {
-      console.error('Error disliking video:', error);
-      alert(t('video.errorDisliking') || 'Failed to dislike video. Please try again.');
+      console.error("Error disliking video:", error);
+      alert(
+        t("video.errorDisliking") ||
+          "Failed to dislike video. Please try again.",
+      );
     } finally {
       setIsDislikeLoading(false);
     }
@@ -326,7 +370,8 @@ export default function VideoPage() {
     const userData = AuthService.getUserData();
 
     if (!isAuthenticated || !token) {
-      alert(t('video.loginRequired') || 'Please login to comment');
+      alert(t("video.loginRequired") || "Please login to comment");
+
       return;
     }
 
@@ -338,38 +383,46 @@ export default function VideoPage() {
       setIsCommentSubmitting(true);
 
       const response = await fetch(`/api/videos/${videoId}/comments`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ text: commentText }),
       });
 
       if (response.status === 401) {
-        alert(t('video.loginRequired') || 'Please login to comment');
+        alert(t("video.loginRequired") || "Please login to comment");
+
         return;
       }
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('Comment error:', errorData);
-        throw new Error('Failed to add comment');
+
+        console.error("Comment error:", errorData);
+        throw new Error("Failed to add comment");
       }
 
       const newComment = await response.json();
 
       // Add new comment to the beginning of the comments list
-      setVideo(prev => prev ? {
-        ...prev,
-        comments: [newComment, ...(prev.comments || [])],
-      } : null);
+      setVideo((prev) =>
+        prev
+          ? {
+              ...prev,
+              comments: [newComment, ...(prev.comments || [])],
+            }
+          : null,
+      );
 
       // Clear the input
-      setCommentText('');
+      setCommentText("");
     } catch (error) {
-      console.error('Error adding comment:', error);
-      alert(t('video.errorComment') || 'Failed to add comment. Please try again.');
+      console.error("Error adding comment:", error);
+      alert(
+        t("video.errorComment") || "Failed to add comment. Please try again.",
+      );
     } finally {
       setIsCommentSubmitting(false);
     }
@@ -387,8 +440,8 @@ export default function VideoPage() {
     return (
       <div className="text-center text-danger min-h-screen flex items-center justify-center">
         <div>
-          <p className="text-lg font-semibold">{t('video.errorLoading')}</p>
-          <p className="text-sm mt-2">{error || t('video.notFound')}</p>
+          <p className="text-lg font-semibold">{t("video.errorLoading")}</p>
+          <p className="text-sm mt-2">{error || t("video.notFound")}</p>
         </div>
       </div>
     );
@@ -402,9 +455,9 @@ export default function VideoPage() {
       <div className="flex-1">
         {/* Video Player */}
         <div className="w-full aspect-video bg-black rounded-2xl overflow-hidden mb-4">
-          <video className="w-full h-full" controls autoPlay>
+          <video autoPlay controls className="w-full h-full">
             <source src={videoUrl} type="video/mp4" />
-            {t('video.browserNotSupported')}
+            {t("video.browserNotSupported")}
           </video>
         </div>
 
@@ -416,22 +469,23 @@ export default function VideoPage() {
           <div className="flex items-center gap-4">
             {/* Channel Info */}
             <div className="flex items-center gap-3">
-              <Avatar size="lg" className="rounded-full">
+              <Avatar className="rounded-full" size="lg">
                 <Avatar.Fallback>
-                  {video.channel?.name?.charAt(0).toUpperCase() || 'C'}
+                  {video.channel?.name?.charAt(0).toUpperCase() || "C"}
                 </Avatar.Fallback>
               </Avatar>
               <div>
                 <p className="font-semibold">{video.channel?.name}</p>
                 {video.channel?.followerCount && (
                   <p className="text-sm text-foreground-500">
-                    {formatNumber(video.channel.followerCount)} {t('video.subscribers')}
+                    {formatNumber(video.channel.followerCount)}{" "}
+                    {t("video.subscribers")}
                   </p>
                 )}
               </div>
             </div>
             <Button className="px-6 rounded-full bg-primary text-white">
-              {t('video.subscribe')}
+              {t("video.subscribe")}
             </Button>
           </div>
 
@@ -439,10 +493,13 @@ export default function VideoPage() {
           <div className="flex items-center gap-2">
             <div className="flex items-center bg-default-100 rounded-full overflow-hidden">
               <button
-                onClick={handleLike}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${
+                  video.userReaction === "LIKE"
+                    ? "bg-blue-500/20 text-blue-500"
+                    : ""
+                }`}
                 disabled={isLikeLoading}
-                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${video.userReaction === 'LIKE' ? 'bg-blue-500/20 text-blue-500' : ''
-                  }`}
+                onClick={handleLike}
               >
                 <ThumbsUpIcon />
                 <span className="text-sm font-medium">
@@ -451,10 +508,13 @@ export default function VideoPage() {
               </button>
               <div className="w-px h-6 bg-default-300" />
               <button
-                onClick={handleDislike}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${
+                  video.userReaction === "DISLIKE"
+                    ? "bg-red-500/20 text-red-500"
+                    : ""
+                }`}
                 disabled={isDislikeLoading}
-                className={`flex items-center gap-2 px-4 py-2 hover:bg-default-200 transition-colors ${video.userReaction === 'DISLIKE' ? 'bg-red-500/20 text-red-500' : ''
-                  }`}
+                onClick={handleDislike}
               >
                 <ThumbsDownIcon />
                 <span className="text-sm font-medium">
@@ -464,11 +524,11 @@ export default function VideoPage() {
             </div>
             <Button className="rounded-full bg-secondary text-white">
               <ShareIcon />
-              <span className="ml-2">{t('video.share')}</span>
+              <span className="ml-2">{t("video.share")}</span>
             </Button>
             <Button className="rounded-full bg-secondary text-white">
               <DownloadIcon />
-              <span className="ml-2">{t('video.download')}</span>
+              <span className="ml-2">{t("video.download")}</span>
             </Button>
             <Button className="rounded-full px-3 bg-secondary text-white">
               <MoreIcon />
@@ -479,20 +539,22 @@ export default function VideoPage() {
         {/* Video Description */}
         <Card className="p-4 bg-default-50">
           <div className="flex gap-3 text-sm font-semibold mb-2">
-            <span>{formatNumber(video.viewCount)} {t('video.viewsLabel')}</span>
+            <span>
+              {formatNumber(video.viewCount)} {t("video.viewsLabel")}
+            </span>
             <span>{formatDate(video.timestamp)}</span>
           </div>
           <div
-            className={`text-sm whitespace-pre-wrap ${!showFullDescription ? 'line-clamp-3' : ''}`}
+            className={`text-sm whitespace-pre-wrap ${!showFullDescription ? "line-clamp-3" : ""}`}
           >
             {video.description}
           </div>
           {video.description && video.description.length > 200 && (
             <button
-              onClick={() => setShowFullDescription(!showFullDescription)}
               className="text-sm font-semibold mt-2 hover:text-primary transition-colors"
+              onClick={() => setShowFullDescription(!showFullDescription)}
             >
-              {showFullDescription ? t('video.showLess') : t('video.showMore')}
+              {showFullDescription ? t("video.showLess") : t("video.showMore")}
             </button>
           )}
         </Card>
@@ -500,41 +562,44 @@ export default function VideoPage() {
         {/* Comments Section */}
         <div className="mt-6">
           <h2 className="text-xl font-bold mb-4">
-            {t('video.comments', { count: video.comments?.length || 0 })}
+            {t("video.comments", { count: video.comments?.length || 0 })}
           </h2>
 
           {/* Comment Input */}
-          <form onSubmit={handleAddComment} className="flex gap-3 mb-6">
-            <Avatar size="md" className="rounded-full">
+          <form className="flex gap-3 mb-6" onSubmit={handleAddComment}>
+            <Avatar className="rounded-full" size="md">
               <Avatar.Fallback>
-                {AuthService.getUserData()?.username?.charAt(0).toUpperCase() || 'U'}
+                {AuthService.getUserData()?.username?.charAt(0).toUpperCase() ||
+                  "U"}
               </Avatar.Fallback>
             </Avatar>
             <div className="flex-1">
               <input
+                className="w-full bg-transparent border-b-2 border-default-200 focus:border-primary outline-none pb-2 transition-colors disabled:opacity-50"
+                disabled={isCommentSubmitting || !isAuthenticated}
+                placeholder={t("video.addComment")}
                 type="text"
-                placeholder={t('video.addComment')}
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                disabled={isCommentSubmitting || !isAuthenticated}
-                className="w-full bg-transparent border-b-2 border-default-200 focus:border-primary outline-none pb-2 transition-colors disabled:opacity-50"
               />
               {commentText.trim() && (
                 <div className="flex justify-end gap-2 mt-2">
                   <Button
-                    type="button"
-                    onClick={() => setCommentText('')}
                     isDisabled={isCommentSubmitting}
+                    type="button"
+                    onClick={() => setCommentText("")}
                   >
-                    {t('video.cancel')}
+                    {t("video.cancel")}
                   </Button>
                   <Button
-                    type="submit"
                     className="bg-primary text-white"
-                    size="sm"
                     isDisabled={isCommentSubmitting}
+                    size="sm"
+                    type="submit"
                   >
-                    {isCommentSubmitting ? t('video.commenting') : t('video.comment')}
+                    {isCommentSubmitting
+                      ? t("video.commenting")
+                      : t("video.comment")}
                   </Button>
                 </div>
               )}
@@ -545,9 +610,9 @@ export default function VideoPage() {
           <div className="space-y-4">
             {video.comments?.map((comment, index) => (
               <div key={index} className="flex gap-3">
-                <Avatar size="md" className="rounded-full">
+                <Avatar className="rounded-full" size="md">
                   <Avatar.Fallback>
-                    {comment.author?.charAt(0).toUpperCase() || 'U'}
+                    {comment.author?.charAt(0).toUpperCase() || "U"}
                   </Avatar.Fallback>
                 </Avatar>
                 <div className="flex-1">
@@ -571,7 +636,7 @@ export default function VideoPage() {
                       <ThumbsDownIcon className="w-4 h-4" />
                     </button>
                     <button className="text-sm font-medium hover:bg-default-100 px-3 py-1 rounded-full transition-colors">
-                      {t('video.reply')}
+                      {t("video.reply")}
                     </button>
                   </div>
                 </div>
@@ -583,19 +648,19 @@ export default function VideoPage() {
 
       {/* Recommended Videos Sidebar */}
       <div className="lg:w-[400px]">
-        <h2 className="text-lg font-bold mb-4">{t('video.recommended')}</h2>
+        <h2 className="text-lg font-bold mb-4">{t("video.recommended")}</h2>
         <div className="space-y-2">
           {recommendedVideos.map((recVideo) => (
             <VideoCard
               key={recVideo.id}
-              id={recVideo.id}
-              title={recVideo.title}
               channelName={recVideo.channelName}
-              videoUrl={recVideo.videoUrl}
-              thumbnailUrl={recVideo.thumbnailUrl}
               duration={recVideo.duration}
-              viewCount={recVideo.viewCount}
+              id={recVideo.id}
+              thumbnailUrl={recVideo.thumbnailUrl}
               timestamp={recVideo.timestamp}
+              title={recVideo.title}
+              videoUrl={recVideo.videoUrl}
+              viewCount={recVideo.viewCount}
             />
           ))}
         </div>

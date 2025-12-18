@@ -64,6 +64,8 @@
     "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@eslint/compat": "^2.0.0",
+    "@eslint/eslintrc": "^3.3.3",
     "@iconify/react": "^6.0.2",
     "@next/eslint-plugin-next": "16.0.1",
     "@react-types/shared": "3.32.1",

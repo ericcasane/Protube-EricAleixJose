@@ -20,7 +20,7 @@ export interface VideoDetail {
   viewCount: number;
   likeCount: number;
   dislikeCount: number;
-  userReaction: 'LIKE' | 'DISLIKE' | null;
+  userReaction: "LIKE" | "DISLIKE" | null;
   timestamp: number;
   channel: Channel;
   comments: Comment[];
@@ -29,7 +29,7 @@ export interface VideoDetail {
 export interface VideoReactionResponse {
   likesCount: number;
   dislikesCount: number;
-  userReaction: 'LIKE' | 'DISLIKE' | null;
+  userReaction: "LIKE" | "DISLIKE" | null;
 }
 
 export interface VideoListItem {

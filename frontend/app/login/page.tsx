@@ -1,14 +1,15 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@heroui/button';
-import { Input } from '@heroui/input';
-import { Card, CardBody, CardHeader } from '@heroui/card';
-import { Link } from '@heroui/link';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTranslations } from '@/hooks/useTranslations';
-import { title } from '@/components/primitives';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Link } from "@heroui/link";
+
+import { useAuth } from "@/contexts/AuthContext";
+import { useTranslations } from "@/hooks/useTranslations";
+import { title } from "@/components/primitives";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,32 +17,33 @@ export default function LoginPage() {
   const t = useTranslations();
 
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.username.trim()) {
-      newErrors.username = t('auth.signIn.usernameRequired');
+      newErrors.username = t("auth.signIn.usernameRequired");
     }
 
     if (!formData.password) {
-      newErrors.password = t('auth.signIn.passwordRequired');
+      newErrors.password = t("auth.signIn.passwordRequired");
     }
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setServerError('');
+    setServerError("");
 
     if (!validateForm()) {
       return;
@@ -55,62 +57,61 @@ export default function LoginPage() {
         password: formData.password,
       });
 
-      router.push('/');
+      router.push("/");
     } catch (error) {
       setServerError(
-        error instanceof Error
-          ? error.message
-          : t('auth.signIn.error')
+        error instanceof Error ? error.message : t("auth.signIn.error"),
       );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: '' }));
-    }
-    if (serverError) {
-      setServerError('');
-    }
-  };
+  const handleChange =
+    (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: "" }));
+      }
+      if (serverError) {
+        setServerError("");
+      }
+    };
 
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-200px)] py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col gap-1 items-center pb-6 pt-8">
-          <h1 className={title({ size: 'sm' })}>
-            {t('auth.signIn.logIn')}
-          </h1>
-          <p className="text-small text-default-500">{t('auth.signIn.subtitle')}</p>
+          <h1 className={title({ size: "sm" })}>{t("auth.signIn.logIn")}</h1>
+          <p className="text-small text-default-500">
+            {t("auth.signIn.subtitle")}
+          </p>
         </CardHeader>
         <CardBody>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-6">
+          <form className="flex flex-col gap-4 px-6" onSubmit={handleSubmit}>
             <Input
-              label={t('auth.signIn.username')}
-              placeholder={t('auth.signIn.username')}
-              value={formData.username}
-              onChange={handleChange('username')}
-              isInvalid={!!errors.username}
-              errorMessage={errors.username}
               isRequired
-              variant="bordered"
               autoComplete="username"
+              errorMessage={errors.username}
+              isInvalid={!!errors.username}
+              label={t("auth.signIn.username")}
+              placeholder={t("auth.signIn.username")}
+              value={formData.username}
+              variant="bordered"
+              onChange={handleChange("username")}
             />
 
             <Input
-              label={t('auth.signIn.password')}
-              placeholder={t('auth.signIn.password')}
+              isRequired
+              autoComplete="current-password"
+              errorMessage={errors.password}
+              isInvalid={!!errors.password}
+              label={t("auth.signIn.password")}
+              placeholder={t("auth.signIn.password")}
               type="password"
               value={formData.password}
-              onChange={handleChange('password')}
-              isInvalid={!!errors.password}
-              errorMessage={errors.password}
-              isRequired
               variant="bordered"
-              autoComplete="current-password"
+              onChange={handleChange("password")}
             />
 
             {serverError && (
@@ -120,18 +121,18 @@ export default function LoginPage() {
             )}
 
             <Button
-              type="submit"
-              size="lg"
-              isLoading={isLoading}
               className="w-full"
+              isLoading={isLoading}
+              size="lg"
+              type="submit"
             >
-              {t('auth.signIn.signInButton')}
+              {t("auth.signIn.signInButton")}
             </Button>
 
             <p className="text-center text-small">
-              {t('auth.signIn.noAccount')}{' '}
-              <Link href="/register" size="sm" className="font-semibold">
-                {t('auth.signIn.registerNow')}
+              {t("auth.signIn.noAccount")}{" "}
+              <Link className="font-semibold" href="/register" size="sm">
+                {t("auth.signIn.registerNow")}
               </Link>
             </p>
           </form>
@@ -140,4 +141,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

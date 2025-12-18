@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Navbar as HeroUINavbar,
@@ -12,25 +12,26 @@ import {
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
 import { Input } from "@heroui/input";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@heroui/dropdown";
 import { link as linkStyles } from "@heroui/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
 import { Icon } from "@iconify/react";
 import { useEffect } from "react";
 import { Kbd } from "@heroui/kbd";
+import { useDisclosure } from "@heroui/modal";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import {
-  SearchIcon,
-  Logo,
-} from "@/components/icons";
+import { SearchIcon, Logo } from "@/components/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslations } from "@/hooks/useTranslations";
-
-import { useDisclosure } from "@heroui/modal";
 import { SearchModal } from "@/components/search-modal";
 
 export const Navbar = () => {
@@ -40,41 +41,42 @@ export const Navbar = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+      if ((event.ctrlKey || event.metaKey) && event.key === "k") {
         event.preventDefault();
         onOpen();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onOpen]);
 
   const searchInput = (
     <>
       <Input
+        isReadOnly
         aria-label="Search"
+        className="cursor-pointer"
         classNames={{
           inputWrapper: "bg-default-100",
           input: "text-sm",
         }}
-        labelPlacement="outside"
-        placeholder={t('nav.search')}
-        startContent={
-          <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-        }
         endContent={
           <div className="flex gap-1">
             <Kbd className="hidden lg:inline-block">Ctrl</Kbd>
             <Kbd className="hidden lg:inline-block">K</Kbd>
           </div>
         }
+        labelPlacement="outside"
+        placeholder={t("nav.search")}
+        startContent={
+          <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+        }
         type="search"
-        isReadOnly
         onClick={onOpen}
-        className="cursor-pointer"
       />
       <SearchModal isOpen={isOpen} onOpenChange={onOpenChange} />
     </>
@@ -107,18 +109,16 @@ export const Navbar = () => {
         </ul>
       </NavbarContent>
 
-      <NavbarContent
-        className="hidden sm:flex basis-1/2"
-        justify="center"
-      >
-        <NavbarItem className="hidden lg:flex w-full max-w-xs">{searchInput}</NavbarItem>
+      <NavbarContent className="hidden sm:flex basis-1/2" justify="center">
+        <NavbarItem className="hidden lg:flex w-full max-w-xs">
+          {searchInput}
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent
         className="hidden sm:flex basis-1/4 sm:basis-full"
         justify="end"
       >
-
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
@@ -131,21 +131,26 @@ export const Navbar = () => {
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
                 <Button
-                  variant="flat"
                   className="text-sm font-normal text-default-600 bg-default-100 flex items-center gap-2"
+                  variant="flat"
                 >
-                  <Icon icon="heroicons:user-circle-solid" className="text-xl" />
+                  <Icon
+                    className="text-xl"
+                    icon="heroicons:user-circle-solid"
+                  />
                   {user.username}
                 </Button>
               </DropdownTrigger>
               <DropdownMenu aria-label="User menu actions">
                 <DropdownItem
                   key="info"
+                  isReadOnly
                   className="gap-2 cursor-default pointer-events-none"
                   textValue="User Info"
-                  isReadOnly
                 >
-                  <p className="font-semibold">{t('auth.signIn.welcome')} @{user.username}</p>
+                  <p className="font-semibold">
+                    {t("auth.signIn.welcome")} @{user.username}
+                  </p>
                 </DropdownItem>
                 <DropdownItem
                   key="profile"
@@ -153,16 +158,18 @@ export const Navbar = () => {
                   href={`/profile/${user.username}`}
                   startContent={<Icon icon="heroicons:user" />}
                 >
-                  {t('nav.myChannel')}
+                  {t("nav.myChannel")}
                 </DropdownItem>
                 <DropdownItem
                   key="logout"
                   color="danger"
-                  textValue={t('nav.logout')}
-                  startContent={<Icon icon="heroicons:arrow-right-on-rectangle" />}
+                  startContent={
+                    <Icon icon="heroicons:arrow-right-on-rectangle" />
+                  }
+                  textValue={t("nav.logout")}
                   onPress={logout}
                 >
-                  {t('nav.logout')}
+                  {t("nav.logout")}
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -172,23 +179,26 @@ export const Navbar = () => {
             <NavbarItem className="hidden md:flex">
               <Button
                 as={NextLink}
-                href="/login"
                 className="text-sm font-normal text-default-600 bg-default-100 flex items-center gap-2"
+                href="/login"
                 variant="flat"
               >
-                <Icon icon="heroicons:arrow-right-on-rectangle" className="text-base" />
-                {t('nav.signIn')}
+                <Icon
+                  className="text-base"
+                  icon="heroicons:arrow-right-on-rectangle"
+                />
+                {t("nav.signIn")}
               </Button>
             </NavbarItem>
             <NavbarItem className="hidden md:flex">
               <Button
                 as={NextLink}
+                className="flex items-center gap-2"
                 href="/register"
                 variant="flat"
-                className="flex items-center gap-2"
               >
-                <Icon icon="heroicons:user-plus" className="text-base" />
-                {t('nav.register')}
+                <Icon className="text-base" icon="heroicons:user-plus" />
+                {t("nav.register")}
               </Button>
             </NavbarItem>
           </>
@@ -233,13 +243,13 @@ export const Navbar = () => {
               </NavbarMenuItem>
               <NavbarMenuItem>
                 <Button
+                  className="w-full flex items-center gap-2"
                   color="danger"
                   variant="flat"
-                  className="w-full flex items-center gap-2"
                   onPress={logout}
                 >
                   <Icon icon="heroicons:arrow-right-on-rectangle" />
-                  {t('nav.logout')}
+                  {t("nav.logout")}
                 </Button>
               </NavbarMenuItem>
             </>
@@ -248,23 +258,23 @@ export const Navbar = () => {
               <NavbarMenuItem>
                 <Button
                   as={NextLink}
+                  className="w-full flex items-center gap-2"
                   href="/login"
                   variant="flat"
-                  className="w-full flex items-center gap-2"
                 >
                   <Icon icon="heroicons:arrow-right-on-rectangle" />
-                  {t('nav.signIn')}
+                  {t("nav.signIn")}
                 </Button>
               </NavbarMenuItem>
               <NavbarMenuItem>
                 <Button
                   as={NextLink}
+                  className="w-full flex items-center gap-2"
                   href="/register"
                   variant="flat"
-                  className="w-full flex items-center gap-2"
                 >
                   <Icon icon="heroicons:user-plus" />
-                  {t('nav.register')}
+                  {t("nav.register")}
                 </Button>
               </NavbarMenuItem>
             </>
@@ -274,4 +284,3 @@ export const Navbar = () => {
     </HeroUINavbar>
   );
 };
-

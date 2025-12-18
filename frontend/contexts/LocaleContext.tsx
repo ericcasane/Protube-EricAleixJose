@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { defaultLocale, isValidLocale, Locale } from '@/i18n.config';
+import React, { createContext, useContext, useEffect, useState } from "react";
+
+import { defaultLocale, isValidLocale, Locale } from "@/i18n.config";
 
 interface LocaleContextType {
   locale: Locale;
@@ -20,7 +21,8 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   // Initialize locale from localStorage on client side
   useEffect(() => {
     setIsClient(true);
-    const storedLocale = localStorage.getItem('locale');
+    const storedLocale = localStorage.getItem("locale");
+
     if (storedLocale && isValidLocale(storedLocale)) {
       setLocaleState(storedLocale);
       document.documentElement.lang = storedLocale;
@@ -32,7 +34,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
-    localStorage.setItem('locale', newLocale);
+    localStorage.setItem("locale", newLocale);
     // Update document language attribute
     document.documentElement.lang = newLocale;
   };
@@ -46,5 +48,6 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
 
 export function useLocale() {
   const context = useContext(LocaleContext);
+
   return context;
 }
